@@ -1,3 +1,3 @@
-function firstCmmit(){
+function firstommit(){
     
 }
