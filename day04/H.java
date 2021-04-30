@@ -1,0 +1,11 @@
+class H{
+    H(int a){
+        System.out.println(a + " ¿‘¥œ¥Ÿ.");
+    }
+    static int something(int a, int b){
+        return a + b;
+    }
+    public static void main(String[] args){
+        new H(something(1, 2));
+    }
+}
