@@ -1,0 +1,50 @@
+1. HW (+ OS + JVM + App1, App2, ... ) 
+   (1) CPU, GPU : 두뇌 
+   (2) RAM(메모리) : 책상 
+   (3) HDD/SSD : 책꽃이 
+   (4) MainBoard: 방 
+   (5) Card : Audio, Video, Ran, WLRan, ... 
+   (6) 주변기기: 키보드, 모니터, 마우스, 프린터, 본체... 
+
+    
+2. 환경 설정 
+   (1) JDK 설치 
+       - jdk 
+       - jre 
+   (2) 환경 변수 
+       - JAVA_HOME => C:\Program Files\Java\jdk1.8.0_221
+       - Path => %JAVA_HOME%\bin
+       - classpath => . 
+
+   (3) Editer
+       - Editplus 
+       - Eclipse
+       - VSCode 
+       - IntelliJ
+
+   (4) API 
+       - jdk-8u221-docs-all.zip 압축해제 / 즐겨찾기 
+
+3. 실행 메커니즘
+  (1) 작성(.java) -> 컴파일(javac.exe) -> 실행(java.exe)
+  (2) .java ( for Man ) -> .class ( for Com )
+
+
+4. 실행이 되는 클래스 ( 인입점이 있는 클래스 ) 
+   public static void main(String args[]){}
+
+   ex) day01/A.java 
+
+5. 클래스 구조 
+  (1) 패지키 선언
+  (2) 임포트 구문
+  (3) 클래스 선언 {
+      (4) 멤버 변수 
+      (5) 생성자 
+      (6) 메소드 
+    }
+
+   ex) day01/B.java 
+
+
+
