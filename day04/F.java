@@ -1,7 +1,7 @@
 class F{ // BMI 계산
     String[][] arr = new String[4][3];
     String[][] bmiArr = { 
-        {"0", "18", "저체중", "밥좀먹으세요."}, 
+        {"0", "18", "저체중", "밥좀먹으세요."},
         {"18", "23", "정상", "딱 좋습니다."},
         {"23", "25", "과체중", "약간 무겁지만, 아직 괜찮아요."},
         {"25", "30", "비만", "아직 안늦었어요, 운동합시다!"},
@@ -29,6 +29,6 @@ class F{ // BMI 계산
     }
     public static void main(String[] args){
         
-        new F().bmiCalculate(163, 49.8);
+        new F().bmiCalculate(162, 400);
     }
 }
