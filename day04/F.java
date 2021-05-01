@@ -32,18 +32,3 @@ class F{ // BMI °è»ê
         new F().bmiCalculate(163, 49.8);
     }
 }
-
-int i = 1;
-		  while(i <=9){
-			  i++;
-			  int j = 1;
-			  while(j <=9){
-				  j++;
-				  int k = 1;
-				  while(k<=9){
-					  
-					  System.out.println(i + " * " + j + " * " + k + " = " + (long)(i*k*j));
-					  k++;
-				  }
-			  }
-		  }
