@@ -1,6 +1,6 @@
 class H{
     H(int a){
-        System.out.println(a + " �Դϴ�.");
+        System.out.println(a + "");
     }
     static int something(int a, int b){
         return a + b;
