@@ -14,4 +14,4 @@ class Ran
 }
 
 //#>java Lotto
-//#>ภๅมุผฎ 
+

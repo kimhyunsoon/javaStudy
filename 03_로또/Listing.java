@@ -4,16 +4,16 @@ class Listing
 {
 	String fname = "우리반.txt";
 	Listing(){
-		BufferedReader br = null;
-		FileReader fr = null;
-		String name = "";
+		FileReader fr = null; // 파일을 불러온다
+		BufferedReader br = null; //한 줄을 불러온다
+		String name = ""; //초기화
 		try{
 			fr = new FileReader(fname);
 			br = new BufferedReader(fr);
 			int i =0; 
-			while((name = br.readLine()) != null){
+			while((name = br.readLine()) != null){ //while문이 반복할 동안 한줄씩 읽는다
 				pln(name);
-				i++;
+				i++; 
 			}
 			pln("총 "+i+"명 검색 완료!!");
 		}catch(FileNotFoundException fe){
