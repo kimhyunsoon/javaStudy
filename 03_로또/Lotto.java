@@ -3,7 +3,6 @@ import java.util.*;
 import java.util.Scanner;
 
 class Lotto {
-    String fileName = "우리반.txt"; //파일 경로
     FileReader fr; 
     BufferedReader br;
     String list[]; 
@@ -12,16 +11,11 @@ class Lotto {
     int i;
 
     Scanner s = new Scanner(System.in);
-    void input(){
+    String input(){ //결과값을 문자열로 반환하는 함수 input();
         System.out.println("파일이름을 입력해주세요: ");
-        String str = s.next();
-        try{
-            int k =  Integer.parseInt(str);
-            System.out.println("파일이름: "+fileName); 
-        }catch(NumberFormatException ne){
-			System.out.println("파일이 없습니당");
-			
-        }
+        String str = s.next()+".txt"; //파일경로를 저장함
+        return str; //input()의 결과는 위 파일 경로임
+        
     }
 
     Lotto(){
