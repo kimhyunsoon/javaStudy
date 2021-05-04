@@ -19,7 +19,7 @@ class Test_soon {
 
     void countName(String ad){ // 매개변수 : 임의의 문자열 ad
         try{
-            fr = new FileReader(ad); // 파일 명을 매개변수에서 받음
+            fr = new FileReader(ad); // 파d일 명을 매개변수에서 받음
 			br = new BufferedReader(fr);
             while((name = br.readLine()) !=null){
                     count++;
