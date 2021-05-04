@@ -1,0 +1,11 @@
+>javac Grade.java
+>java Grade
+
+국어: 50 
+수학: 60
+영어: 70
+과학: 80
+
+학점: C (총점: XXX점, 평균: XX점) 
+
+(
