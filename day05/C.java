@@ -15,8 +15,8 @@ class C {
 	//2) 증감 ex) ++, --
 	void m2(){
 		int i=0;
-		int r1=(i++ + 1); //연산자 우선순위
-		int r2=(++i + 1);
+		int r1=(i++ + 1); //우선순위가 극단적으로 낮음
+		int r2=(++i + 1); //우선순위가 극단적으로 높음
 		i++;
 		System.out.println("r1: "+r1+", r2: "+r2+", i: "+ i);
 	}
@@ -58,7 +58,7 @@ class C {
 	//7) 논리 ex) &, &&, |, ||
 	void m7(){
 		int k=0;
-		boolean r1 = 1>2 && k++<1; // short circuit
+		boolean r1 = 1>2 && k++<1; // short circuit 두개 있는건 고지식하다(무조건 수행)
 		System.out.println("r1: "+r1+", k:"+k);
 
 		int i=1;
