@@ -2,44 +2,44 @@ import java.io.*;
 import java.util.*;
 
 class Lotto_soon {
-    String fname = "ì„¤ì •/ìš°ë¦¬ë°˜.txt"; // íŒŒì¼ ê²½ë¡œ
-    BufferedReader br = null; // íŒŒì¼ ì½ëŠ” ë³€ìˆ˜ì¢…ë¥˜ ì¸ë“¯
-    FileReader fr = null; // íŒŒì¼ ì½ëŠ” ë³€ìˆ˜ì¢…ë¥˜ ì¸ë“¯
+    String fname = "¼³Á¤/¿ì¸®¹İ.txt"; // ÆÄÀÏ °æ·Î
+    BufferedReader br = null; // ÆÄÀÏ ÀĞ´Â º¯¼öÁ¾·ù ÀÎµí
+    FileReader fr = null; // ÆÄÀÏ ÀĞ´Â º¯¼öÁ¾·ù ÀÎµí
 
     Lotto_soon() {
-        String name = ""; // í•™ìƒì´ë¦„ ë¹ˆ ë³€ìˆ˜
+        String name = ""; // ÇĞ»ıÀÌ¸§ ºó º¯¼ö
 
         try{
-            // íŒŒì¼ì˜ í•™ìƒìˆ˜ êµ¬í•¨
-            fr = new FileReader(fname); // ìƒˆë¡œ íŒŒì¼ì½ìŒ
-            br = new BufferedReader(fr); // ìƒˆë¡œ íŒŒì¼ì½ìŒ
+            // ÆÄÀÏÀÇ ÇĞ»ı¼ö ±¸ÇÔ
+            fr = new FileReader(fname); // »õ·Î ÆÄÀÏÀĞÀ½
+            br = new BufferedReader(fr); // »õ·Î ÆÄÀÏÀĞÀ½
             int i =0; 
-            while(br.readLine() != null){ // íŒŒì¼ì˜ ì¤„ì´ ë¹„ì–´ìˆì§€ ì•Šìœ¼ë©´ ì‹¤í–‰
-                i++; // ì¤„ ê°¯ìˆ˜ (í•™ìƒìˆ˜) ë§Œí¼ ië¥¼ ì¦ê°€ì‹œí‚´
+            while(br.readLine() != null){ // ÆÄÀÏÀÇ ÁÙÀÌ ºñ¾îÀÖÁö ¾ÊÀ¸¸é ½ÇÇà
+                i++; // ÁÙ °¹¼ö (ÇĞ»ı¼ö) ¸¸Å­ i¸¦ Áõ°¡½ÃÅ´
             };
             
 
-            //ë°°ì—´ì„ ìƒì„±í•˜ê³  íŒŒì¼ì˜ ì´ë¦„ë“¤ì„ ëŒ€ì…í•¨
-            fr = new FileReader(fname); // ìƒˆë¡œ íŒŒì¼ì½ìŒ
-            br = new BufferedReader(fr); // ìƒˆë¡œ íŒŒì¼ì½ìŒ
+            //¹è¿­À» »ı¼ºÇÏ°í ÆÄÀÏÀÇ ÀÌ¸§µéÀ» ´ëÀÔÇÔ
+            fr = new FileReader(fname); // »õ·Î ÆÄÀÏÀĞÀ½
+            br = new BufferedReader(fr); // »õ·Î ÆÄÀÏÀĞÀ½
             int j=0;
-            String[] List = new String[i]; // ê¸¸ì´ê°€ iì¸ ë¹ˆ ë°°ì—´ ì„ ì–¸
+            String[] List = new String[i]; // ±æÀÌ°¡ iÀÎ ºó ¹è¿­ ¼±¾ğ
 
-            while((name = br.readLine()) != null){ // íŒŒì¼ì˜ ì¤„ì„ ëŒ€ì…í•œ nameì´ ë¹„ì–´ìˆì§€ ì•Šìœ¼ë©´ ì‹¤í–‰
-                List[j] = name; // Listë°°ì—´ jë²ˆì§¸ ìš”ì†Œì— íŒŒì¼ì˜ jë²ˆì§¸ ì¤„ì„ ëŒ€ì…í•¨
-                j++; // ì¤„ ê°¯ìˆ˜ (í•™ìƒìˆ˜) ë§Œí¼ jë¥¼ ì¦ê°€ì‹œí‚´
+            while((name = br.readLine()) != null){ // ÆÄÀÏÀÇ ÁÙÀ» ´ëÀÔÇÑ nameÀÌ ºñ¾îÀÖÁö ¾ÊÀ¸¸é ½ÇÇà
+                List[j] = name; // List¹è¿­ j¹øÂ° ¿ä¼Ò¿¡ ÆÄÀÏÀÇ j¹øÂ° ÁÙÀ» ´ëÀÔÇÔ
+                j++; // ÁÙ °¹¼ö (ÇĞ»ı¼ö) ¸¸Å­ j¸¦ Áõ°¡½ÃÅ´
             };
 
 
-            //ëœë¤ìœ¼ë¡œ ì¶œë ¥í•¨
+            //·£´ıÀ¸·Î Ãâ·ÂÇÔ
             Random r = new Random();
-            int k = r.nextInt(i); // 0 ë¶€í„° i(í•™ìƒìˆ˜) ê¹Œì§€ì˜ ìˆ˜ ì¤‘ì— ëœë¤ìœ¼ë¡œ í•œê°œë¥¼ ê°€ì ¸ì˜´
-            System.out.println("ëœë¤í•™ìƒì´ë¦„: " + List[k]);
+            int k = r.nextInt(i); // 0 ºÎÅÍ i(ÇĞ»ı¼ö) ±îÁöÀÇ ¼ö Áß¿¡ ·£´ıÀ¸·Î ÇÑ°³¸¦ °¡Á®¿È
+            System.out.println("·£´ıÇĞ»ıÀÌ¸§: " + List[k]);
 
             
 
         }catch(FileNotFoundException fe){
-            System.out.println(fname+"íŒŒì¼ì„ ì°¾ì§€ ëª»í–ˆìŒ");
+            System.out.println(fname+"ÆÄÀÏÀ» Ã£Áö ¸øÇßÀ½");
         }catch(IOException ie){
         }
     }
