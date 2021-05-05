@@ -21,16 +21,16 @@ class test_soon {
     void countName(){
         try{
             fr = new FileReader(fileName); //fileName = "우리반.txt"를 읽는다
-			br = new BufferedReader(fr); //줄 인식??
+         br = new BufferedReader(fr); //줄 인식??
             while((name = br.readLine()) !=null){ //메모장이 몇줄인지 확인. 파일의 줄이 비어있지 않으면 실행
                     //System.out.println("이름: "+name);
                     count++; //줄 갯수(학생 수)만큼 증가시킴
             }
             //System.out.println("총 "+count+"명 검색 완료!!");
         }catch(FileNotFoundException fe){
-			System.out.println(fileName+"파일을 찾지 못하였습니다");
+         System.out.println(fileName+"파일을 찾지 못하였습니다");
         }catch(IOException ie){
-		}
+      }
     }
 
     void saveName(){ //배열을 생성하고 파일의 이름들을 대입함
@@ -54,11 +54,11 @@ class test_soon {
     }
 
     public static void main(String[] args) 
-	{
-		test_soon lotto= new test_soon();
+   {
+      test_soon lotto= new test_soon();
         lotto.countName();
         lotto.saveName();
         lotto.readName();
-	}
+   }
   
 }

@@ -3,6 +3,7 @@ import java.util.*;
 import java.util.Scanner;
 
 class Lotto {
+    String fileName;
     FileReader fr; 
     BufferedReader br;
     String list[]; 
@@ -11,14 +12,14 @@ class Lotto {
     int i;
 
     Scanner s = new Scanner(System.in);
-    String input(){ //결과값을 문자열로 반환하는 함수 input();
+    Lotto(){ 
         System.out.println("파일이름을 입력해주세요: ");
-        String str = s.next()+".txt"; //파일경로를 저장함
-        return str; //input()의 결과는 위 파일 경로임
+        String str = s.next();
+        fileName = str; //입력받은 값을 fileName에 저장
         
     }
 
-    Lotto(){
+    void countName(){ 
         try{
             fr = new FileReader(fileName); //fileName = "우리반.txt"를 읽는다
 			br = new BufferedReader(fr); //줄 인식??
@@ -56,7 +57,7 @@ class Lotto {
     public static void main(String[] args) 
 	{
 		Lotto lotto= new Lotto();
-        lotto.input();
+        lotto.countName();
         lotto.saveName();
         lotto.readName();
 	}
