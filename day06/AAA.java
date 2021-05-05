@@ -1,6 +1,6 @@
 class AAA{
     String strs[]; //선언
-    A(){
+    AAA(){
         strs = new String[4]; //방의 크기가 4개인 배열 생성
     }
     void input(){//초기화
@@ -20,9 +20,15 @@ class AAA{
 
     void out1(){ //for문으로 꺼내쓰기
         for(int i=0;i<strs.length;i++){ //strs.length strs배열의 길이가 4
-            System.out.println("strs[0]"+strs[i]);
+            System.out.println("strs["+i+"]: "+strs[i]);
         }
     }
+
+    public static void main(String[] args){
+        AAA a = new AAA();
+        a.input();
+        a.out1();
+    }  
 
 
 

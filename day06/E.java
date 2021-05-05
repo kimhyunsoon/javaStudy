@@ -40,7 +40,7 @@ class E {
         E e = new E();
         
         // e.out1();
-        // e.out2();
+        e.out2();
         e.out3();
     }
 }
