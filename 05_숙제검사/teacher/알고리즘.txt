@@ -1,0 +1,24 @@
+< 숙제검사 알고리즘 > 
+(1) '숙제디렉토리' 입력받기 
+    - 실제존재하는 디렉토리 확인
+ 
+//(2)  리스트로 디렉토리명 호출해 봄 
+
+(3) '우리반.txt'를 읽어서 Map저장 
+    ex) Hashtable<String, Boolean> map;
+         map.put(line, false);
+
+(4) 검사 
+    ex) Set<String> keys = map.keySet();
+         key와 kid 일치하면 
+         map.put(key, true);
+
+(5) 결과 
+    ex) boolean flag = map.get(key)
+         if(!flag) pln(key)
+    
+
+   
+
+
+
