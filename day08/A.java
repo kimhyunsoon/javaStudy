@@ -1,6 +1,5 @@
 class Human 
 {
-
     String name = "홍길동";
     Human(){}
     Human(String name){
@@ -15,6 +14,7 @@ class Human
 class SuperMan extends Human
 {
     int power = 500;
+    //String name = "클락";
     SuperMan(){
         super("클락");
     }
@@ -28,4 +28,18 @@ class SuperMan extends Human
 
     }
 }
+
+class RunningMan extends Human{
+
+    int speed;
+    RunningMan(int speed){
+        super("런닝맨");
+        this.speed = speed;
+    }
+    void move(){
+        System.out.println("달린다");
+    }
+
+
+}  
 
