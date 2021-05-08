@@ -2,7 +2,6 @@ class A {
     String strs[]; //선언
     A(){
         strs = new String[4]; //생성
-
     }
     void in(){ // 초기화
         strs[0] = "봄";

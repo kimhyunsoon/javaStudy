@@ -2,7 +2,7 @@ class AUser
 {
 	public static void main(String[] args) 
 	{
-		Human m = new Human("이순신"); //Human 생성자를 객체로 생성
+		Human m = new Human("이가은"); //Human 생성자를 객체로 생성
 		System.out.println("m.name: " + m.name); //이순신
 		m.move();
         System.out.println("");

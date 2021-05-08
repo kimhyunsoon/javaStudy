@@ -40,6 +40,9 @@ class B {
     public static void main(String[] args) {
         
         도형 a = new 사각형();
+
+        //도형 a = new 도형();
+        
         도형 b = new 삼각형();
         도형 c = new 원형();
         a.draw();
