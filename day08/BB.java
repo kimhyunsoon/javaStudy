@@ -4,9 +4,7 @@ class Star {
 
         System.out.println("x");
     }
-    
 }
-
 
 class Wars extends Star {
 
@@ -16,10 +14,8 @@ class Wars extends Star {
     }
 
     void 패버린다(){
-
-
+        System.out.println("까불지맛");
     }
-    
 }
 
 
