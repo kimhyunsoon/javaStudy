@@ -36,7 +36,10 @@ class BUser
 	}
 	public static void main(String args[]) //throws Exception 
     {
-		new BUser().call();
+		// new BUser().call();
+
+		BUser bb = new BUser();
+		bb.call();
 		System.out.println("10");
 	}
 }

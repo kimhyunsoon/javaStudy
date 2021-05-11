@@ -1,44 +1,38 @@
-class MyException extends Exception
-{
-	void print1(){
+class MyException extends Exception {// Exception 클래스에서 상속받음
+	void f1(){
 		System.out.println("MyException의 기능");
 	}
 	public String toString(){
 		return "MyException";
 	}
 }
-
-
-class YourException extends Exception
-{
-	void print2(){
+class YourException extends Exception {
+	void f2(){
 		System.out.println("YourException의 기능");
 	}
 	public String toString(){
 		return "YourException";
-	}
+	}	
 }
 
-class A
-{
+
+class A {
 	boolean b;
 	boolean b1;
-	boolean b2 = true;
-
-	A() throws Exception{
-		if(b) throw new Exception();
+	boolean b2 = true; 
+	A() throws Exception {
+        if(b) throw new Exception();
 	}
-	void use1() throws MyException{
+	void use1() throws MyException {
 		if(b1) throw new MyException();
 	}
-	void use2() throws YourException{
+	void use2() throws YourException {
 		if(b2) throw new YourException();
 	}
 }
-
-class AUser
-{
-	void call(){
+class AUser {
+	void call() //throws MyException, YourException, Exception 
+	{
 		try{
 			A a = new A();
 			a.use1();
@@ -50,12 +44,9 @@ class AUser
 		}catch(Exception e){
 			System.out.println(e);
 		}
-	
 	}
-	public static void main(String[] args) 
-	{
+	public static void main(String args[]) {
 		new AUser().call();
 	}
 }
-
 

@@ -80,7 +80,7 @@ class LottoMulti
 			pln("최소한 1명은 뽑아주라구!");
 			readCount();
 		}
-		else if(set.size()<count){
+		else if(set.size()-1<count){
 			pln("당첨자수는 " +set.size()+ " 이하로 입력해주세요!");
 			readCount();
 		} else{

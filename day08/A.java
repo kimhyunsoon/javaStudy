@@ -1,25 +1,20 @@
 class Human 
 {
     String name = "È«±æµ¿";
-
     Human(String name){
-        
-     
+      
         this.name = name;
-       
-        
+
     }
 
     void move(){
         System.out.println("°È´Â´Ù");
     }
-    
 }
 
 class SuperMan extends Human
 {
     int power = 500;
-   
     //String name = "Å¬¶ô";
     SuperMan(){
         super("Å¬¶ô");
@@ -29,11 +24,8 @@ class SuperMan extends Human
         System.out.println("³­´Ù");
     }
 
-   
-  
     void shotBeam(){
         System.out.println("±¤¼±À» ½ð´Ù");
-
     }
 }
 
