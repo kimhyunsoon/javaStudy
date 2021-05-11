@@ -45,7 +45,8 @@ class LottoMulti
 	}
 
 	//2. 파일을 읽고 set에 저장
-	// try 삭제_ 상위 findFile()에서 중복되어 삭제함
+	// try 삭제_ 상위 findFile()에서 중복되어 삭제함)
+	void readFile(File f){ 
 		fr = new FileReader(f);
 		br = new BufferedReader(fr);
 		String name = "";
