@@ -8,6 +8,7 @@ class LottoMulti
 	FileReader fr;
 	BufferedReader br;
 	BufferedReader brkey = new BufferedReader(new InputStreamReader(System.in)); 
+	boolean numCheck;
 	int count;
 	
 	TreeSet<String> set = new TreeSet<String>();
@@ -78,11 +79,10 @@ class LottoMulti
 		String input = s.nextLine();
 		
 		// 추가된 메쏘드_Scanner로 받은 문자가 숫자(정수)인지 확인
-		boolean numCheck = true;
-		numberCheck(input, numCheck); 
+		numberCheck(input); 
 		
-		if(!numCheck) { // numberCheck(); 에서 저장한 numCheck가 false이면 실행함
-			pln("당첨자수는 숫자만 입력해주세요!");
+		if(!numCheck || input.length() == 0) { // numberCheck(); 에서 저장한 numCheck가 false거나 input의 길이가 0이면
+			pln("당첨자수를 숫자로 입력해주세요!");
 			readCount();
 		} else {
 			count = Integer.parseInt(input); // 숫자인지 확인을 위해 String으로 받았던 입력값을 int로 변환함
@@ -103,7 +103,7 @@ class LottoMulti
 		Random ran = new Random();
 		set.clear(); //set의 모든 요소 제거(기존 set을 한번 더 재활용하기 위해)
 		while(set.size() < count) { 
-			int j = ran.nextInt(map.size()-1); //난수 생성
+			int j = ran.nextInt(map.size()); //난수 생성
 			set.add(map.get(j+1)); //map.get으로 value값 받아서 리셋된 set에 저장
 		}
 	}
@@ -126,11 +126,12 @@ class LottoMulti
 
 
 	//추가된 메쏘드_Scanner로 받은 문자가 숫자(정수)인지 확인
-	void numberCheck(String a, Boolean b){ // 매개변수로 문자열(입력값) 과 불리언(체크용)을 받음
+	void numberCheck(String a){ // 매개변수로 문자열(입력값)을 받음
+		numCheck = true;
 		for (int i =0; i<a.length(); i++) { // 매개변수 입력값의 문자열 길이 만큼 실행
 			char tmp = a.charAt(i); // 매개변수 입력값의 i번째 문자를 tmp에 저장
 			if(!Character.isDigit(tmp)){ // tmp가 숫자가 아니면
-				b = false; // 매개변수 불리언(체크용)을 false로 바꿈
+				numCheck = false; // numCheck를 false로 바꿈
 			} 
 		}
 	}
