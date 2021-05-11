@@ -15,6 +15,7 @@ class YourException extends Exception {
 	}	
 }
 
+
 class A {
 	boolean b;
 	boolean b1;
