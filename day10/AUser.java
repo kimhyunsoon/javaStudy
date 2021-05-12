@@ -1,6 +1,5 @@
 package aa.cc;
-
-import aa.bb.A; //클래스 접근 
+import aa.bb.A; //다른 패키지일지라도 상속관계의 부모의 자원 접근 가능
 
 class AUser extends A
 {
@@ -14,3 +13,5 @@ class AUser extends A
 		new AUser();
 	}
 }
+
+
