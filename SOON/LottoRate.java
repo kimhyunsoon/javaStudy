@@ -3,21 +3,19 @@ import java.util.*;
 
 class LottoRate {
     
-    String fName = "teacher/list.txt"; //불러올 파일 디폴트값
+    String fName = "list.txt"; //불러올 파일 디폴트값
     String sList; //읽은 파일 이름
     FileReader fr; 
     BufferedReader br;
     BufferedReader brkey = new BufferedReader(new InputStreamReader(System.in));
     String name;
-    String winner;
-    int rate;
     
     
     LottoRate(){ 
 
         findFile();
-        cut();
-        winnerLotto();
+        out();
+        
     
         
 
@@ -65,35 +63,15 @@ class LottoRate {
         }
    }
 
-   //3. 배열에서 조작대상 찾기
-   
-   void cut(){
-       for(String name: list){
-           int idx = name.indexOf(" ");
-           if(idx != -1) { // " "가 포함되어있지 않으면 -1을 반환함, 포함되어있을때 실행
-               winner = name.substring(0, idx); // 이름 저장
-               String rateStr = name.substring(idx); // " "부터 끝까지를 문자열로 저장
-               rateStr = rateStr.trim(); // 위에서 나온 문자열 예)"    50"의 좌우공백 제거
-               rate = Integer.parseInt(rateStr); // 위에서 나온 문자열 예)"50"을 Integer로 형변환
-           }
-       }
-   }
-   void winnerLotto(){
-        Random r = new Random();
-        int k = r.nextInt(100); // 0~99중 1개의 숫자를 랜덤으로 k에 저장
-        if ((k+1) <= rate){ // 예) k가 30이하일 확률은 30% 
-            pln("당첨자 : " + winner); // 확률안에 들어왔다면 출력
-        }else {
-            System.out.println((100 - rate)+"% 의 확률을 뚫고 실패ㅠㅠ"); //아니라면 다른 행위 (winner를 배열에서 빼고 추첨하면될듯)
+   //3. 배열 출력해보기
+   void out(){
+        for(String name: list){
+            System.out.println("name: "+name);
         }
-
    }
 
 
     void pln(String str){
-		System.out.println(str);
-	}
-    void plnt(int str){
 		System.out.println(str);
 	}
 
