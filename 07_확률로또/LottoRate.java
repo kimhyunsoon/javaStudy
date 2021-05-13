@@ -69,7 +69,8 @@ class LottoRate {
    
    void cut(){
        for(String name: list){
-           int idx = name.indexOf(" ");
+           
+           System.out.println(idx);
            if(idx != -1) { // " "가 포함되어있지 않으면 -1을 반환함, 포함되어있을때 실행
                winner = name.substring(0, idx); // 이름 저장
                String rateStr = name.substring(idx); // " "부터 끝까지를 문자열로 저장

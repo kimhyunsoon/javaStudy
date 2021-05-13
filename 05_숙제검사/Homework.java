@@ -46,7 +46,7 @@ class Homework {
             //pln("존재하는 디렉토리입니다");
             if(f.isFile()){
                 pln("파일이네..안돼요 다시 입력해주세요");
-                confirmDir();
+                findDir();
             }else{
                 saveDirs(f);
             }

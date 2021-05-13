@@ -1,9 +1,9 @@
-public class A2 {
+public class A2 { //2. 자신의 객체를 다른 클래스에게 넘길 때
     
     int age = 36;
     String name = "이가은";
     A2(){
-        A2Friend a2f= new A2Friend(this);
+        A2Friend a2f= new A2Friend(this); 
         a2f.use();
     }
 

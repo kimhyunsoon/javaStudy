@@ -5,7 +5,7 @@ class BUser
 	{
 		try{
 			pln("1");
-			A a = new A();
+			AA1 a = new AA1();
 			pln("2");
 			a.use1();
 			pln("3");
