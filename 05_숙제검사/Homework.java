@@ -44,9 +44,16 @@ class Homework {
         File f = new File(path); //File class
         if(f.exists()){ //디렉토리가 존재하면 true, 존재하지 않으면 flase로 반환
             //pln("존재하는 디렉토리입니다");
-            saveDirs(f);
+            if(f.isFile()){
+                pln("파일이네..안돼요 다시 입력해주세요");
+                confirmDir();
+            }else{
+                saveDirs(f);
+            }
+            
         }else{
-            pln("존재하지 않는 디렉토리입니다");
+            pln("디렉토리를 찾지 못했어요. 다시 입력해주세요.");
+            confirmDir();
         }
     }
 
