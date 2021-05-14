@@ -5,7 +5,7 @@ interface A { //접근제한자 중 public하고 default만 나올 수 있음
     void m1(); //추상메소드, public abstract 생략
     
     static void m2(){ //static 메소드
-        System.out.println("m2");
+        System.out.println("m2"); //굳이 오버라이딩을 하지 않아도 되게
     }
     default void m3(){ //default 메소드(예약어)
         System.out.println("m3");
