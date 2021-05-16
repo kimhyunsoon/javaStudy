@@ -3,6 +3,8 @@ public class AA2 {
     String name = "±èÇö¼ø";
 
     AA2(){
+
+        
         AA2Friend aa2f = new AA2Friend(this);
         aa2f.use();
 
@@ -21,10 +23,9 @@ public class AA2 {
 
 class AA2Friend{
 
-    AA2 aa2;
-    AA2Friend(AA2 aa2){
-        this.aa2 = aa2;
-
+    AA2 aa2; //º¯¼ö
+    AA2Friend(AA2 a){ //
+        this.aa2 = a;
     }
     
     void use(){

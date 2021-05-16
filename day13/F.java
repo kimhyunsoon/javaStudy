@@ -40,6 +40,6 @@ class F
 		}
 	}
 	public static void main(String[] args) {
-		F f = new F();
+		new F();
 	}
 }

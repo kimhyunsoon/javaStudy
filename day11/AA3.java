@@ -1,4 +1,4 @@
-class AA3 extends Object
+class AA3
 {
 	String name = "È«±æµ¿";
 	
@@ -6,12 +6,15 @@ class AA3 extends Object
 
 		this("ÀÌ°ÇÈñ");
 		AA3User aa3u=new AA3User(this);
+		// AA3User aa3u = new AA3User(new AA3());
+
 		aa3u.use();
+
 	}
 	
-	AA3(String name){
+	AA3(String a){
 		super();
-		this.name = name;
+		this.name = a;
 	}
 
 	void m(){
@@ -22,16 +25,18 @@ class AA3 extends Object
 	{
 		new AA3();
 	}
+
 }
+
 
 
 class AA3User
 {
 	
 	AA3 aa3;
-	AA3User(){}
-	AA3User(AA3 aa3){
-		this.aa3 = aa3;
+	
+	AA3User(AA3 a){
+		this.aa3 = a;
 	}
 	
 	void use(){
