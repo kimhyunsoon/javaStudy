@@ -7,4 +7,6 @@ class DChild extends D
 	void m2(){
 		System.out.println("DChild¿« m2()");
 	}
+
+
 }
