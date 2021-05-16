@@ -5,7 +5,7 @@ public class Path {
     HashMap<String, String> pathMap = new HashMap<>();
     
     void put(){
-        pathMap.put("bin", "zzz");
+        pathMap.put("bin", "../src/soon/res");
     }
     public String PathFunc(String a){
         put();
