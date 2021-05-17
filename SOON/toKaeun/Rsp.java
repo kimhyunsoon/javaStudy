@@ -26,8 +26,8 @@ public class Rsp {
         } else {
             totalRound = s.nextInt();
             System.out.println("");
-            if (totalRound == 0 || totalRound > 10 ){
-                System.out.println("최소 1게임에서 최대 10게임 까지 가능해요..! 다시 입력해주세요.");
+            if (totalRound == 0 || totalRound > 100 ){
+                System.out.println("최소 1게임에서 최대 100게임 까지 가능해요..! 다시 입력해주세요.");
                 inputRound();
             }
         }
@@ -53,6 +53,7 @@ public class Rsp {
             System.out.println("");
             System.out.println("====== Final ROUND "+roundCount+"/"+totalRound+" ======");
             System.out.println("현재 전적 : " + win+ "승 / "+ draw + "무 / " + lose + "패");
+            System.out.println("");
             System.out.println("알파고) 안내면 진다...! 가위바위보!!!");
             System.out.println("");
             
