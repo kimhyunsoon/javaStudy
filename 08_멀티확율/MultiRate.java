@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-class Test {
+class MultiRate {
     
     String dFile = "list.txt"; //불러올 파일 디폴트값
     FileReader fr; 
@@ -11,7 +11,11 @@ class Test {
      //읽은 파일 이름
     BufferedReader brkey = new BufferedReader(new InputStreamReader(System.in));  
 
-    Test(){ 
+    MultiRate(){
+        saveList();
+        cut();
+        setArray();
+        // extract(); 
 
     }
     
@@ -28,7 +32,7 @@ class Test {
                 line = line.trim(); //공백 삭제
                 if(line.length() !=0){
                     list.add(line); 
-                    pln(line);
+                    //pln(line);
                 }
             } 
         }catch(FileNotFoundException fe){
@@ -99,15 +103,12 @@ class Test {
         }
     }
 
-    void ran100(){
+    void extract(){
         Random random = new Random();
         int ran = random.nextInt(100); //0~100 사이의 임의의 수
-        int i = 0;
-
         if(ran<wList.size()){
             if(wList.size()>100){
                 System.out.println("확률이 100을 넘을 수 없습니다");
-
             }
             else{
                 System.out.println("당첨자: "+wList.get(ran));
@@ -117,25 +118,13 @@ class Test {
             ran = random.nextInt(list.size());
             System.out.println("당첨자: "+list.get(ran));
         }
-
     }
-
-
 
     void pln(String str){
         System.out.println(str);
     }
 
-
-
-   public static void main(String[] args) {
-       Test test = new Test();
-       test.saveList();
-       test.cut();
-       test.setArray();
-       test.ran100();
-
-
-       
-   }
+    public static void main(String[] args) {
+        new MultiRate();
+    }
 }
