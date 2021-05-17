@@ -10,7 +10,7 @@ class Test {
     boolean defaultFile = true;
      //읽은 파일 이름
     BufferedReader brkey = new BufferedReader(new InputStreamReader(System.in));  
-    
+
     Test(){ 
 
     }
@@ -81,26 +81,31 @@ class Test {
                     iter.remove(); //rate가 0인 애들 제거
                 }else{
                     map.put(winner,rate); //table에 확률 조작된 애들을 확률과 함께 저장
-                    //pln(winner);
+                   //pln(winner);
+
                 }
             }
         }
     }
 
-
+    ArrayList<String> wList =  new ArrayList<String>();
     void setArray(){
-        ArrayList<String> wList =  new ArrayList<String>();
-        Set<Integer> keys= table.keySet();
-        for(int i = 0 ; i<map.length ;i++){
-            wList.add(keys);
+        Set<String> keys= map.keySet();
+        for(String key : keys){
+            for(int i=0; i<map.get(key); i++){
+                wList.add(key);
+                pln(key);
+            }
+
         }
+        
     }
 
     void ran100(){
         Random random = new Random();
         int ran = random.nextInt(100); //0~100 사이의 임의의 수
         int i = 0;
-        Set<String> names = table.keySet();
+        Set<String> names = map.keySet();
         
 
         
@@ -120,7 +125,9 @@ class Test {
        Test test = new Test();
        test.saveList();
        test.cut();
-       test.ran100();
+       test.setArray();
+
+
        
    }
 }
