@@ -73,5 +73,3 @@ class DSG3{        // Drawing Straws Game 3
     }
 }
 
-
-출처: https://seokho-j0308.tistory.com/51 [까막눈]
