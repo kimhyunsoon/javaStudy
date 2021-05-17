@@ -1,5 +1,3 @@
-import org.graalvm.compiler.nodes.NodeView.Default;
-
 class CCC { //switch, case
             //
     void m1(int i){

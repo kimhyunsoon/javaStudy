@@ -8,6 +8,7 @@ public class RPS {
     int draw = 0;
     int lose = 0;
     RPS(){
+        inputRound();
         play();
     }
 
@@ -21,70 +22,90 @@ public class RPS {
 
     void play(){
         
-        System.out.println("가위 바위 보");
-        Scanner sc = new Scanner(System.in);
-        Random ran = new Random();
+        if(roundCount<=totalRound){
+            System.out.println("가위 바위 보");
+            Scanner sc = new Scanner(System.in);
+            Random ran = new Random();
 
-        int users = null;
-        int com = ran.nextInt(3);
+            int com = ran.nextInt(3);
+            String user = sc.next();
+            game(com,user);
 
-        int user = sc.nextInt();
 
+            
+        }
+        else{
+            System.out.println("최종전적: "+win+"승 "+draw+"무 "+lose+"패");
+        }
 
-        if(user == 0){
+        
+    }
+
+    void game(int com, String user){
+        if(user.equals("가위")){
             switch (com) {
                 case 0:
                     pln("알파고) 가위!, 나) 가위!");
-                    pln("draw!");    
+                    pln("draw!");
+                    draw++;    
                     break;
                 case 1:
                     pln("알파고) 바위!, 나) 가위!");
-                    pln("졌...다...ㅠㅠ");    
+                    pln("졌...다...ㅠㅠ");
+                    lose++;    
                     break;
                 case 2:
                     pln("알파고) 보!, 나) 가위!");
-                    pln("이겼다!!");    
+                    pln("이겼다!!");
+                    win++;    
                     break;
                 default: pln("가위, 바위, 보로 입력해주세요");
             }
         }
 
-        else if(user == 1){
+        else if(user.equals("바위")){
             switch (com) {
                 case 0:
                     pln("알파고) 가위!, 나) 바위!");
-                    pln("이겼다!!");    
+                    pln("이겼다!!");
+                    win++;    
                     break;
                 case 1:
                     pln("알파고) 바위!, 나) 바위!");
-                    pln("draw!");    
+                    pln("draw!");
+                    draw++;    
                     break;
                 case 2:
                     pln("알파고) 보!, 나) 가위!");
-                    pln("졌...다...ㅠㅠ");    
+                    pln("졌...다...ㅠㅠ");
+                    lose++;    
                     break;
                 default: pln("가위, 바위, 보로 입력해주세요");
             }
         }
 
-        else if(user == 2){
+        else if(user.equals("보")){
             switch (com) {
                 case 0:
                     pln("알파고) 가위!, 나) 보!");
-                    pln("졌...다...ㅠㅠ");    
+                    pln("졌...다...ㅠㅠ");
+                    lose++;    
                     break;
                 case 1:
                     pln("알파고) 바위!, 나) 보!");
-                    pln("이겼다!!");    
+                    pln("이겼다!!");
+                    win++;    
                     break;
                 case 2:
                     pln("알파고) 보!, 나) 가위!");
-                    pln("draw!");    
+                    pln("draw!");
+                    draw++;    
                     break;
                 default: pln("가위, 바위, 보로 입력해주세요");
             }
         }
-        
+        roundCount++;
+        play();
     }
 
 

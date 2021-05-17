@@ -7,6 +7,9 @@ class LottoRate {
     FileReader fr; 
     BufferedReader br;
     String name;
+
+    String name2;
+
     BufferedReader brkey = new BufferedReader(new InputStreamReader(System.in));  
     String winner;
     int rate;
@@ -55,8 +58,7 @@ class LottoRate {
         }catch(FileNotFoundException fe){
             pln("파일을 찾지 못했어요 :(");
             findFile();
-        }
-        catch(IOException ie){
+        }catch(IOException ie){
         }
     }
 
@@ -67,6 +69,7 @@ class LottoRate {
             int idx = name.indexOf(" ");
             //System.out.println(idx);
             if(idx != -1) { // " "가 포함되어있지 않으면 -1을 반환함, 포함되어있을때 실행
+                name2 = name;
                 winner = name.substring(0, idx); // 이름 저장
                 String wRate = name.substring(idx); // " "부터 끝까지를 문자열로 저장
                 wRate = wRate.trim(); // 위에서 나온 문자열 예)"    50"의 좌우공백 제거
@@ -80,19 +83,14 @@ class LottoRate {
    void extract(){
         Random random = new Random();
         int ran = random.nextInt(100); 
-        try {
-            if (ran < wList.size()){
-                pln("당첨자 : " + winner);
+        if (ran < wList.size()){
+            pln("당첨자 : " + winner);
 
-            }
-        } catch (IndexOutOfBoundsException ie) {
-            if(ran>wList.size()){
-                // list.remove("name");
-                // ran = random.nextInt(list.size());
-                System.out.println("당첨자 : " + wList.get(ran)); 
-            }
-        } catch(Exception e){}
-       
+        } else{
+            list.remove(name2);
+            ran = random.nextInt(list.size());
+            pln("당첨자 : "+list.get(ran));
+        }
     }
 
     void pln(String str){
