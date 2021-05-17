@@ -96,16 +96,29 @@ class Test {
                 wList.add(key);
                 pln(key);
             }
-
         }
-        
     }
 
     void ran100(){
         Random random = new Random();
         int ran = random.nextInt(100); //0~100 사이의 임의의 수
         int i = 0;
-        Set<String> names = map.keySet();
+
+        if(ran<wList.size()){
+            if(wList.size()>100){
+                System.out.println("확률이 100을 넘을 수 없습니다");
+
+            }
+            else{
+                System.out.println("당첨자: "+wList.get(ran));
+            }
+        }else{
+            list.remove("name");
+            ran = random.nextInt(list.size());
+            System.out.println("당첨자: "+list.get(ran));
+        }
+
+        }
         
 
         
@@ -126,6 +139,7 @@ class Test {
        test.saveList();
        test.cut();
        test.setArray();
+       test.ran100();
 
 
        
