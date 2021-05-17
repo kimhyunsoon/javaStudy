@@ -118,12 +118,6 @@ class Test {
             System.out.println("´çÃ·ÀÚ: "+list.get(ran));
         }
 
-        }
-        
-
-        
-        
-
     }
 
 
