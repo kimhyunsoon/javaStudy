@@ -6,7 +6,7 @@ public class E {
     InputStream is; //파일
     OutputStream os; //모니터
     String src = "keyword_kaeun.txt";
-    String dest = "Etest.java";
+    // String dest = "Etest.java";
 
     E(){
 
@@ -18,14 +18,15 @@ public class E {
     }
 
     void rw2(){
+        int count = 0;
         byte[] bs = new byte[512]; //계란판
         try {
-            int count = 0;
-            while((count = is.read()) != -1){
+            while((count = is.read(bs)) != -1){
                 os.write(bs, 0, count);
             }
-            System.out.println("복사성공!");
             os.flush();
+            System.out.println("복사성공!");
+            
         } catch (IOException e) {
         } finally{
             try {
