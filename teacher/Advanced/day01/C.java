@@ -1,7 +1,7 @@
 import java.io.*;
 
 //file -> monitor 
-class C 
+class C //林力: FileInputStream & FileOutputStream
 {
 	FileInputStream is; //颇老  
 	FileOutputStream os; //颇老 

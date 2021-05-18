@@ -43,4 +43,8 @@
 	     1) InputStream / OutputStream 
               ex) day01/B.java      
 			
-		 2) Reader / Writer 
+		 2) FileInputStream / FileOutputStream 
+		      ex) day01/C.java
+
+		 3) BufferedInputStream / BufferedOutputStream 
+		      ex) day01/D.java 

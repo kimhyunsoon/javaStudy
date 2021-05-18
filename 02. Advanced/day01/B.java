@@ -1,10 +1,11 @@
 import java.io.*;
 //keyboard->file
+//1바이트 기반 스트림 예시
 
 public class B {
     InputStream is; //public abstract, System.in의 반환타입
     OutputStream os;
-    String fname = "r.txt";
+    String fname = "Btest.txt";
 
     B(){
         is = System.in;
@@ -25,17 +26,13 @@ public class B {
             }
             os.flush(); //비워준다
         } catch (IOException ie) {
-
         } finally{
             try {
                 is.close();
                 os.close();
             } catch (IOException ie) {
-                //TODO: handle exception
             }
         }
-
-
     }
 
     public static void main(String[] args) {
