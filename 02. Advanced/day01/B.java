@@ -1,6 +1,6 @@
 import java.io.*;
 //keyboard->file
-//1바이트 기반 스트림 예시
+//반복문을 1바이트마다 돌림
 
 public class B {
     InputStream is; //public abstract, System.in의 반환타입
