@@ -49,7 +49,7 @@ public class A { //DataInputStream & DataOutputStream
         dos.flush();
     }
     
-    void readFromFile(){
+    void readFromFile()throws IOException{
         byte b = dis.readByte();
         short s = dis.readShort();
         char c = dis.readChar();
@@ -83,11 +83,12 @@ public class A { //DataInputStream & DataOutputStream
         try {
             //a.writeToFile();
             a.readFromFile();
-            a.closeAll();
+
 
         } catch (IOException ie) {
 
         }
+        a.closeAll();
 
 
     }
