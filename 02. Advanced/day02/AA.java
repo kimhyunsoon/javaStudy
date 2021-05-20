@@ -2,10 +2,11 @@ import java.io.*;
 public class AA { //주제: DataInputStream & DataOutputStream
 
     String fname = "AAtest.txt";
-    FileInputStream fis; //노드스트림
     FileOutputStream fos; //노드스트림
-    DataInputStream dis; //필터스트림
     DataOutputStream dos; //필터스트림
+    FileInputStream fis; //노드스트림
+    DataInputStream dis; //필터스트림
+
     
     AA(){
         try {

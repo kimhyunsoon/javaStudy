@@ -6,10 +6,11 @@ public class A { //DataInputStream & DataOutputStream
     //data source A.java
 
     String fName = "Adata.txt";
-    FileInputStream fis;
     FileOutputStream fos;
-    DataInputStream dis;
     DataOutputStream dos;
+    FileInputStream fis;
+    DataInputStream dis;
+
 
     
     A(){
@@ -81,7 +82,7 @@ public class A { //DataInputStream & DataOutputStream
     public static void main(String[] args) {
         A a = new A();
         try {
-            //a.writeToFile();
+            a.writeToFile();
             a.readFromFile();
 
 
