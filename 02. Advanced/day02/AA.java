@@ -43,7 +43,7 @@ public class AA { //주제: DataInputStream & DataOutputStream
 
     void readFromFile() throws IOException{
         //FileInputStream에 있는 read 메소드를 이용, dis를 통해 만들어진 파일을 읽음
-        short s = dis.readByte();
+        short s = dis.readShort();
         int i = dis.readInt();
         String str = dis.readUTF();
         boolean flag = dis.readBoolean();
