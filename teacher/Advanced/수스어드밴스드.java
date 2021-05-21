@@ -54,3 +54,22 @@
 
 		 5) Reader / Writer 
 		      ex) day02/B.java 
+
+		 6) FileReader / FileWriter 
+		      ex) day02/B.java 
+
+	     7) BufferedReader / PrintWriter
+		      ex) day02/C.java 
+
+     (6) 주요 클래스 
+		 File : File과 Dir를 모델링 
+		      ex) day02/D.java 
+
+2. Network 
+     (1) TCP(Transmission Control Protocol): 연결지향프로토콜(신뢰성/실시간)  
+           ( ex:전화, 메신져, .. ) 
+
+		   ex) day03/AServer.java, AClient.java 
+
+	 (2) UDP(User Datagram Protocol): 비연결지향프로토콜(비신뢰성)    
+           ( ex:편지, 쪽지, 인터넷방송,.. )
