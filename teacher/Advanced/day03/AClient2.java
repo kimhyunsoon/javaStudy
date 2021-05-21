@@ -28,7 +28,7 @@ class AClient {
 				dos.flush();
 			}
 		}catch(IOException ie){
-			pln("speak() ie: " + ie);
+			pln("상대방이 나갔습니다");
 		}finally{
 			try{
 				if(dos !=null) dos.close();
