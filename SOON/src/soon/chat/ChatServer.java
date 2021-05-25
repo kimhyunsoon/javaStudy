@@ -10,11 +10,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 interface GlobalServer{
     public static ConcurrentHashMap<String,Socket> user = new ConcurrentHashMap<>();
+    public static ConcurrentHashMap<String,Socket> name = new ConcurrentHashMap<>();
     public static ConcurrentHashMap<Integer,Socket> socketMap = new ConcurrentHashMap<>();
     int port = 3586;
-    Lib lib = new Lib();
-
-    
+    Lib lib = new Lib();    
 }
 public class ChatServer implements GlobalServer{
 
@@ -25,9 +24,9 @@ public class ChatServer implements GlobalServer{
             serverSocket = new ServerSocket(port);
             lib.msgln("서버 시작");
             while (true) {
-                // 4. 클라이언트의 접속을 대기한다.
                 socketMap.put(0, serverSocket.accept());
                 Socket socket = socketMap.get(0);
+
                 lib.msgln("[" + socket.getInetAddress() + " : " + socket.getPort() + "] 에서 접속");
                 
                 // 12. 메시지 전송 처리를 하는 스레드 생성 및 실행
@@ -49,21 +48,30 @@ public class ChatServer implements GlobalServer{
 }
 
 class ServerReceiver extends Thread implements GlobalServer{
-    // private DataInputStream dis;
-    Socket socket = socketMap.get(0);
-    DataInputStream dis;
 
+    Socket socket = socketMap.get(0);
+    
     public ServerReceiver(Socket socekt) {
         try {
-            dis = new DataInputStream(socket.getInputStream());
+            DataInputStream dis = new DataInputStream(socket.getInputStream());
         } catch (IOException e) {}
     }
     
     @Override
     public void run() {
         try {
-            dis = new DataInputStream(socket.getInputStream());
-            lib.msg(dis.readUTF());
+            DataInputStream dis = new DataInputStream(socket.getInputStream());
+            user.put(dis.readUTF(), socket);
+            String name = dis.readUTF();
+            lib.msgln(dis.readUTF() + "님이 입장함");
+            if (!name.equals("")) {
+                sendMessage(dis.readUTF() + "님이 입장함");
+            }
+
+            while (dis != null) {
+                name = "";
+                sendMessage(dis.readUTF());
+              }
 
         } catch (IOException e) {}
     }
