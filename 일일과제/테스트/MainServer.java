@@ -2,20 +2,14 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
-public class MainServer2 extends Thread{
+public class MainServer extends Thread{
     ServerSocket ss;
     Socket sc;
-    DataInputStream dis;
-    DataOutputStream dos;
+
     int port = 3586;
     String ipClient;
-    String msg = "";
-    OutputStream os;
-	InputStream is;
-    public String name;
-    public Map<String, Socket> map; //String : 대화명, Socket: 해당 유저의 소켓
-    
-    public MainServer2(){
+
+    public MainServer(){
 
     }
     
@@ -27,10 +21,12 @@ public class MainServer2 extends Thread{
                 sc = ss.accept(); 
                 ipClient = sc.getInetAddress().getHostAddress();
                 pln(ipClient+"에서 접속되었습니다.");
-                OneClientModule ocm = new OneClientModule();
-                ocm.receiver(sc);
                 ServerSpeak2 th2 = new ServerSpeak2(sc);
                 th2.start();
+                OneClientModule ocm = new OneClientModule();
+                ocm.receiver(sc);
+                ocm.start();
+
 
 
 
@@ -52,7 +48,7 @@ public class MainServer2 extends Thread{
     }
 
     public static void main(String[] args) {
-        MainServer2 ms= new MainServer2();
+        MainServer ms= new MainServer();
         ms.serverStart();
         
     }
@@ -88,3 +84,12 @@ class ServerSpeak2 extends Thread{
         }
     }
 }
+
+
+    // String msg = "";
+    // OutputStream os;
+	// InputStream is;
+    // public String name;
+    // public Map<String, Socket> map; //String : 대화명, Socket: 해당 유저의 소켓
+        // DataInputStream dis;
+    // DataOutputStream dos;

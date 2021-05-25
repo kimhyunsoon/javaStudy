@@ -5,15 +5,15 @@ import java.util.*;
 public class OneClientModule extends Thread{
     static Map<String, Socket> map;
 
-    // ServerSocket ss;
+    ServerSocket ss;
     Socket sc;
     DataInputStream dis;
     DataOutputStream dos;
-    // int port = 3586;
-    // String ipClient;
+    int port = 3586;
+    String ipClient;
     String msg = "";
-    // OutputStream os;
-	// InputStream is;
+    OutputStream os;
+	InputStream is;
     String name;
     
 
@@ -24,7 +24,7 @@ public class OneClientModule extends Thread{
 
 
     public OneClientModule(String msg, String from) {
-        
+        start();
     }
 
     public void sendMessage(String msg){
@@ -51,11 +51,11 @@ public class OneClientModule extends Thread{
     }
     
     public void receiver(Socket sc){
-        // this.sc = sc;
+        this.sc = sc;
         try {
             dis = new DataInputStream(sc.getInputStream());
             name = dis.readUTF();
-            // sendMessage(name+"님이 입장했습니다.");
+            sendMessage(name+"님이 입장했습니다.");
             map.put(name,sc);
             System.out.println("#현재 서버 접속자 수는 " + map.size() + "명입니다.");
         } catch (Exception e) {}
@@ -76,8 +76,6 @@ public class OneClientModule extends Thread{
     void pln(String str){
         System.out.println(str);
     }
-
-    
 }
 
 
