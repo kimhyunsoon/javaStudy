@@ -17,7 +17,7 @@ interface GlobalClient{
 
 }
 public class ChatClient implements GlobalClient{
-   
+
     public void clientStart() {
         try {
             Socket socket = new Socket(ip, port);
