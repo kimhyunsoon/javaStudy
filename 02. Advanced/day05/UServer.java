@@ -4,7 +4,7 @@ import java.net.*;
 public class UServer { 
     DatagramSocket ds; //메세지함(우체통)
     DatagramPacket dp; //메세지틀(편지봉투)
-    int port = 6000;
+    int port = 7000;
 
     UServer(){ //무조건 호출되지만 반복호출(재귀호출)이 어렵다. 객체가 매번 만들어지기 때문
         try {

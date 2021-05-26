@@ -10,9 +10,23 @@ public class UUServer {
     UUServer(){
         try {
             ds = new DatagramSocket(port);
-        } catch (Exception e) {
-            //TODO: handle exception
+            pln(port+"번에서 UDP 서버 대기중");
+            byte[] buf = new byte[2048];
+            dp = new DatagramPacket(buf, buf.length);
+            ds.receive(dp);
+            String msg = new String (buf);
+            msg = msg.trim();
+            pln("Client>> "+msg);
+        } catch (SocketException se) {
+        } catch (IOException ie){
+        } finally{
+            if(ds !=null) ds.close();
         }
+    }
+
+
+    void pln(String str){
+        System.out.println(str);
     }
 
     

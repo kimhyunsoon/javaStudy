@@ -51,7 +51,7 @@ class B extends JFrame
 		setVisible(true);
 		setLocation(200, 100);
 
-	    setResizable(false);
+	    setResizable(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	public static void main(String[] args) 
