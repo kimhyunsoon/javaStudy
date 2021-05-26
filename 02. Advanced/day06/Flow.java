@@ -2,25 +2,26 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-
 //GridLayout
-public class Grid extends JFrame{
-    JButton b1,b2,b3,b4;
+public class Flow extends JFrame{
     Container cp;
+    String lables[] = {"도1","레","미","파","솔","라","시","도2"};
+    JButton bs[];
+    
+    Flow(){
+        bs = new JButton[8];
+    }
     
     void init(){
-        b1 = new JButton("버튼1");
-        b2 = new JButton("버튼2");
-        b3 = new JButton("버튼3");
-        b4 = new JButton("버튼4");
-
-        setLayout(new GridLayout(2,3));
+        setLayout(new flowLayout());
         cp = getContentPane();
-        cp.add(b1);cp.add(b2);cp.add(b3);cp.add(b4);
-        cp.add(new JButton("버튼5"));
-        cp.add(new JButton("버튼6"));
-
+        for(int i=0;i<lables.length;i++){
+            bs [i]= new JButton(lables[i]);
+            cp.add(bs[i]);
+        }
+        
         setUI();
+
     }
 
 
@@ -35,7 +36,7 @@ public class Grid extends JFrame{
 	}
 
     public static void main(String [] args) {
-        new Grid().init();
+        new Flow().init();
         
     }
     

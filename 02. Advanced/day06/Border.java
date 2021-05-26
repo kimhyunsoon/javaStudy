@@ -3,7 +3,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 //BorderLayout
-public class Frame01 extends JFrame{
+public class Border extends JFrame{
     Container cp;
     JPanel p;
     JPanel pBaby;
@@ -52,7 +52,7 @@ public class Frame01 extends JFrame{
     
     void setUI(){
 		setTitle("BorderLayout Ver 1.0");
-		setSize(300, 200);
+		setSize(500, 300);
 		setVisible(true);
 		setLocation(200, 100);
 
@@ -61,7 +61,7 @@ public class Frame01 extends JFrame{
 	}
 
     public static void main(String [] args) {
-       Frame01 f = new Frame01();
+       Border f = new Border();
        f.init();
         
     }
