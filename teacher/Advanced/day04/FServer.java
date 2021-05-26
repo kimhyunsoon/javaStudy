@@ -1,67 +1,71 @@
 import java.io.*;
 import java.net.*;
 
-public class FServer {
-    ServerSocket ss;
-    Socket sc;
-    int port = 3000;
-    String ipClient;
+class FServer 
+{
+	ServerSocket ss;
+	Socket s;
+	int port = 3000; 
+	String ipClient;
+	String fName = "goodwarriors.mpeg";
+
     InputStream is;
-    BufferedInputStream bis;
-    String file;
-    FileOutputStream fos;
-    
-    
-    FServer(){
+	BufferedInputStream bis;
+	FileOutputStream fos;
+	BufferedOutputStream bos;
 
-        try {
-            ss = new ServerSocket(port);
-            pln(port+"에서 대기중");
-            sc = ss.accept();
-            ipClient = sc.getInetAddress().getHostAddress();
-            pln(ipClient+"에서 접속되었습니다.");
-
-            receive();
-            
-        } catch (IOException ie) {
-            //TODO: handle exception
-        } finally{
-
-        }
-    }
-
-    void makeStream(){
-        is = s.getInputStream();
-        bis = new BufferedInputStream(is,2048);
-        fos = new FileOutputStream(file);
-        bos = new BufferedOutputStream(fos);
-    }
-
-    void receive(){
-        byte bs = new byte[512];
-        int cnt;
-        try {
-            while((cnt = bis.read(bs)) != -1){
-                bos.write(bs,0,cnt);
-            }
-            
-        } catch (Exception e) {
-            //TODO: handle exception
-        }
-
-
-        }
-    }
-
-    void pln(String str){
-        System.out.println(str);
-
-    }
-    
-
-
-    public static void main(String[] args) {
-        new FServer();
-    }
-    
+	FServer(){
+		try{
+			ss = new ServerSocket(port);
+			pln(port+"번 포트에서 파일 서버 대기중..");
+			s = ss.accept();
+			ipClient = s.getInetAddress().getHostAddress();
+			pln("클라이언트("+ipClient+") 연결됨");
+			makeStream();
+			receive();
+		}catch(IOException ie){
+		}finally{
+			try{
+				if(s != null) s.close();
+				if(ss != null) ss.close();
+			}catch(IOException ie){}
+		}
+	}
+	void makeStream(){
+		try{
+			is = s.getInputStream();
+			bis = new BufferedInputStream(is, 2048);
+			fos = new FileOutputStream(fName);
+			bos = new BufferedOutputStream(fos, 2048);
+		}catch(IOException ie){}
+	}
+	void receive(){ //Socket -> File 
+		int cnt = 0;
+		long totalSize = 0; 
+		byte bs[] = new byte[512];
+		try{
+			while((cnt = bis.read(bs)) != -1){
+				bos.write(bs, 0, cnt);
+				totalSize += cnt;
+				//pln("받기중.. totalSize: " + totalSize);
+			}
+			bos.flush();
+			pln("파일("+fName+") 받기 완료! ("+totalSize+"bytes)");
+		}catch(IOException ie){
+		}finally{
+			try{
+				if(bis != null) bis.close();
+				if(is != null) is.close();
+				if(bos != null) bos.close();
+				if(fos != null) fos.close();
+			}catch(IOException ie){}
+		}
+	}
+	void pln(String str){
+		System.out.println(str);
+	}
+	public static void main(String[] args) 
+	{
+		new FServer();
+	}
 }

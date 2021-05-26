@@ -7,7 +7,7 @@ class FClient
 	String ip = "127.0.0.1"; //자신의 서버 
 	//String ip = "192.168.1.15"; //대면 학생
 	//String ip = "123.142.144.46"; //비대면 학생 
-	int port = 3001;
+	int port = 3000;
 	String path = "C:/SOO/Advanced/자료실/goodwarriors.mpeg";
 
 	FileInputStream fis;
@@ -28,7 +28,6 @@ class FClient
 				if(s != null) s.close();
 			}catch(IOException ie){}
 		}
-
 	}
 	void makeStream(){
 		try{
