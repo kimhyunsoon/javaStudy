@@ -8,7 +8,7 @@ class UI extends JFrame{
     JButton b;
     void init(){
         b = new JButton("자바의 버튼");
-        add(b);
+        add(b); 
         setUI();
 
 

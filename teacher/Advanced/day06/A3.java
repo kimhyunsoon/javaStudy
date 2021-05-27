@@ -34,6 +34,7 @@ class A3Handler implements ActionListener
 	A3Handler(A3 a3){
 		this.a3 = a3;
 	}
+
 	public void actionPerformed(ActionEvent e){
 		a3.b.setText("클릭! by 제3클래스");
 	}

@@ -3,10 +3,10 @@ import java.awt.event.*;
 import javax.swing.*;
 
 
-class UI extends JFrame{
+class Event01 extends JFrame{
     JButton b;
 
-    class A1Handler implements ActionListener{
+    class Event01Handler implements ActionListener{
         public void actionPerformed(ActionEvent e){
             //b.setText("클릭! by 유명 내부클래스");
             Object obj = e.getSource();
@@ -21,8 +21,9 @@ class UI extends JFrame{
 
     void init(){
         b = new JButton("자바의 버튼");
-        ActionListener listener = new A1Handler();
+        ActionListener listener = new Event01Handler();
         b.addActionListener(listener); //javax.swing에 있음, 
+        add(b);
         setUI();
 
 
@@ -39,8 +40,8 @@ class UI extends JFrame{
     }
 
     public static void main(String[] args){
-        UI ui= new UI();
-        ui.init();
+        Event01 event01= new Event01();
+        event01.init();
 
     }
     

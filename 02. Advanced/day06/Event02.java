@@ -10,15 +10,19 @@ class UI2 extends JFrame{
     JButton b;
     void init(){
         b = new JButton("자바의 버튼");
-        // ActionListener listener = new ActionListener()
-        // {
-        //     public void actionPerformed(ActionEvent e){
-        //         b.setText("클릭! by 유명 내부클래스");}
-        // }
+        // ActionListener listener = new ActionListener(){
+
+        //     @Override
+        //     public void actionPerformed(ActionEvent e) {
+        //         b.setText("클릭! by 무명 내부(1)");
+                
+        //     }
+        // };
+        // b.addActionListener(listener);
 
         b.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
-                b.setText("클릭! by 유명 내부클래스");
+                b.setText("클릭! by 무명 내부(2)");
             }
         }); 
         add(b);
