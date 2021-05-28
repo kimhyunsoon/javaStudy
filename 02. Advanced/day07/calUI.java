@@ -56,19 +56,9 @@ class CalUI extends JFrame
         p.setLayout(new GridLayout(5, 4));
 		ButtonHandler handler = new ButtonHandler(this);
 
-		for (int i = 0; i < labelArr.length; i++) {
-            btnArr[i] = new JButton(labelArr[i]);
-            if(labelArr[i].equals("")){
-                btnArr[i].setVisible(false);
-            }
-            p.add(btnArr[i]);
-			btnArr[i].addActionListener(handler);
-        }
 
 
 
-
-        
 	}
 	void setUI(){
 		setTitle("Cal Ver 1.0");
@@ -87,3 +77,32 @@ class CalUI extends JFrame
 		new CalUI().init();
 	}
 }
+
+
+
+
+
+// btnArr[0] = new JButton("del");
+// btnArr[1] = new JButton("CE");
+// btnArr[2] = new JButton("C");
+// btnArr[3] = new JButton("¡À");
+
+// btnArr[4] = new JButton("7");
+// btnArr[5] = new JButton("8");
+// btnArr[6] = new JButton("9");
+// btnArr[7] = new JButton("¡¿");
+
+// btnArr[8] = new JButton("4");
+// btnArr[9] = new JButton("5");
+// btnArr[10] = new JButton("6");
+// btnArr[11] = new JButton("-");
+
+// btnArr[12] = new JButton("+/-");
+// btnArr[13] = new JButton("0");
+// btnArr[14] = new JButton(".");
+// btnArr[15] = new JButton("=");
+
+// btnArr[16] = new JButton("1");
+// btnArr[17] = new JButton("2");
+// btnArr[18] = new JButton("3");
+// btnArr[19] = new JButton("+");
