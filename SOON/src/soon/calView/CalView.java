@@ -4,8 +4,9 @@ import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.math.BigDecimal;
-
 import javax.swing.*;
+import javax.script.ScriptEngineManager; 
+import javax.script.ScriptEngine;
 
 
 public class CalView extends JFrame{
@@ -47,7 +48,7 @@ public class CalView extends JFrame{
         for (int i = 0; i < labelArr.length; i++) {
             btnArr[i] = new JButton(labelArr[i]);
             char tmp = labelArr[i].charAt(0);
-            
+            // input.setText("0");
             if (Character.isDigit(tmp) || labelArr[i] == ".") { // 숫자나 . 일때
                 btnArr[i].addActionListener(new ActionListener(){
                     public void actionPerformed(ActionEvent e){
@@ -87,25 +88,17 @@ public class CalView extends JFrame{
                 });
             } else if(labelArr[i].equals("=")){
                 btnArr[i].addActionListener(new ActionListener(){
-                    public void actionPerformed(ActionEvent e){
-
+                    public void actionPerformed(ActionEvent e) {
                         info.setText(info.getText() + input.getText());
-
-                        LinkedList<BigDecimal> numList = new LinkedList<BigDecimal>(); //숫자관련
-                        LinkedList<Character> opList = new LinkedList<Character>(); //연산자 관련
-                        
                         String s = info.getText().replace("÷","/").replace("×","*");
                         
-                        String num = ""; //연사자 외에 숫자들을 임시 저장할 곳
+                        ArrayList<BigDecimal> numList = new ArrayList<BigDecimal>(); //숫자관련
+                        ArrayList<Character> opList = new ArrayList<Character>(); //연산자 관련
                         
+                        String num = ""; 
                         for(int i = 0; i < s.length(); i++) {
                             char ch = s.charAt(i); //string을 char 타입 단위로 나눔
-                            if(ch == '*' || ch == '/') {
-                                opList.addFirst(ch);
-                            }else if(ch == '+' || ch =='-'){
-                                opList.add(ch);
-                            }
-                            
+        
                             if(ch == '+' || ch =='-' || ch == '*' || ch == '/') {
                                 numList.add(new BigDecimal(num));
                                 opList.add(ch); //연산자를 연산자배열에 추가
@@ -115,25 +108,29 @@ public class CalView extends JFrame{
                             num += ch; //연산자 앞까지의 숫자를 임시로 넣어 놓음
                         }
                         numList.add(new BigDecimal(num)); //마지막 숫자
-                
-                        while(!opList.isEmpty()) { //연산자배열이 빌 때까지
-                            BigDecimal prevNum = numList.poll(); //poll : 앞부터 완전히 뺀다
-                            BigDecimal nextNum = numList.poll();
-                            
-                            char op = opList.poll();
-                            
-                            
-                            if(op == '+') {
-                                numList.addFirst(prevNum.add(nextNum)); //addFirst 배열 제일 앞에 넣는다
-                            } else if(op == '-') {
-                                numList.addFirst(prevNum.subtract(nextNum));
-                            } else if(op == '*') {
-                                numList.addFirst(prevNum.multiply(nextNum));
-                            } else if(op == '/') {
-                                numList.addFirst(prevNum.divide(nextNum));
+                        
+                        int cnt = opList.size();
+                        for (int k = 0; k < cnt; k++) {
+                            int me = 0;
+                            if(opList.contains('*')){
+                                me = opList.indexOf('*');
+                                numList.set(me, numList.get(me).multiply(numList.get(me+1)));
+                            } else if(opList.contains('/')){
+                                me = opList.indexOf('/');
+                                numList.set(me, numList.get(me).divide(numList.get(me+1)));
+                            } else if(opList.contains('+')){
+                                me = opList.indexOf('+');
+                                numList.set(me, numList.get(me).add(numList.get(me+1)));
+                            } else if(opList.contains('-')){
+                                me = opList.indexOf('-');
+                                numList.set(me, numList.get(me).subtract(numList.get(me+1)));
                             }
+                            opList.remove(me);
+                            numList.remove(me+1);
+                            cnt--;
+                            k--;
                         }
-                        input.setText(numList.poll().toString());
+                        input.setText(numList.get(0).toString());
                         info.setText("");
                     }
                 });
