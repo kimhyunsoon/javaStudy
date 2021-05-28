@@ -98,12 +98,7 @@ public class CalView extends JFrame{
                         
                         for(int i = 0; i < s.length(); i++) {
                             char ch = s.charAt(i); //string을 char 타입 단위로 나눔
-                            if(ch == '*' || ch == '/') {
-                                opList.addFirst(ch);
-                            }else if(ch == '+' || ch =='-'){
-                                opList.add(ch);
-                            }
-                            
+        
                             if(ch == '+' || ch =='-' || ch == '*' || ch == '/') {
                                 numList.add(new BigDecimal(num));
                                 opList.add(ch); //연산자를 연산자배열에 추가
