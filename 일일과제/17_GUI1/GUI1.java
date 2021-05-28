@@ -6,7 +6,7 @@ import java.io.*;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-public class Image02 extends JFrame{
+public class GUI1 extends JFrame{
 
     Container cp;
     ImageIcon imageIcon1, imageIcon2,imageIcon3, imageIcon4, imageIcon5;
@@ -60,11 +60,11 @@ public class Image02 extends JFrame{
     void loadImg(){
 
         try {
-            File f1 = new File("02. Advanced/day08/image/031.jpg");
-            File f2 = new File("02. Advanced/day08/image/041.jpg");
-            File f3 = new File("02. Advanced/day08/image/01.jpg");
-            File f4 = new File("02. Advanced/day08/image/02.jpg");
-            File f5 = new File("02. Advanced/day08/image/05.jpg");
+            File f1 = new File("image/031.jpg");
+            File f2 = new File("image/041.jpg");
+            File f3 = new File("image/01.jpg");
+            File f4 = new File("image/02.jpg");
+            File f5 = new File("image/05.jpg");
             // BufferedImage bi =  ImageIO.read(f); 
 
             // imageIcon = new ImageIcon(bi); //이미지 개체에서 ImageIcon 생성
@@ -100,7 +100,7 @@ public class Image02 extends JFrame{
 
 
     public static void main(String[] args){
-        new Image02().init();
+        new GUI1().init();
     }
 
     
@@ -111,8 +111,8 @@ public class Image02 extends JFrame{
 
 class Handler01 implements ActionListener{
 
-    Image02 i3;
-    Handler01(Image02 i3){
+    GUI1 i3;
+    Handler01(GUI1 i3){
         this.i3 = i3;
     }
 
@@ -133,8 +133,8 @@ class Handler01 implements ActionListener{
 
 class Handler02 implements ActionListener{
 
-    Image02 i3;
-    Handler02(Image02 i3){
+    GUI1 i3;
+    Handler02(GUI1 i3){
         this.i3 = i3;
     }
 
@@ -168,8 +168,8 @@ class Handler02 implements ActionListener{
 
 class Handler03 implements ActionListener{
 
-    Image02 i3;
-    Handler03(Image02 i3){
+    GUI1 i3;
+    Handler03(GUI1 i3){
         this.i3 = i3;
     }
 
@@ -190,8 +190,8 @@ class Handler03 implements ActionListener{
 
 class Handler04 implements ActionListener{
 
-    Image02 i3;
-    Handler04(Image02 i3){
+    GUI1 i3;
+    Handler04(GUI1 i3){
         this.i3 = i3;
     }
 
