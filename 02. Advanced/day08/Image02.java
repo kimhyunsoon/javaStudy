@@ -102,11 +102,7 @@ public class Image02 extends JFrame{
     public static void main(String[] args){
         new Image02().init();
     }
-
-    
 }
-
-
 
 
 class Handler01 implements ActionListener{
@@ -159,8 +155,6 @@ class Handler02 implements ActionListener{
         }else{
             return;
         }
-
-        
     }
 
 }
