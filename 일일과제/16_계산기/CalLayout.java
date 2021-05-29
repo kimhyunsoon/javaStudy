@@ -2,7 +2,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class KaeunCal extends JFrame{
+public class CalLayout extends JFrame{
     Container calWrap;
     JPanel btnPad;
     JTextField input;
@@ -16,7 +16,7 @@ public class KaeunCal extends JFrame{
     };
     JButton btnArr[];
     
-    KaeunCal(){
+    CalLayout(){
         btnArr = new JButton[labelArr.length];
     }
 
@@ -52,7 +52,7 @@ public class KaeunCal extends JFrame{
 	}
 
     public static void main(String [] args) {
-        KaeunCal view = new KaeunCal();
+        CalLayout view = new CalLayout();
         view.init();
     }
     
