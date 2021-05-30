@@ -1,8 +1,6 @@
 import java.awt.*;
 import java.awt.event.*;
-import java.math.BigDecimal;
 import java.util.ArrayList;
-
 import javax.swing.*;
 
 public class CalHandler implements ActionListener{
@@ -16,11 +14,11 @@ public class CalHandler implements ActionListener{
     
     @Override
     public void actionPerformed(ActionEvent e) {
-        String infotext= cg.info.getText();
-        String iptext= cg.input.getText();
-        cg.info.setText(infotext+iptext);
+        // String infotext= cg.info.getText();
+        // String iptext= cg.input.getText();
+        cg.info.setText(cg.info.getText()+cg.input.getText());
         
-        String s = infotext.replace("÷","/").replace("×","*"); 
+        String s = cg.info.getText().replace("÷","/").replace("×","*"); 
 
         ArrayList<Double> numList = new ArrayList<Double>(); //lable의 숫자를 저장할 ArrayList
         ArrayList<Character> opList = new ArrayList<Character>(); //연산 저장할 ArrayList
@@ -47,7 +45,7 @@ public class CalHandler implements ActionListener{
                 Double tmp = 0.0;
     
                 if(opList.contains('*')){
-                    me = opList.indexOf('*'); //*가 입력되기 이전의 인덱스를 반환하여 저장
+                    me = opList.indexOf('*'); 
                     tmp = numList.get(me)*numList.get(me+1);
                     numList.set(me, tmp); //me를 null로 바꿈
                 }else if(opList.contains('/')){
@@ -68,8 +66,10 @@ public class CalHandler implements ActionListener{
                 cnt --;
                 j--;
             }
+
             cg.input.setText(numList.get(0).toString());
-            cg.info.setText(iptext);
+            cg.info.setText("");
+
         } catch (NumberFormatException ne) {
             //TODO: handle exception
         }

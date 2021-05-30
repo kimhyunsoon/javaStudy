@@ -2,24 +2,27 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
-public class MainServer extends Thread{
+public class FileServer extends Thread{
     ServerSocket ss;
     Socket sc;
     int port = 3000;
-    //ArrayList<Receiver> list = new ArrayList<Receiver>();
-    Vector<Receiver> v = new Vector<Receiver>();
-    Receiver receiver;
-    
-    //배열에 Receiver 클래스에서 나온 데이타를 넣음
-    
-    MainServer(){
+
+
+    Vector<FileReceiver> v = new Vector<FileReceiver>();
+    FileReceiver receiver;
+
+
+
+    FileServer(){
         try {
-            ss = new ServerSocket(port);
+            ss = new ServerSocket(port); 
             pln(port+"번 포트에서 서버 대기중...");
-            start();
+            
+            //start(); //서버 메세지 전송 쓰레드 실행
             while(true){
                 sc = ss.accept();
-                receiver = new Receiver(this);
+                //메세지 전송처리를 하는 스레드 생성 및 실행
+                receiver = new FileReceiver(this);
                 //this는 메인서버야. Receiver 클래스에 자신의 객체를 넘김(2번 용법)
                 v.add(receiver);
                 receiver.start();
@@ -27,13 +30,13 @@ public class MainServer extends Thread{
         } catch (IOException ie) {
             pln(port+"번 포트는 이미 사용중");
         } finally{
-            try {
+            try { //서버소켓 닫기
+                if(sc !=null) sc.close(); 
                 if(ss !=null) ss.close();
-            } catch (IOException ie) {
-
-            }
+            } catch (IOException ie) {}
         }
     }
+
 
     BufferedReader br= new BufferedReader(new InputStreamReader(System.in));
     public void run(){
@@ -53,6 +56,8 @@ public class MainServer extends Thread{
         }
     }
 
+
+
     void pln(String str){
         System.out.println(str);
     }
@@ -61,7 +66,7 @@ public class MainServer extends Thread{
     }
 
     public static void main(String[] args) {
-        new MainServer();
+        new FileServer();
         
     }
     
