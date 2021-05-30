@@ -53,14 +53,16 @@ public class FileReceiver extends Thread{
         }
     }
 
-    void receiveFile(DataInputStream dis){ //Socket -> File
+    String receiveFile(DataInputStream dis){ //Socket -> File
         String result = "";
         pln("파일 수신작업을 시작합니다.");
-        String fName = dis.readUTF();
-        File file = new File(path+"/"+fName);
-        int cnt = 0;
-        byte bs[] = new byte[512];
+
         try {
+            String fName = dis.readUTF();
+            File file = new File(path+"/"+fName);
+            int cnt = 0;
+            byte bs[] = new byte[512];
+            
             while((cnt = bis.read(bs)) != -1){
                 bos.write(bs, 0, cnt);
             }
@@ -70,10 +72,11 @@ public class FileReceiver extends Thread{
         } finally{
             closeFileST();
         }
+        return result;
     }
 
 
-    void listenMsg(DataInputStream dis){ //Socket에 있는 정보를 ->모니터, 다른 클라이언트
+    String listenMsg(DataInputStream dis){ //Socket에 있는 정보를 ->모니터, 다른 클라이언트
         String result = "";
         try {
             while(true){
@@ -89,6 +92,8 @@ public class FileReceiver extends Thread{
         } finally{
             closeTextST();
         }
+
+        return result;
     }
 
     void sendMessage(String msg){//배열에 입력된 정보를 다 꺼내서 출력
