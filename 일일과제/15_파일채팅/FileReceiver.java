@@ -12,8 +12,11 @@ public class FileReceiver extends Thread{
     BufferedInputStream bis;
     FileOutputStream fos;
     BufferedOutputStream bos;
-
+    String path = "C:/KAEUN/JAVA"; 
     String fName = "";
+    String msg = "";
+    String name = "";
+
 
     //접속하고 키보드로 입력해서 socket으로 보냄
     FileServer fs;
@@ -24,38 +27,37 @@ public class FileReceiver extends Thread{
         makeTextST();
         makeFileST();
 
+        try {
+            name = dis.readUTF(); //클라이언트가 입력하는 첫줄은 닉네임으로 받음
+            sendMessage(name+"님 입장!");
+            pln(name+"님 입장!");
+            pln("현재 서버 접속자 수는" + fs.v.size()+"명입니다.");
+        } catch (Exception e) {
+            //TODO: handle exception
+        }
     }
 
     public void run(){
-        listen();
-        receive();
-        
-    }
 
-    void makeTextST(){ //make 텍스트를 받기 위한 스트림
         try {
-            is = sc.getInputStream();
-            os = sc.getOutputStream();
-            dis = new DataInputStream(is);
-            dos = new DataOutputStream(os);
-        } catch (IOException ie) {}
-
+            String type = dis.readUTF();
+            if(type.equals("file")){ //전송된 파일 쓰기
+                String result = receiveFile(dis);
+                pln("result: "+result);
+            }else if(type.equals("msg")){
+                String result = listenMsg(dis);
+                pln("result: "+result);
+            }
+        } catch (IOException ie) {
+            //TODO: handle exception
+        }
     }
 
-
-
-    void makeFileST(){
-        try {
-            is = sc.getInputStream();
-            bis = new BufferedInputStream(is,2048);
-            fos = new FileOutputStream(fName);
-            bos = new BufferedOutputStream(fos,2048);
-        } catch (IOException ie) {}
-    }
-
-    
-
-    void receive(){ //Socket -> File
+    void receiveFile(DataInputStream dis){ //Socket -> File
+        String result = "";
+        pln("파일 수신작업을 시작합니다.");
+        String fName = dis.readUTF();
+        File file = new File(path+"/"+fName);
         int cnt = 0;
         byte bs[] = new byte[512];
         try {
@@ -71,15 +73,9 @@ public class FileReceiver extends Thread{
     }
 
 
-    void listen(){ //Socket에 있는 정보를 ->모니터, 다른 클라이언트
-        String name = "";
-        String msg = "";
-        
+    void listenMsg(DataInputStream dis){ //Socket에 있는 정보를 ->모니터, 다른 클라이언트
+        String result = "";
         try {
-            name = dis.readUTF(); //클라이언트가 입력하는 첫줄은 닉네임으로 받음
-            sendMessage(name+"님 입장!");
-            pln(name+"님 입장!");
-            pln("현재 서버 접속자 수는" + fs.v.size()+"명입니다.");
             while(true){
                 msg = dis.readUTF();
                 sendMessage(msg);
@@ -130,5 +126,28 @@ public class FileReceiver extends Thread{
     void pln(String str){
         System.out.println(str);
     }
+
+    void makeTextST(){ //make 텍스트를 받기 위한 스트림
+        try {
+            is = sc.getInputStream();
+            os = sc.getOutputStream();
+            dis = new DataInputStream(is);
+            dos = new DataOutputStream(os);
+        } catch (IOException ie) {}
+
+    }
+
+
+
+    void makeFileST(){
+        try {
+            is = sc.getInputStream();
+            bis = new BufferedInputStream(is,2048);
+            fos = new FileOutputStream(fName);
+            bos = new BufferedOutputStream(fos,2048);
+        } catch (IOException ie) {}
+    }
+
+    
     
 }

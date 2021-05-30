@@ -15,7 +15,7 @@ public class FileClient extends Thread{
     BufferedInputStream bis;
     BufferedOutputStream bos;
     String path = "C:/KAEUN/JAVA"; 
-    String fName = "복사본_keyword_kaeun"
+    String fName = "복사본_keyword_kaeun";
     
 
     //접속하고, 키보드로 입력해서 socket으로 보냄
@@ -66,10 +66,9 @@ public class FileClient extends Thread{
             if(name.length() == 0) name = "Guest";
             dos.writeUTF(name);
             dos.flush();
-            inputMSG();
+            inputMsg();
         } catch (IOException ie) {
         } finally{
-            closeAll();
         }
 
     }
@@ -94,7 +93,7 @@ public class FileClient extends Thread{
 class FileSender extends Thread{
     
     FileClient fc;
-    public FileSender(FileClient fc){
+    FileSender(FileClient fc){
         this.fc = fc;
         //데이터 전송용 스트림 생성
         try {
@@ -107,11 +106,11 @@ class FileSender extends Thread{
 
     }
     
-    public void run(){
+    void run(){
         send();
     }
     
-    public void send(){
+    void send(){
         int count = 0;
         byte[] bs = new byte[512];
         long totalSize = 0;
@@ -133,10 +132,10 @@ class FileSender extends Thread{
 
 //메세지 전송용 클래스
 
-public class MsgSender extends Thread{
+class MsgSender extends Thread{
     FileClient fc;
 
-    public MsgSender(FileClient fc){
+    MsgSender(FileClient fc){
         this.fc = fc;
         //메세지 전송용 스트림 생성
         try {
