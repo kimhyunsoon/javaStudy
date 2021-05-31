@@ -32,9 +32,9 @@ public class Receiver extends Thread{
         String msg = "";
         
         try {
-            name = dis.readUTF(); //클라이언트가 입력하는 첫줄은 닉네임으로 받음
-            sendMessage(name+"님 입장!");
-            pln(name+"님 입장!");
+            //name = dis.readUTF(); //클라이언트가 입력하는 첫줄은 닉네임으로 받음
+            //sendMessage(name+"님 입장!");
+            //pln(name+"님 입장!");
             pln("현재 서버 접속자 수는" + ms.v.size()+"명입니다.");
             while(true){
                 msg = dis.readUTF();
