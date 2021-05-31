@@ -5,7 +5,7 @@ import javax.swing.*;
 import java.io.*;
 
 public class GUI2 extends JFrame{
-    Container outerWrap = getContentPane() ;
+    Container cp = getContentPane() ;
     JPanel btnPad = new JPanel();
     JButton clearBtn = new JButton("Clear");
     JTextArea textArea = new JTextArea();
@@ -18,8 +18,8 @@ public class GUI2 extends JFrame{
         extenArr.add("txt");
         extenArr.add("svg");
         extenArr.add("java");
-        String infoMsg = "=====??? ?? ??? ???.=====\n";
-        infoMsg += infoMsg + "?? ? ?? ??? : ";
+        String infoMsg = "=====읽을수 없는 확장자 입니다.=====\n";
+        infoMsg += infoMsg + "읽을 수 있는 확장자 : ";
         for(int i = 0; i<extenArr.size(); i++){
             if(i == extenArr.size() - 1){
                 infoMsg +="." + extenArr.get(i);
@@ -65,7 +65,7 @@ public class GUI2 extends JFrame{
         saveBtn.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
                 String content = textArea.getText();
-                String infoMsg2 = "??? ??????.";
+                String infoMsg2 = "내용을 입력해주세요.";
                 if(content.length() == 0 || content == infoMsg2){
                     textArea.setText(infoMsg2);
                 }else {
@@ -90,11 +90,11 @@ public class GUI2 extends JFrame{
         btnPad.setLayout(new GridLayout(0,2));
         btnPad.add(openBtn);
         btnPad.add(saveBtn);
-        textArea.setLineWrap(true);
+        textArea.setLineWrap(true); 
 
-        outerWrap.add(clearBtn, BorderLayout.NORTH);
-        outerWrap.add(textArea, BorderLayout.CENTER);
-        outerWrap.add(btnPad, BorderLayout.SOUTH);
+        cp.add(clearBtn, BorderLayout.NORTH);
+        cp.add(textArea, BorderLayout.CENTER);
+        cp.add(btnPad, BorderLayout.SOUTH);
         setUI();
     }
     
