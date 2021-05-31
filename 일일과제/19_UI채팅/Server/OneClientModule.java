@@ -1,7 +1,7 @@
 import java.io.*;
 import java.net.*;
 
-public class Receiver extends Thread{
+public class OneClientModule extends Thread{
 
     Socket sc;
     InputStream is;
@@ -10,11 +10,11 @@ public class Receiver extends Thread{
     DataOutputStream dos;
 
     //접속하고 키보드로 입력해서 socket으로 보냄
-    MainServer ms;
-    Receiver(MainServer ms){
+    ServerGUI sg;
+    OneClientModule(ServerGUI sg){
         //소켓에 있는 정보를 읽어야 함
-        this.ms = ms; //this의 3번째 용법 : 자신의 생성자를 호출할때
-        this.sc = ms.sc; //Socket을 쓸 수 있게 됨
+        this.sg = sg; //this의 3번째 용법 : 자신의 생성자를 호출할때
+        this.sc = sg.sc; //Socket을 쓸 수 있게 됨
         try {
             is = sc.getInputStream();
             os = sc.getOutputStream();
@@ -32,10 +32,10 @@ public class Receiver extends Thread{
         String msg = "";
         
         try {
-            //name = dis.readUTF(); //클라이언트가 입력하는 첫줄은 닉네임으로 받음
-            //sendMessage(name+"님 입장!");
-            //pln(name+"님 입장!");
-            pln("현재 서버 접속자 수는" + ms.v.size()+"명입니다.");
+            name = dis.readUTF(); //클라이언트가 입력하는 첫줄은 닉네임으로 받음
+            sendMessage(name+"님 입장!");
+            pln(name+"님 입장!");
+            pln("현재 서버 접속자 수는" + sg.v.size()+"명입니다.");
             while(true){
                 msg = dis.readUTF();
                 sendMessage(msg);
@@ -43,9 +43,9 @@ public class Receiver extends Thread{
                 //메세지가 입력될 동안 수행
             }
         } catch (IOException ie) { //
-            ms.v.remove(this);
-            sendMessage(name+"님 퇴장!"+ms.v.size()+"명입니다");
-            pln(name+"님 퇴장!"+ms.v.size()+"명입니다");
+            sg.v.remove(this);
+            sendMessage(name+"님 퇴장!"+sg.v.size()+"명입니다");
+            pln(name+"님 퇴장!"+sg.v.size()+"명입니다");
         } finally{
             closeAll();
         }
@@ -53,9 +53,9 @@ public class Receiver extends Thread{
 
     void sendMessage(String msg){//배열에 입력된 정보를 다 꺼내서 출력
         try {
-            for(Receiver receiver: ms.v){
-                receiver.dos.writeUTF(msg);
-                receiver.dos.flush();
+            for(OneClientModule ocm: sg.v){
+                ocm.dos.writeUTF(msg);
+                ocm.dos.flush();
             }
         } catch (IOException ie) {
             //TODO: handle exception

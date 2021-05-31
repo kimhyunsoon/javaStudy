@@ -6,210 +6,140 @@ import java.awt.image.BufferedImage;
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
 
-public class ClientGUI extends JFrame{//JFrame 상속
+public class ClientGUI extends JFrame implements ActionListener{
+    //ActionListener, Runnable 인터페이스의 완전한 객체를 구현해야 함
+    Sender sender;
 
+    //GUI쪽
     Container cp;
     JLabel label;
     JPanel northPad, southPad;
     JTextField inputName, inputMsg;
-    JTextArea chatLog;
+    static JTextArea chatLog;
     JButton clearBtn, enterBtn, exitBtn;
     static private final String newline = "\n";
-    String name;
+    Boolean connect = false;
 
     //서버연결부분
     Socket sc;
     String ip = "127.0.0.1";
     int port = 3000;
 
+    String chatId;
+    String msg, msg1; 
 
 
-    ClientGUI(){
+    public ClientGUI(){
 
-
-        setPanel();
-    }
-
-
-    void setPanel(){
         cp = getContentPane();
-        chatLog = new JTextArea();
-        chatLog.setMargin(new Insets(5,5,5,5));
-        chatLog.setEditable(false);
-        JScrollPane chatScroll = new JScrollPane(chatLog);
-
-        inputName = new JTextField("닉네임을 입력해 주세요",20);
-        inputName.addActionListener(new ActionListener(){
-            public void actionPerformed (ActionEvent evt) {
-                name = inputName.getText();
-                pln(name);
-                try {
-                    sc = new Socket(ip,port);
-                    pln("서버에 연결되었습니다.");
-
-                } catch (UnknownHostException ue) {
-                    pln("해당 서버를 찾지 못함");
-                } catch(IOException ie){}
-
-        
-
-                // inputName.selectAll ();
-                inputName.setEditable (false); //입력받은 후에 수정 불가하게 바꿈
-            }
-
-
-        });
-
-
-        
-        Listen listen = new Listen(this,sc);
-        listen.start();
-        Send send = new Send(this,name,sc);
-        send.start();
-
-
-
-
         enterBtn = new JButton("입장");
-        enterBtn.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent e1){
-                enterBtn.setText("퇴장");
-                pln("sdf");
-                
-            }
-        });
-
-
-
-
+        exitBtn = new JButton("퇴장");
         clearBtn = new JButton("clear");
-        clearBtn.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent e2){
-                pln("sdfasdf");
-            }
-        });
-
-        inputMsg = new JTextField("메세지를 입력하세요");
-
-
+        inputName = new JTextField(20); //닉네임 입력
+        inputMsg = new JTextField("메세지를 입력하세요"); //메세지 입력
         northPad = new JPanel();
         southPad = new JPanel();
+
+
+        chatLog = new JTextArea(); //메세지 출력
+        chatLog.setMargin(new Insets(5,5,5,5));
+        chatLog.setEditable(false);
+        JScrollPane chatScroll = new JScrollPane(chatLog); //메세지 출력창에 스크롤바 생성
 
         northPad.add(inputName);
         northPad.add(enterBtn);
         southPad.add(inputMsg);
         southPad.add(clearBtn);
 
-
-
-        
-        
-        //northPad.add(exitBtn);
-
         cp.add(northPad, BorderLayout.NORTH);
         cp.add(chatLog, BorderLayout.CENTER);
         cp.add(southPad, BorderLayout.SOUTH);
+
+        inputMsg.addKeyListener(new KeyAdapter(){
+            public void keyPressed(KeyEvent ke){
+                if(ke.getKeyCode() == KeyEvent.VK_ENTER){
+                    msg = inputMsg.getText();
+                    sender.sendMsg(msg);
+                    inputMsg.setText("");
+                }
+            }
+        });
+
+        enterBtn.addActionListener(this);
         setUI();
-         
+
     }
 
     void setUI(){
-		setTitle("Chat GUI Test Ver 1.0");
-		setSize(400, 450);
+		setTitle("FileChooser");
+		setSize(500, 800);
 		setVisible(true);
 		setLocation(200, 100);
-	    setResizable(false);
+	    setResizable(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
-    void pln(String str){
-        System.out.println(str);
-    }
-    void p(String str){
-        System.out.print(str);
-    }
 
     public static void main(String[] args) {
+
+        // 클라이언트 객체 생성, 생성자 호출
         new ClientGUI();
-    }
-    
-}
 
-class Listen extends Thread{ //수신쓰레드
-    InputStream is;
-    DataInputStream dis;
-
-    ClientGUI cg;
-    Socket sc;
-
-    Listen(ClientGUI cg,Socket sc){
-        this.cg = cg;
-        this.sc = cg.sc;
     }
 
-    public void run(){
-        try {
-            dis = new DataInputStream(sc.getInputStream());
-            while(true){
-                String msg = dis.readUTF();
-                System.out.println(msg);
+    public void actionPerformed(ActionEvent e){
+        //입장버튼 클릭했을때
+        if(e.getSource() == enterBtn){
+            if(!connect){
+                try {
+                    sc = new Socket(ip,port);
+                    System.out.println("서버에 연결되었습니다/");
+                    chatLog.append("서버에연결되었습니다 \n");
+                
+                    sender = new Sender(sc,chatId);
+                    Thread th2 = new ReceiverThread(sc);
+                    th2.start();
+
+                } catch (IOException ie) {
+                    //TODO: handle exception
+                }
 
             }
-        } catch (IOException ie) {
-            System.out.println("서버 다운.. 2초 후에 종료됩니다.");
-			try{
-				Thread.sleep(2000);
-				System.exit(0);
-			}catch(InterruptedException ie2){}
-        } finally{
-            try {
-                if(dis != null) dis.close();
+        }
+    }
 
-            } catch (IOException ie) {
+    //소켓생성 내부클래스
+    public class Sender{
+        PrintWriter pw;
+        Socket sc;
+        String name;
+
+        Sender( Socket sc, String name){
+            this.sc = sc;
+            this.name = name;
+
+            try {
+                pw = new PrintWriter(sc.getOutputStream());
+                pw.println(name);
+                pw.flush();
+            } catch (Exception e) {
                 //TODO: handle exception
             }
+
         }
-    }
-}
 
-class Send extends Thread{
-
-    OutputStream os;
-    DataOutputStream dos;
-    BufferedReader br = new BufferedReader(new InputStreamReader(System.in)); 
-    ClientGUI cg;
-    String name;
-    Socket sc;
-
-    Send(ClientGUI cg, String name, Socket sc){
-        this.cg = cg;
-        this.name = cg.name;
-    }
-
-    public void run(){
-        try {
-            dos = new DataOutputStream(sc.getOutputStream());
-            while(true){
-                String msg = br.readLine();
-                dos.writeUTF(name+">> "+msg);
-                cg.chatLog.append (msg);
-                dos.flush();
+        public void sendMsg(String Msg){
+            if(pw != null){
+                try {
+                    pw.println(msg);
+                    pw.flush();
+    
+                } catch (Exception e) {
+                    //TODO: handle exception
+                }
             }
-        } catch (IOException ie) {
-        } finally{
-            closeAll();
         }
-        
     }
-    void closeAll(){
-        try {
-
-            if(dos !=null) dos.close();
-            if(sc != null) sc.close();
-        } catch (IOException ie) {}
-    }
-
-    
-    
 
 }
+
