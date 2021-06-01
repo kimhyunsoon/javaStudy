@@ -14,7 +14,8 @@ public class ClientGUI extends JFrame implements ActionListener{
     Container cp;
     JLabel label;
     JPanel northPad, southPad;
-    JTextField inputName, inputMsg;
+    JTextField inputName;
+    JTextField inputMsg;
     static JTextArea chatLog;
     JButton clearBtn, enterBtn, exitBtn;
     static private final String newline = "\n"; //개행
@@ -125,13 +126,16 @@ public class ClientGUI extends JFrame implements ActionListener{
         inputMsg = new JTextField("메세지를 입력하세요",30); //메세지 입력 텍스트필드
         northPad = new JPanel();
         southPad = new JPanel();
+        label = new JLabel("MY ID ");
 
         chatLog = new JTextArea(); //메세지 출력창
         chatLog.setEditable(false);
         JScrollPane chatScroll = new JScrollPane(chatLog); //메세지 출력창에 스크롤바 생성
 
+        northPad.add(label);
         northPad.add(inputName);
         northPad.add(enterBtn);
+
         southPad.add(inputMsg);
         southPad.add(clearBtn);
 
@@ -155,11 +159,6 @@ public class ClientGUI extends JFrame implements ActionListener{
         new ClientGUI();
 
     }
-
-
-
-
-
     public class Sender{
 
         Socket sc;
@@ -189,10 +188,6 @@ public class ClientGUI extends JFrame implements ActionListener{
                     //TODO: handle exception
                 }
             }
-            
-            
-            
-            
 
         }
     }

@@ -19,8 +19,18 @@ public class ReceiverThread extends Thread{
                 cg.chatLog.append(str+"\n");
                 
             }
-        } catch (Exception e) {
-            //TODO: handle exception
+        } catch (IOException ie) {
+            System.out.println("서버 다운.. 2초 후에 종료됩니다.");
+			try{
+				Thread.sleep(2000);
+				System.exit(0);
+			}catch(InterruptedException ie2){
+            }
+        }finally{
+            try {
+                if(dis != null) dis.close();
+                if(sc != null) sc.close();
+            } catch (IOException ie) {}
         }
     }
     
