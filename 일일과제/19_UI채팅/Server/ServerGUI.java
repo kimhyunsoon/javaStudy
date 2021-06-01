@@ -6,6 +6,7 @@ public class ServerGUI extends Thread{
     ServerSocket ss;
     Socket sc;
     int port = 3000;
+    String ipClient;
     //ArrayList<Receiver> list = new ArrayList<Receiver>();
     Vector<OneClientModule> v = new Vector<OneClientModule>();
     OneClientModule ocm;
@@ -19,6 +20,7 @@ public class ServerGUI extends Thread{
             start();
             while(true){
                 sc = ss.accept();
+                ipClient = sc.getInetAddress().getHostAddress();
                 ocm = new OneClientModule(this);
                 //this는 메인서버야. Receiver 클래스에 자신의 객체를 넘김(2번 용법)
                 v.add(ocm);

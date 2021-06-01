@@ -7,18 +7,17 @@ import javax.swing.*;
 import javax.swing.text.JTextComponent;
 
 public class ClientGUI extends JFrame implements ActionListener{
-    //ActionListener, Runnable 인터페이스의 완전한 객체를 구현해야 함
+
     Sender sender;
 
-    //GUI쪽
+    //GUI 관련
     Container cp;
     JLabel label;
     JPanel northPad, southPad;
     JTextField inputName, inputMsg;
     static JTextArea chatLog;
     JButton clearBtn, enterBtn, exitBtn;
-    static private final String newline = "\n";
-    Boolean connect = false;
+    static private final String newline = "\n"; //개행
 
     //서버연결부분
     Socket sc;
@@ -26,23 +25,108 @@ public class ClientGUI extends JFrame implements ActionListener{
     int port = 3000;
 
     String chatId;
-    String msg, msg1; 
+    String msg; 
 
 
     public ClientGUI(){
 
+        setPanel();
+
+        //닉네임 입력창 키보드 입력이벤트
+        inputName.addKeyListener(new KeyAdapter(){
+            public void keyPressed(KeyEvent ke){
+                if(ke.getKeyCode() == KeyEvent.VK_ENTER){//엔터 누르면 실행
+                    try {
+                        northPad.add(exitBtn);
+                        enterBtn.setEnabled(false);
+                        sc = new Socket(ip,port);
+                        chatLog.append("서버에연결되었습니다 \n");
+                        chatId = inputName.getText(); //입력받은 텍스트를 아이디로 저장
+                        sender = new Sender(sc,chatId); //내부클래스 생성하여 소켓과 아이디 넘김
+                        Thread th1 = new ReceiverThread(sc); //서버로부터 수신받는 쓰레드 호출
+                        th1.start();
+                        inputName.setEditable(false); //비활성화시킴
+                        inputMsg.requestFocus(); //포커스를 메세지입력창으로 이동시킴
+
+                    } catch (IOException ie) {
+                        //TODO: handle exception
+                    }
+                }
+            }
+        });
+
+        //메세지 입력창 키보드 입력이벤트
+        inputMsg.addKeyListener(new KeyAdapter(){
+            public void keyPressed(KeyEvent ke2){
+                if(ke2.getKeyCode()== KeyEvent.VK_ENTER){
+                    msg = inputMsg.getText();
+                    System.out.println(msg);
+                    sender.sendMsg(msg); //내부클래스의 송신 메소드 호출
+                    inputMsg.setText("");
+                }
+            }
+        });
+
+        //텍스트필드 포커스 이벤트
+        inputMsg.addFocusListener(new FocusAdapter(){
+            //텍스트필드에 포커스가 왔을 때 필드를 공백으로
+            public void focusGained(FocusEvent e){
+                inputMsg.setText("");
+            }
+        });
+
+        setUI();
+        enterBtn.addActionListener(this);
+        clearBtn.addActionListener(this);
+        exitBtn.addActionListener(this);
+        
+
+
+
+    }
+
+    //버튼 액션이벤트
+    public void actionPerformed(ActionEvent e){
+        //1. 입장버튼 이벤트
+        if(e.getSource() == enterBtn){
+            try {
+                northPad.add(exitBtn); //퇴장버튼 추가
+                enterBtn.setEnabled(false); //입장버튼 비활성화
+                sc = new Socket(ip,port);
+                chatLog.append("서버에연결되었습니다 \n");
+                chatId = inputName.getText();
+                sender = new Sender(sc,chatId);
+                Thread th1 = new ReceiverThread(sc);
+                th1.start();
+                inputName.setEditable(false); 
+                inputMsg.requestFocus();
+            } catch (IOException ie) {
+                System.out.println(ie.getMessage());
+            }
+        }
+        //2. 클리어버튼 이벤트
+        if(e.getSource() == clearBtn){
+            chatLog.setText("");
+        }
+        //3. 퇴장버튼 이벤트
+        if(e.getSource() == exitBtn){
+            System.exit(JFrame.EXIT_ON_CLOSE); //프로그램 종료
+        }
+    }
+
+
+
+    void setPanel(){
         cp = getContentPane();
         enterBtn = new JButton("입장");
         exitBtn = new JButton("퇴장");
         clearBtn = new JButton("clear");
-        inputName = new JTextField(20); //닉네임 입력
-        inputMsg = new JTextField("메세지를 입력하세요"); //메세지 입력
+        inputName = new JTextField(20); //닉네임 입력 텍스트필드
+        inputMsg = new JTextField("메세지를 입력하세요",30); //메세지 입력 텍스트필드
         northPad = new JPanel();
         southPad = new JPanel();
 
-
-        chatLog = new JTextArea(); //메세지 출력
-        chatLog.setMargin(new Insets(5,5,5,5));
+        chatLog = new JTextArea(); //메세지 출력창
         chatLog.setEditable(false);
         JScrollPane chatScroll = new JScrollPane(chatLog); //메세지 출력창에 스크롤바 생성
 
@@ -54,20 +138,6 @@ public class ClientGUI extends JFrame implements ActionListener{
         cp.add(northPad, BorderLayout.NORTH);
         cp.add(chatLog, BorderLayout.CENTER);
         cp.add(southPad, BorderLayout.SOUTH);
-
-        inputMsg.addKeyListener(new KeyAdapter(){
-            public void keyPressed(KeyEvent ke){
-                if(ke.getKeyCode() == KeyEvent.VK_ENTER){
-                    msg = inputMsg.getText();
-                    sender.sendMsg(msg);
-                    inputMsg.setText("");
-                }
-            }
-        });
-
-        enterBtn.addActionListener(this);
-        setUI();
-
     }
 
     void setUI(){
@@ -82,62 +152,48 @@ public class ClientGUI extends JFrame implements ActionListener{
 
     public static void main(String[] args) {
 
-        // 클라이언트 객체 생성, 생성자 호출
         new ClientGUI();
 
     }
 
-    public void actionPerformed(ActionEvent e){
-        //입장버튼 클릭했을때
-        if(e.getSource() == enterBtn){
-            if(!connect){
-                try {
-                    sc = new Socket(ip,port);
-                    System.out.println("서버에 연결되었습니다/");
-                    chatLog.append("서버에연결되었습니다 \n");
-                
-                    sender = new Sender(sc,chatId);
-                    Thread th2 = new ReceiverThread(sc);
-                    th2.start();
 
-                } catch (IOException ie) {
-                    //TODO: handle exception
-                }
 
-            }
-        }
-    }
 
-    //소켓생성 내부클래스
+
     public class Sender{
-        PrintWriter pw;
+
         Socket sc;
         String name;
+        DataOutputStream dos;
 
         Sender( Socket sc, String name){
             this.sc = sc;
             this.name = name;
 
             try {
-                pw = new PrintWriter(sc.getOutputStream());
-                pw.println(name);
-                pw.flush();
+                dos = new DataOutputStream(sc.getOutputStream());
+                dos.writeUTF(name);
+                dos.flush();
             } catch (Exception e) {
-                //TODO: handle exception
             }
 
         }
 
+        //서버로 메세지 넘김
         public void sendMsg(String Msg){
-            if(pw != null){
+            if(dos !=null){
                 try {
-                    pw.println(msg);
-                    pw.flush();
-    
+                    dos.writeUTF(chatId+">> "+msg);
+                    dos.flush();
                 } catch (Exception e) {
                     //TODO: handle exception
                 }
             }
+            
+            
+            
+            
+
         }
     }
 
