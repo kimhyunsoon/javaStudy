@@ -15,7 +15,6 @@ public class GameServer extends Thread{
     GameThread client;
 
     GameServer(){
-        //家南 积己
         try {
             ss = new ServerSocket(port);
             while(true){
