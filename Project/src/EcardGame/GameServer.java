@@ -1,10 +1,10 @@
-package project.EcardGame;
+package EcardGame;
 
 import java.io.*;
 import java.net.*;
 import java.util.*;
 
-import project.EcardGame.GameThread;
+import EcardGame.GameThread;
 
 public class GameServer extends Thread{
 
