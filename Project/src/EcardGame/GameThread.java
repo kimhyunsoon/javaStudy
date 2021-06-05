@@ -41,16 +41,16 @@ public class GameThread extends Thread{
 
 
     public void run(){//Socket에 있는 정보를 ->모니터, 브로드캐스트
+        String pName = "";
         try {
-            String pName = dis.readUTF(); //닉네임 저장
+            pName = dis.readUTF(); //닉네임 저장
             if(!playerList.containsKey(pName)){ //playerList가 pName을 포함하고 있지 않으면
                 playerList.put(pName,dos); //맵에 플레이어의 이름, 입력해 오는걸 저장
                 playerInfo.put(pName,score); //맵에 플레이어의 이름, 점수를 저장
             }else if(playerList.containsKey(pName)){ 
-                sc.close();//이미 존재하는 이름이면 소켓 닫음
+                //sc.close();//이미 존재하는 이름이면 소켓 닫음
             }
-            sendMessage(pName+"님 입장!");
-            pln(pName+"님 입장!");
+            sendMessage(pName+"님 입장!!!!!!!");
 
             while(true){
                 String msg = dis.readUTF(); //클라이언트로부터 수신되는 메세지 읽음
@@ -76,15 +76,12 @@ public class GameThread extends Thread{
         //전략 : 클라이언트쪽의 입력이벤트에서 발생하는 구분자 종류로 어떤 행위를 선택할지
         // 
         
-        String temp = msg.substring(0,6); //
+        String temp = msg.substring(0,7); //
         if(temp.equals("//Chat ")){ //채팅을 입력받았을 경우
             sendMessage(msg.substring(7)); //7번째 스트링부터 브로드캐스트
-        }else if(temp.equals("//King ") && temp.equals("//slave") && temp.equals("//ctzn ")){
-            //플레이어가 카드를 눌렀을 경우
-            playGame();
+        }else if(temp.equals("//Ready")){
+            System.out.println(temp);
         }
-
-
     }
 
 
@@ -141,7 +138,7 @@ public class GameThread extends Thread{
         //맵의 key값에 저장되어 있는 플레이어들에게 메세지 송신
         while(iter.hasNext()){
             try {
-
+                DataOutputStream dos = playerList.get(iter.next());
                 dos.writeUTF(msg);
                 dos.flush();
             } catch (IOException ie) {

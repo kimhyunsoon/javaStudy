@@ -17,6 +17,7 @@ public class GameServer extends Thread{
     GameServer(){
         try {
             ss = new ServerSocket(port);
+            System.out.println(port+"번 포트에서 서버 대기중...");
             while(true){
                 sc = ss.accept();
                 client = new GameThread(sc);
