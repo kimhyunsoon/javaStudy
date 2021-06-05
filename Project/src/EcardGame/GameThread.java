@@ -11,6 +11,7 @@ public class GameThread extends Thread{
     private Socket gtsc;
     private DataInputStream dis;
     private DataOutputStream dos;
+    boolean gameStart;
 
     //플레이어 저장
     private static LinkedHashMap<String, DataOutputStream> playerList = new LinkedHashMap<String, DataOutputStream>(GameServer.maxclient);
@@ -80,7 +81,9 @@ public class GameThread extends Thread{
         if(temp.equals("//Chat ")){ //채팅을 입력받았을 경우
             sendMessage(msg.substring(7)); //7번째 스트링부터 브로드캐스트
         }else if(temp.equals("//Ready")){
-            System.out.println(temp);
+            sendMessage("게임이 시작됩니다");
+            gameStart = true;
+            sendMessage("//Start"); //Start 예약어 보냄
         }
     }
 
