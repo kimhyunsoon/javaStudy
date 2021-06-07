@@ -116,18 +116,21 @@ public class GameThread extends Thread{
                             sendMessage(client1 +" 승 "+client2+" 패 ");
                             clientInfo.put(client1, clientInfo.get(client1)+1); //승자 점수 추가
                             sendScore();
+                            showCard();
                             countRound();
                             client1Card = client2Card = "";
                             break;
                         }else if(client2Card.equals("//Ctzn")){//플레이어2 시민
                             sendMessage("무승부 다시 하세요");
                             sendScore();
+                            showCard();
                             client1Card = client2Card = "";
                             break;
                         }else if(client2Card.equals("//King")){
                             sendMessage(client1 +" 패 "+client2+" 승 ");
                             clientInfo.put(client2, clientInfo.get(client2)+1); //승자 점수 추가
                             sendScore();
+                            showCard();
                             countRound();
                             client1Card = client2Card = "";
                             break;
@@ -137,6 +140,7 @@ public class GameThread extends Thread{
                             sendMessage(client1 +" 패 "+client2+" 승 ");
                             clientInfo.put(client2, clientInfo.get(client2)+1); //승자 점수 추가
                             sendScore();
+                            showCard();
                             countRound();
                             client1Card = client2Card = "";
                             break;
@@ -144,6 +148,7 @@ public class GameThread extends Thread{
                             sendMessage(client1 +" 승 "+client2+" 패 ");
                             clientInfo.put(client1, clientInfo.get(client1)+1); //승자 점수 추가
                             sendScore();
+                            showCard();
                             countRound();
                             client1Card = client2Card = "";
                             break;
@@ -153,6 +158,7 @@ public class GameThread extends Thread{
                             sendMessage(client1 +" 승 "+client2+" 패 ");
                             clientInfo.put(client1, clientInfo.get(client1)+1); //승자 점수 추가
                             sendScore();
+                            showCard();
                             countRound();
                             client1Card = client2Card = "";
                             break;
@@ -160,6 +166,7 @@ public class GameThread extends Thread{
                             sendMessage(client1 +" 패 "+client2+" 승 ");
                             clientInfo.put(client2, clientInfo.get(client2)+1); //승자 점수 추가
                             sendScore();
+                            showCard();
                             countRound();
                             client1Card = client2Card = "";
                             break;
@@ -188,8 +195,13 @@ public class GameThread extends Thread{
     }
 
     public void sendScore(){ //예약어와 함께 플레이어 이름, 점수 송신
-        sendMessage("//CList"+client1+"#&"+clientInfo.get(client1));
-        sendMessage("//CList"+client2+"#&"+clientInfo.get(client2));
+        sendMessage("//CList"+client1+" "+clientInfo.get(client1));
+        sendMessage("//CList"+client2+" "+clientInfo.get(client2));
+    }
+
+    public void showCard(){
+        sendMessage("//Wcard"+client1+" "+client1Card);
+        sendMessage("//Wcard"+client2+" "+client2Card);
     }
 
     public void sendMessage(String msg){ //메세지 송신 메소드
