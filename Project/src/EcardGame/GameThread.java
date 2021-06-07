@@ -11,26 +11,23 @@ public class GameThread extends Thread{
     private Socket gtsc;
     private DataInputStream dis;
     private DataOutputStream dos;
-    boolean gameStart;
 
-    //플레이어 저장
-    private static LinkedHashMap<String, DataOutputStream> playerList = new LinkedHashMap<String, DataOutputStream>(GameServer.maxclient);
-    private static LinkedHashMap<String, Integer> playerInfo = new LinkedHashMap<String,Integer>(GameServer.maxclient);
-
-    //private GameClient gtClient; //클라이언트 클래스 변수로 선언
-    //private GameGUI gameroom; //클라이언트 GUI 클래스 변수로 선언
-    
+    public static final int maxclient = 2;
     public String pName; //플레이어 ID
     public int score;
-    private static GameThread client1 = null;
-    private static GameThread client2 = null;
-    private static String choose1 = null; //플레이어1 버튼 선택
-    private static String choose2 = null; //플레이어2 버튼 선택
-    private static int chooseInt1=0; 
-    private static int chooseInt2=0;
 
+    //배열
+    private static LinkedHashMap<String, DataOutputStream> clientList = new LinkedHashMap<String, DataOutputStream>(GameServer.maxclient);
+    private static LinkedHashMap<String, Integer> clientInfo = new LinkedHashMap<String,Integer>(GameServer.maxclient);
+    private static Vector<Integer> readyPlayer = new Vector<Integer>(); 
+    private static Vector<Integer> roundCount = new Vector<Integer>();
+ 
+    private static String client1 = "";
+    private static String client2 = "";
+    private static String client1Card = "";
+    private static String client2Card = "";
 
-    public GameThread(Socket sc){
+    public GameThread(Socket sc){ //생성자에서 스트림 오픈
         gtsc = sc;
         try {
             dis = new DataInputStream(sc.getInputStream());
@@ -40,27 +37,34 @@ public class GameThread extends Thread{
         }
     }
 
-
-    public void run(){//Socket에 있는 정보를 ->모니터, 브로드캐스트
-        String pName = "";
+    public void run(){//플레이어 맵에 저장, filter 메소드 실행, 플레이어 퇴장시 제거 
+        //String pName = "";
         try {
-            pName = dis.readUTF(); //닉네임 저장
-            if(!playerList.containsKey(pName)){ //playerList가 pName을 포함하고 있지 않으면
-                playerList.put(pName,dos); //맵에 플레이어의 이름, 입력해 오는걸 저장
-                playerInfo.put(pName,score); //맵에 플레이어의 이름, 점수를 저장
-            }else if(playerList.containsKey(pName)){ 
-                //sc.close();//이미 존재하는 이름이면 소켓 닫음
+            pName = dis.readUTF(); 
+            if(!clientList.containsKey(pName)){ //닉네임 중복방지, 중복되면 소켓 닫음
+                clientList.put(pName,dos); //맵에 플레이어의 이름, 입력해 오는걸 저장
+                clientInfo.put(pName,score); //맵에 플레이어의 이름, 점수를 저장
             }
-            sendMessage(pName+"님 입장!!!!!!!");
-
+            if(clientList.size()> GameServer.maxclient){ //인원수 제한
+                //sendMessage("//Full ");
+                gtsc.close();
+            }
+            sendMessage("System>> "+pName+"님이 임장하셨습니다.");
+            if (client1.equals("")) {//입장순서대로 client1,client2 변수에 저장 후 카드셋팅 예약어 보냄
+                client1 = pName;
+                sendMessage("//King "+client1);
+            }else {
+                client2 = pName;
+                sendMessage("//Slav "+client2);
+            }
             while(true){
                 String msg = dis.readUTF(); //클라이언트로부터 수신되는 메세지 읽음
                 filter(msg); //메세지or게임진행 브로드캐스트
             }
         } catch (IOException ie) {
-            playerList.remove(pName); //게임참여자 리스트에서 제거 
-            playerInfo.remove(pName, this); 
-            sendMessage(pName+"님 퇴장!");
+            clientList.remove(pName); //게임참여자 리스트에서 제거 
+            clientInfo.remove(pName, this); 
+            sendMessage("System>> "+pName+"님이 퇴장하셨습니다.");
             pln(pName+"님 퇴장!");
         } finally{
             try {
@@ -73,75 +77,127 @@ public class GameThread extends Thread{
         }
     }
 
-    void filter(String msg){//클라이언트쪽에서 보내는 버튼입력, 메세지입력 종류에 따라 각기 다른 행위를 함
-        //전략 : 클라이언트쪽의 입력이벤트에서 발생하는 구분자 종류로 어떤 행위를 선택할지
-        // 
+    void filter(String msg){//클라이언트쪽에서 보내는 예약어로 게임플레이, 채팅 등 각기 다른 행위를 함
         
-        String temp = msg.substring(0,7); //
+        String temp = msg.substring(0,7);
         if(temp.equals("//Chat ")){ //채팅을 입력받았을 경우
-            sendMessage(msg.substring(7)); //7번째 스트링부터 브로드캐스트
-        }else if(temp.equals("//Ready")){
-            sendMessage("게임이 시작됩니다");
-            gameStart = true;
-            sendMessage("//Start"); //Start 예약어 보냄
-        }
-    }
+            sendMessage(msg.substring(7)); 
+        }else if(temp.equals("//Ready")){ //준비버튼이 입력되었을 경우
+            readyPlayer.addElement(1);
+            System.out.println(readyPlayer.size());
+            if(readyPlayer.size() == clientList.size()) { //준비버튼 배열의 사이즈와 클라이언트리스트 사이즈(최대:2) 같으면 실행
+                sendMessage("곧 게임이 시작됩니다");
+                sendMessage("//ReadyAll");
+                for(int i=3; i>0; i--){
+                    try{
+                        sendMessage("[ " + i + "초 후 게임을 시작합니다 .. ]");						 	
+                        Thread.sleep(1000);
+                    }catch(InterruptedException ie){}
+                }
+                sendMessage("//Start"); //Start 예약어 보냄	
+            }
+        }else if(temp.equals("//Timer")){//타이머가 종료되었을 경우
+            String cardType = msg.substring(7,13); //선택한 카드 저장
+            String member = msg.substring(13);     //플레이어 저장
+            if(member.equals(client1)) {
+                client1Card = cardType;
+            }else if(member.equals(client2)) {
+                client2Card = cardType;
+            }
+            // System.out.println("1: "+client1+"님");
+            // System.out.println("카드: "+client1Card);
+            // System.out.println("2: " +client2+"님");
+            // System.out.println("카드: "+client2Card);
 
-
-
-    void playGame(){
-        //플레이어 버튼 액션으로부터 String으로 받은 값을 정수형으로 변환
-        if(choose1 == null){ //플레이어1의 버튼 결과
-            chooseInt1 = Integer.parseInt(choose1); //
-        }
-        else{
-            chooseInt2 = Integer.parseInt(choose2);
-        }
-        if(choose1!=null&&choose2!=null){//타이머 30초가 끝나면 실행되는 변수 넣어줘야 함
-            //플레이어1이 왕이고, 플레이어2가 노예인 케이스와
-            //플레이어1이 노예고, 플레이어2가 왕인 케이스 2개가 있어야 함
-            //입장순서대로 왕,노예가 정해지므로 플레이어1이 왕, 플레이어2가 노예다
-            switch (chooseInt1) {
-                case 1: //플레이어1이 시민카드 냈을때
-                    if(chooseInt2==0){//플레이어2 노예
-                        sendMessage("플레이어1 승 플레이어2 패");
-                        choose1 = choose2 = null;
-                        client1 = client2 = null;
-                        break;
-                    }else if(chooseInt2==1){//플레이어2 시민
-                        sendMessage("무승부 다시 하세요");
-                        choose1 = choose2 = null;
-                        client1 = client2 = null;
-                        break;
-                    }
-                case 2: //플레이어1이 왕카드 냈을때
-                    if(chooseInt2==0){
-                        sendMessage("플레이어1 패 플레이어2 승");
-                        choose1 = choose2 = null;
-                        client1 = client2 = null;
-                        break;
-                    }else if(chooseInt2==1){
-                        sendMessage("플레이어1 승 플레이어2 패");
-                        choose1 = choose2 = null;
-                        client1 = client2 = null;
-                        break;
-                    }
-                break;
+            if(!client2Card.equals("") && !client1Card.equals("")) {
+                switch (client1Card) {//플레이어1
+                    case "//Ctzn": //플레이어1이 시민카드 냈을때
+                        if(client2Card.equals("//Slav")){//플레이어2 노예
+                            sendMessage(client1 +" 승 "+client2+" 패 ");
+                            clientInfo.put(client1, clientInfo.get(client1)+1); //승자 점수 추가
+                            sendScore();
+                            countRound();
+                            client1Card = client2Card = "";
+                            break;
+                        }else if(client2Card.equals("//Ctzn")){//플레이어2 시민
+                            sendMessage("무승부 다시 하세요");
+                            sendScore();
+                            client1Card = client2Card = "";
+                            break;
+                        }else if(client2Card.equals("//King")){
+                            sendMessage(client1 +" 패 "+client2+" 승 ");
+                            clientInfo.put(client2, clientInfo.get(client2)+1); //승자 점수 추가
+                            sendScore();
+                            countRound();
+                            client1Card = client2Card = "";
+                            break;
+                        }
+                    case "//King": //플레이어1
+                        if(client2Card.equals("//Slav")){//플레이어2 노예
+                            sendMessage(client1 +" 패 "+client2+" 승 ");
+                            clientInfo.put(client2, clientInfo.get(client2)+1); //승자 점수 추가
+                            sendScore();
+                            countRound();
+                            client1Card = client2Card = "";
+                            break;
+                        }else if(client2Card.equals("//Ctzn")){//플레이어2 시민
+                            sendMessage(client1 +" 승 "+client2+" 패 ");
+                            clientInfo.put(client1, clientInfo.get(client1)+1); //승자 점수 추가
+                            sendScore();
+                            countRound();
+                            client1Card = client2Card = "";
+                            break;
+                        }
+                    case "//Slav": //플레이어1
+                        if(client2Card.equals("//King")){//플레이어2 왕
+                            sendMessage(client1 +" 승 "+client2+" 패 ");
+                            clientInfo.put(client1, clientInfo.get(client1)+1); //승자 점수 추가
+                            sendScore();
+                            countRound();
+                            client1Card = client2Card = "";
+                            break;
+                        }else if(client2Card.equals("//Ctzn")){//플레이어2 시민
+                            sendMessage(client1 +" 패 "+client2+" 승 ");
+                            clientInfo.put(client2, clientInfo.get(client2)+1); //승자 점수 추가
+                            sendScore();
+                            countRound();
+                            client1Card = client2Card = "";
+                            break;
+                        }
+                    break;
+                }
             }
         }
     }
 
+    public void countRound(){
+        if(roundCount.size() == 0){
+            roundCount.add(2);
+            sendMessage("//Round" + 2); //이 예약어가 들어오면 라운드 표시? 안해도 상관 없을듯
+        }else {
+            int nextRound = roundCount.get(0) + 1;
+            if(nextRound > 3) {
+                sendMessage("//Slav " + client1); //카드 교체 로직이므로 이 예약어가 들어오면 카드를 교체해서 셋팅해주세요
+                sendMessage("//King " + client2);
+                roundCount.clear();
+            }else {
+                roundCount.set(0, nextRound);
+                sendMessage("//Round" + nextRound);
+            }
+        }
+    }
 
+    public void sendScore(){ //예약어와 함께 플레이어 이름, 점수 송신
+        sendMessage("//CList"+client1+"#&"+clientInfo.get(client1));
+        sendMessage("//CList"+client2+"#&"+clientInfo.get(client2));
+    }
 
-
-
-
-    public void sendMessage(String msg){
-        Iterator<String> iter = playerList.keySet().iterator();
+    public void sendMessage(String msg){ //메세지 송신 메소드
+        Iterator<String> iter = clientList.keySet().iterator();
         //맵의 key값에 저장되어 있는 플레이어들에게 메세지 송신
         while(iter.hasNext()){
             try {
-                DataOutputStream dos = playerList.get(iter.next());
+                DataOutputStream dos = clientList.get(iter.next());
                 dos.writeUTF(msg);
                 dos.flush();
             } catch (IOException ie) {
@@ -152,38 +208,8 @@ public class GameThread extends Thread{
     void pln(String str){
         System.out.println(str);
     }
-
-
-
-
-
-    
 }
 
-
-
-
-    // //플레이어 ID 구하기
-    // private String getPlayreID(){
-    //     String ids;
-    //     Enumeration<String> enu = playerVector.elements();
-    //     while(enu.hasMoreElements()){
-    //         pName.pln(enu.nextElement());
-    //     }
-    // }
-
-
-    // //플레이어 ID, 스레드 배열에 저장
-    // void addUser(String pName, GameThread client){
-    //     if(checkID(pName)!= null){ //입력받지 않으면 에러, 예외처리 아직 안됨
-    //         System.out.println("error");
-    //     }
-    //     playerList.put(pName, dos); //사용자 ID 추가
-    //     //벡터의 끝에 지정된 구성 요소를 추가하여 크기가 1씩 증가 
-    //     playerInfo.put(pName,score);//사용자 ID 및 클라이언트와 통신할 스레드 저장
-    //     client.pName = pName;
-    // }
-    
 
 
     

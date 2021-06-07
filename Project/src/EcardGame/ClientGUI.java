@@ -26,7 +26,7 @@ public class ClientGUI extends JFrame implements ActionListener{
     //서버연결부분
     Socket sc;
     String ip = "127.0.0.1";
-    int port = 3000;
+    int port = 4000;
 
     String chatId;
     String msg; 
@@ -94,7 +94,7 @@ public class ClientGUI extends JFrame implements ActionListener{
         //1. 입장버튼 이벤트
         if(e.getSource() == enterBtn){
             try {
-                dos.writeUTF("//Ready");
+                dos.writeUTF("//Timer"+"//King"+chatId);
                 dos.flush();
             } catch (IOException ie) {
                 System.out.println(ie.getMessage());
@@ -102,11 +102,21 @@ public class ClientGUI extends JFrame implements ActionListener{
         }
         //2. 클리어버튼 이벤트
         if(e.getSource() == clearBtn){
-            chatLog.setText("");
+            try {
+                dos.writeUTF("//Timer"+"//Ctzn"+chatId);
+                dos.flush();
+            } catch (IOException ie) {
+                System.out.println(ie.getMessage());
+            }
         }
         //3. 퇴장버튼 이벤트
         if(e.getSource() == exitBtn){
-            System.exit(JFrame.EXIT_ON_CLOSE); //프로그램 종료
+            try {
+                dos.writeUTF("//Timer"+"//Slav"+chatId);
+                dos.flush();
+            } catch (IOException ie) {
+                System.out.println(ie.getMessage());
+            }
         }
     }
 
@@ -114,9 +124,9 @@ public class ClientGUI extends JFrame implements ActionListener{
 
     void setPanel(){
         cp = getContentPane();
-        enterBtn = new JButton("입장");
-        exitBtn = new JButton("퇴장");
-        clearBtn = new JButton("clear");
+        enterBtn = new JButton("황제");
+        exitBtn = new JButton("노예");
+        clearBtn = new JButton("시민");
         inputName = new JTextField(20); //닉네임 입력 텍스트필드
         inputMsg = new JTextField("메세지를 입력하세요",30); //메세지 입력 텍스트필드
         northPad = new JPanel();
@@ -178,6 +188,7 @@ public class ClientGUI extends JFrame implements ActionListener{
             if(dos !=null){
                 try {
                     dos.writeUTF("//Chat "+chatId+">> "+msg);
+                    
                     dos.flush();
                 } catch (Exception e) {
                     //TODO: handle exception
