@@ -15,12 +15,14 @@ public class GameThread extends Thread{
     public static final int maxclient = 2;
     public String pName; //플레이어 ID
     public int score;
+    String[] msgArr;
 
     //배열
     private static LinkedHashMap<String, DataOutputStream> clientList = new LinkedHashMap<String, DataOutputStream>(GameServer.maxclient);
     private static LinkedHashMap<String, Integer> clientInfo = new LinkedHashMap<String,Integer>(GameServer.maxclient);
     private static Vector<Integer> readyPlayer = new Vector<Integer>(); 
     private static Vector<Integer> roundCount = new Vector<Integer>();
+    // private static ArrayList<String> userList = new ArrayList<String>();
  
     private static String client1 = "";
     private static String client2 = "";
@@ -50,13 +52,17 @@ public class GameThread extends Thread{
                 gtsc.close();
             }
             sendMessage("System>> "+pName+"님이 임장하셨습니다.");
+            
             if (client1.equals("")) {//입장순서대로 client1,client2 변수에 저장 후 카드셋팅 예약어 보냄
+                //userList.add(pName);
                 client1 = pName;
                 sendMessage("//King "+client1);
             }else {
+                //userList.add(pName);
                 client2 = pName;
                 sendMessage("//Slav "+client2);
             }
+
             while(true){
                 String msg = dis.readUTF(); //클라이언트로부터 수신되는 메세지 읽음
                 filter(msg); //메세지or게임진행 브로드캐스트
@@ -76,6 +82,22 @@ public class GameThread extends Thread{
             }
         }
     }
+
+
+
+
+    public void sendToMsg(String fromName, String toName, String msg){     
+        try{            
+                        
+             clientList.get(toName).writeUTF("귓:from("+fromName+")=>"+msg);
+             clientList.get(fromName).writeUTF("귓:to("+toName+")=>"+msg);
+            
+         }catch(Exception e){
+             System.out.println("예외:"+e);
+         }
+    
+    }//sendAllMsg()-----------
+    
 
     void filter(String msg){//클라이언트쪽에서 보내는 예약어로 게임플레이, 채팅 등 각기 다른 행위를 함
         
@@ -104,10 +126,6 @@ public class GameThread extends Thread{
             }else if(member.equals(client2)) {
                 client2Card = cardType;
             }
-            // System.out.println("1: "+client1+"님");
-            // System.out.println("카드: "+client1Card);
-            // System.out.println("2: " +client2+"님");
-            // System.out.println("카드: "+client2Card);
 
             if(!client2Card.equals("") && !client1Card.equals("")) {
                 switch (client1Card) {//플레이어1
@@ -197,6 +215,8 @@ public class GameThread extends Thread{
     public void sendScore(){ //예약어와 함께 플레이어 이름, 점수 송신
         sendMessage("//CList"+client1+" "+clientInfo.get(client1));
         sendMessage("//CList"+client2+" "+clientInfo.get(client2));
+        sendMessage("//Times"+client1);
+        sendMessage("//Times"+client2);
     }
 
     public void showCard(){

@@ -14,7 +14,7 @@ public class GameServer extends JFrame implements ActionListener{
 
     ServerSocket ss;
     Socket sc;
-    public static final int port = 4000;
+    public static final int port = 4004;
     public static final int maxclient = 2;
     GameThread client;
     
@@ -119,9 +119,9 @@ public class GameServer extends JFrame implements ActionListener{
 
     void loadImg(){
         try {
-            imageIcon1 = new ImageIcon(ImageIO.read(new File("C:/KAEUN/JAVA/project/src/EcardGame/img/serverStart.png")));
-            imageIcon2 = new ImageIcon(ImageIO.read(new File("C:/KAEUN/JAVA/project/src/EcardGame/img/serverExit.png")));
-            imageIcon3 = new ImageIcon(ImageIO.read(new File("C:/KAEUN/JAVA/project/src/EcardGame/img/bg.png")));
+            imageIcon1 = new ImageIcon(ImageIO.read(new File("C:/KAEUN/gitStudy/Project/src/EcardGame/img/serverStart.png")));
+            imageIcon2 = new ImageIcon(ImageIO.read(new File("C:/KAEUN/gitStudy/Project/src/EcardGame/img/serverExit.png")));
+            imageIcon3 = new ImageIcon(ImageIO.read(new File("C:/KAEUN/gitStudy/Project/src/EcardGame/img/serverBG.png")));
         } catch (IOException ie) {
             //TODO: handle exception
         }

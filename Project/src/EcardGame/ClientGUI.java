@@ -26,7 +26,7 @@ public class ClientGUI extends JFrame implements ActionListener{
     //서버연결부분
     Socket sc;
     String ip = "127.0.0.1";
-    int port = 4000;
+    int port = 4500;
 
     String chatId;
     String msg; 
@@ -49,6 +49,8 @@ public class ClientGUI extends JFrame implements ActionListener{
                         sender = new Sender(sc,chatId); //내부클래스 생성하여 소켓과 아이디 넘김
                         Thread th1 = new ReceiverThread(sc); //서버로부터 수신받는 쓰레드 호출
                         th1.start();
+
+
                         inputName.setEditable(false); //비활성화시킴
                         inputMsg.requestFocus(); //포커스를 메세지입력창으로 이동시킴
 
@@ -84,10 +86,13 @@ public class ClientGUI extends JFrame implements ActionListener{
         clearBtn.addActionListener(this);
         exitBtn.addActionListener(this);
         
+        
 
 
 
     }
+
+    
 
     //버튼 액션이벤트
     public void actionPerformed(ActionEvent e){
@@ -176,6 +181,7 @@ public class ClientGUI extends JFrame implements ActionListener{
 
             try {
                 dos = new DataOutputStream(sc.getOutputStream());
+
                 dos.writeUTF(name);
                 dos.flush();
             } catch (Exception e) {
