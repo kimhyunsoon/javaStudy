@@ -56,11 +56,11 @@ public class GameThread extends Thread{
             if (client1.equals("")) {//입장순서대로 client1,client2 변수에 저장 후 카드셋팅 예약어 보냄
                 //userList.add(pName);
                 client1 = pName;
-                sendMessage("//King "+client1);
+                sendMessage("//Kings"+client1);
             }else {
                 //userList.add(pName);
                 client2 = pName;
-                sendMessage("//Slav "+client2);
+                sendMessage("//Slavs"+client2);
             }
 
             while(true){
@@ -83,20 +83,6 @@ public class GameThread extends Thread{
         }
     }
 
-
-
-
-    public void sendToMsg(String fromName, String toName, String msg){     
-        try{            
-                        
-             clientList.get(toName).writeUTF("귓:from("+fromName+")=>"+msg);
-             clientList.get(fromName).writeUTF("귓:to("+toName+")=>"+msg);
-            
-         }catch(Exception e){
-             System.out.println("예외:"+e);
-         }
-    
-    }//sendAllMsg()-----------
     
 
     void filter(String msg){//클라이언트쪽에서 보내는 예약어로 게임플레이, 채팅 등 각기 다른 행위를 함

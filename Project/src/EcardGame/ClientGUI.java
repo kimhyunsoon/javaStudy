@@ -26,7 +26,7 @@ public class ClientGUI extends JFrame implements ActionListener{
     //서버연결부분
     Socket sc;
     String ip = "127.0.0.1";
-    int port = 4500;
+    int port = 4004;
 
     String chatId;
     String msg; 
