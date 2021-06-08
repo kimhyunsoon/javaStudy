@@ -1,13 +1,12 @@
-package Test;
-
+package soon.eCard;
 import java.io.*;
 import java.net.*;
 
-public class TestReceiver extends Thread{
+public class Receiver extends Thread{
     Socket sc;
     DataInputStream dis;
-    TestClient cg;
-    public TestReceiver(Socket sc){
+    Client cg;
+    public Receiver(Socket sc){
         this.sc = sc;
     }
 
@@ -19,10 +18,9 @@ public class TestReceiver extends Thread{
                 if(str == null) break;
                 System.out.println(str);
                 cg.chatLog.append(str+"\n");
-                
             }
         } catch (IOException ie) {
-            System.out.println("¼­¹ö ´Ù¿î.. 2ÃÊ ÈÄ¿¡ Á¾·áµË´Ï´Ù.");
+            System.out.println("ì„œë²„ ë‹¤ìš´.. 2ì´ˆ í›„ì— ì¢…ë£Œë©ë‹ˆë‹¤.");
 			try{
 				Thread.sleep(2000);
 				System.exit(0);
@@ -35,4 +33,5 @@ public class TestReceiver extends Thread{
             } catch (IOException ie) {}
         }
     }
+    
 }
