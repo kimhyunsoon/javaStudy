@@ -27,6 +27,8 @@ public class GameServer extends JFrame implements ActionListener{
     JTextArea chatLog;
     static private final String newline = "\n"; //°³Çà
     ImageIcon imageIcon1, imageIcon2, imageIcon3;
+    String path = GameServer.class.getResource("").getPath();
+    File fileInSamePackage = new File(path + "test.txt");
 
     GameServer(){
         loadImg();
@@ -119,9 +121,9 @@ public class GameServer extends JFrame implements ActionListener{
 
     void loadImg(){
         try {
-            imageIcon1 = new ImageIcon(ImageIO.read(new File("C:/KAEUN/gitStudy/Project/src/EcardGame/img/serverStart.png")));
-            imageIcon2 = new ImageIcon(ImageIO.read(new File("C:/KAEUN/gitStudy/Project/src/EcardGame/img/serverExit.png")));
-            imageIcon3 = new ImageIcon(ImageIO.read(new File("C:/KAEUN/gitStudy/Project/src/EcardGame/img/serverBG.png")));
+            imageIcon1 = new ImageIcon(ImageIO.read(new File(path+"img/serverStart.png")));
+            imageIcon2 = new ImageIcon(ImageIO.read(new File(path+"img/serverExit.png")));
+            imageIcon3 = new ImageIcon(ImageIO.read(new File(path+"img/serverBG.png")));
         } catch (IOException ie) {
             //TODO: handle exception
         }

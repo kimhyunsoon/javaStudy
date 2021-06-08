@@ -2,12 +2,14 @@ package EcardGame;
 
 import java.io.*;
 import java.net.*;
+import java.util.LinkedList;
 
 public class ReceiverThread extends Thread{
     Socket sc;
     DataInputStream dis;
     ClientGUI cg;
-    String playerName;
+    
+
     public ReceiverThread(Socket sc){
         this.sc = sc;
     }
@@ -17,17 +19,14 @@ public class ReceiverThread extends Thread{
             dis = new DataInputStream(sc.getInputStream());
             while(true){
                 String str = dis.readUTF();
-                if(str.startsWith("//Kings")) {
-                    playerName = str.substring(7);
-                    if(str.indexOf(playerName) != -1){
-                        System.out.println("황제를 셋팅합니다");
-                    }
-                 }else if (str.startsWith("//Slavs")) {
-                    playerName = str.substring(7);
-                    if(str.indexOf(playerName) != -1){
-                        System.out.println("노예를 셋팅합니다");
-                    }
-                 }
+                if(str.startsWith("//Kings") && str.indexOf(cg.playerName.get(0)) != -1) {
+                    System.out.println(cg.playerName.get(0) + "zz");
+                    System.out.println("황제를 셋팅합니다");
+                }else if (str.startsWith("//Slavs") && str.indexOf(cg.playerName.get(0)) != -1) {
+                
+                    System.out.println(cg.playerName.get(0) + "ss");
+                    System.out.println("노예를 셋팅합니다");
+                }
                 System.out.println(str);
                 cg.chatLog.append(str+"\n");
                 

@@ -3,6 +3,7 @@ package EcardGame;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import java.util.StringTokenizer;
 
 import EcardGame.GameServer;
 import EcardGame.GameThread;
@@ -51,7 +52,9 @@ public class GameThread extends Thread{
                 //sendMessage("//Full ");
                 gtsc.close();
             }
+            
             sendMessage("System>> "+pName+"님이 임장하셨습니다.");
+
             
             if (client1.equals("")) {//입장순서대로 client1,client2 변수에 저장 후 카드셋팅 예약어 보냄
                 //userList.add(pName);

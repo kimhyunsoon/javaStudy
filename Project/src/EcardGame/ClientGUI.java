@@ -7,6 +7,7 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
+import java.util.LinkedList;
 
 public class ClientGUI extends JFrame implements ActionListener{
 
@@ -29,7 +30,8 @@ public class ClientGUI extends JFrame implements ActionListener{
     int port = 4004;
 
     String chatId;
-    String msg; 
+    String msg;
+    public static LinkedList<String> playerName = new LinkedList<String>();
 
 
     public ClientGUI(){
@@ -178,10 +180,10 @@ public class ClientGUI extends JFrame implements ActionListener{
         Sender( Socket sc, String name){
             this.sc = sc;
             this.name = name;
-
+            
             try {
                 dos = new DataOutputStream(sc.getOutputStream());
-
+                playerName.add(name);
                 dos.writeUTF(name);
                 dos.flush();
             } catch (Exception e) {
