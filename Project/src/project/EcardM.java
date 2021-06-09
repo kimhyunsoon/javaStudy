@@ -1,33 +1,18 @@
-package EcardGame;
+package project;
 
-import java.awt.Graphics;
-import EcardGame.Login;
-import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.Socket;
-import java.net.UnknownHostException;
-import java.util.HashMap;
-import java.util.LinkedList;
-
+import java.awt.*;
+import project.Login;
+import project.EcardM.Listener;
+import project.EcardM.Sender;
+import java.awt.event.*;
+import java.io.*;
+import java.net.*;
+import java.util.*;
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
+import javax.swing.*;
 
-public class EcardGUI extends JFrame implements ActionListener {
+
+public class EcardM extends JFrame implements ActionListener {
 	JFrame frame;
 	
 	ImageIcon img_king, img_slav, img_ctzn1, img_ctzn2, img_ctzn3, img_ctzn4, img_chatLog, img_msg, img_background, img_ready, img_exit, img_backCard; //기본 이미지
@@ -47,16 +32,41 @@ public class EcardGUI extends JFrame implements ActionListener {
 	JPanel background;
 	String playerName1, playerScore, playerIdx,playerName2; 
 	
-	int port = 4004;
+	JLabel jTimer;
+	Font font;
 	public static LinkedList<String> playerName = new LinkedList<String>();
-	String path = GameServer.class.getResource("").getPath();
+	int port = 4003;
 	
-	public EcardGUI() {
+	
+	public EcardM() {
 		loadImg();
-		frame = new JFrame();
+        setPanel();
+		
+		
+		btn_exit.addActionListener(this);
+		//btn_myKing.addActionListener(this);
+		//btn_mySlav.addActionListener(this);
+
+
+		
+		
+		revalidate();
+		repaint();
+		frame.getContentPane().setLayout(null);
+		frame.setSize(1580,960);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setResizable(false);
+		frame.setVisible(true);
+		
+		startChat();
+	
+	}
+
+    void setPanel(){
+        frame = new JFrame();
 		try {
 			background = new JPanel() {
-				Image img_background = new ImageIcon(ImageIO.read(new File(path+"img/BG.png"))).getImage();
+				Image img_background = new ImageIcon(ImageIO.read(new File("img/BG.png"))).getImage();
 				public void paint(Graphics g) {//그리는 함수
 					g.drawImage(img_background, 0, 0, null);
 				}
@@ -65,6 +75,13 @@ public class EcardGUI extends JFrame implements ActionListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		font = new Font("고딕체", Font.PLAIN, 70);
+		jTimer = new JLabel("30");
+		jTimer.setFont(font);
+		
+		jTimer.setLayout(null);
+		jTimer.setBounds(1300, 120, 150, 150);
+		
 		
 		btn_myKing = new JButton(change_img_king); btn_mySlav = new JButton(change_img_slav);
 		btn_myCtzn1 = new JButton(change_img_ctzn1); btn_myCtzn2 = new JButton(change_img_ctzn2);
@@ -79,21 +96,19 @@ public class EcardGUI extends JFrame implements ActionListener {
 		btn_myBack = new JButton(change_img_backCard); btn_yourBack = new JButton(change_img_backCard);
 		
 		text_chatLog = new JTextArea(); text_msg = new JTextField();
+
 		
 		background.setBounds(0, 0, 1580, 960);
 		
-		btn_yourKing.setBounds(390, 80, 150, 238); btn_yourCtzn1.setBounds(550, 80, 150, 238);
+		btn_yourKing.setBounds(390, 80, 150, 238); btn_yourCtzn1.setBounds(550, 80, 150, 238); 
 		btn_yourCtzn2.setBounds(710, 80, 150, 238); btn_yourCtzn3.setBounds(870, 80, 150, 238);
 		btn_yourCtzn4.setBounds(1030, 80, 150, 238); btn_yourSlav.setBounds(390, 80, 150, 238);
-		
-
 		
 		
 		btn_myKing.setBounds(390, 640, 150, 238); btn_myCtzn1.setBounds(550, 640, 150, 238);
 		btn_myCtzn2.setBounds(710, 640, 150, 238); btn_myCtzn3.setBounds(870, 640, 150, 238);
 		btn_myCtzn4.setBounds(1030, 640, 150, 238); btn_mySlav.setBounds(390, 640, 150, 238);
-		btn_myKing.setVisible(false);   btn_mySlav.setVisible(false);
-		btn_yourKing.setVisible(false);   btn_yourSlav.setVisible(false);
+		
 		
 		btn_yourBack.setBounds(630, 328, 150, 238); btn_myBack.setBounds(790, 392, 150, 238);
 		
@@ -102,10 +117,10 @@ public class EcardGUI extends JFrame implements ActionListener {
 		text_chatLog.setBounds(1200, 318, 330, 510); text_msg.setBounds(1200, 828, 330, 50);
 		
 		frame.add(btn_myKing); frame.add(btn_myCtzn1); frame.add(btn_myCtzn2);
-		frame.add(btn_myCtzn3); frame.add(btn_myCtzn4);
+		frame.add(btn_myCtzn3); frame.add(btn_myCtzn4); frame.add(btn_mySlav);
 		
 		frame.add(btn_yourSlav); frame.add(btn_yourCtzn1); frame.add(btn_yourCtzn2);
-		frame.add(btn_yourCtzn3); frame.add(btn_yourCtzn4);
+		frame.add(btn_yourCtzn3); frame.add(btn_yourCtzn4); frame.add(btn_yourKing);
 		
 		frame.add(btn_myBack); frame.add(btn_yourBack);
 		
@@ -113,64 +128,39 @@ public class EcardGUI extends JFrame implements ActionListener {
 		
 		frame.add(text_chatLog); frame.add(text_msg);
 		
+		frame.add(jTimer);
 		//frame.add(lab_score);
 		frame.add(background);
-		
-		btn_exit.addActionListener(this);
-		//btn_myKing.addActionListener(this);
-		//btn_mySlav.addActionListener(this);
-		
-		
-		revalidate();
-		repaint();
-		frame.getContentPane().setLayout(null);
-		frame.setSize(1580,960);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setResizable(false);
-		frame.setVisible(true);
-		
-		startChat();
-	}
-	void newClass() {
-		
-		
-		init();
-	}
-	void init() {
-		
-	}
-	void setUi() {
-		
-	}
+    }
 
 	void loadImg() {
 		try {
-			img_king = new ImageIcon(ImageIO.read(new File(path+"img/king.png")));
+			img_king = new ImageIcon(ImageIO.read(new File("img/king.png")));
 			i_king = img_king.getImage();
 			change_i_king = i_king.getScaledInstance(150, 238, Image.SCALE_SMOOTH);
 			change_img_king = new ImageIcon(change_i_king);
 			
-			img_slav = new ImageIcon(ImageIO.read(new File(path+"img/slav.png")));
+			img_slav = new ImageIcon(ImageIO.read(new File("img/slav.png")));
 			i_slav = img_slav.getImage();
 			change_i_slav = i_slav.getScaledInstance(150, 238, Image.SCALE_SMOOTH);
 			change_img_slav = new ImageIcon(change_i_slav);
 			
-			img_ctzn1 = new ImageIcon(ImageIO.read(new File(path+"img/ctzn1.png")));
+			img_ctzn1 = new ImageIcon(ImageIO.read(new File("img/ctzn1.png")));
 			i_ctzn1 = img_ctzn1.getImage();
 			change_i_ctzn1 = i_ctzn1.getScaledInstance(150, 238, Image.SCALE_SMOOTH);
 			change_img_ctzn1 = new ImageIcon(change_i_ctzn1);
 			
-			img_ctzn2 = new ImageIcon(ImageIO.read(new File(path+"img/ctzn2.png")));
+			img_ctzn2 = new ImageIcon(ImageIO.read(new File("img/ctzn2.png")));
 			i_ctzn2 = img_ctzn2.getImage();
 			change_i_ctzn2 = i_ctzn2.getScaledInstance(150, 238, Image.SCALE_SMOOTH);
 			change_img_ctzn2 = new ImageIcon(change_i_ctzn2);
 			
-			img_ctzn3 = new ImageIcon(ImageIO.read(new File(path+"img/ctzn3.png")));
+			img_ctzn3 = new ImageIcon(ImageIO.read(new File("img/ctzn3.png")));
 			i_ctzn3 = img_ctzn3.getImage();
 			change_i_ctzn3 = i_ctzn3.getScaledInstance(150, 238, Image.SCALE_SMOOTH);
 			change_img_ctzn3 = new ImageIcon(change_i_ctzn3);
 			
-			img_ctzn4 = new ImageIcon(ImageIO.read(new File(path+"img/ctzn4.png")));
+			img_ctzn4 = new ImageIcon(ImageIO.read(new File("img/ctzn4.png")));
 			i_ctzn4 = img_ctzn4.getImage();
 			change_i_ctzn4 = i_ctzn4.getScaledInstance(150, 238, Image.SCALE_SMOOTH);
 			change_img_ctzn4 = new ImageIcon(change_i_ctzn4);
@@ -190,17 +180,17 @@ public class EcardGUI extends JFrame implements ActionListener {
 			change_i_background = i_background.getScaledInstance(150, 238, Image.SCALE_SMOOTH);
 			change_img_background = new ImageIcon(change_i_background);*/
 			
-			img_ready = new ImageIcon(ImageIO.read(new File(path+"img/read.png")));
+			img_ready = new ImageIcon(ImageIO.read(new File("img/read.png")));
 			i_ready = img_ready.getImage();
 			change_i_ready = i_ready.getScaledInstance(320, 90, Image.SCALE_SMOOTH);
 			change_img_ready = new ImageIcon(change_i_ready);
 
-			img_exit = new ImageIcon(ImageIO.read(new File(path+"img/exit.png")));
+			img_exit = new ImageIcon(ImageIO.read(new File("img/exit.png")));
 			i_exit = img_exit.getImage();
 			change_i_exit = i_exit.getScaledInstance(320, 90, Image.SCALE_SMOOTH);
 			change_img_exit = new ImageIcon(change_i_exit);
 			
-			img_backCard = new ImageIcon(ImageIO.read(new File(path+"img/backCard.png")));
+			img_backCard = new ImageIcon(ImageIO.read(new File("img/backCard.png")));
 			i_backCard = img_backCard.getImage();
 			change_i_backCard = i_backCard.getScaledInstance(150, 238, Image.SCALE_SMOOTH);
 			change_img_backCard = new ImageIcon(change_i_backCard);
@@ -212,6 +202,7 @@ public class EcardGUI extends JFrame implements ActionListener {
 		}
 	}
 	
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
@@ -219,12 +210,7 @@ public class EcardGUI extends JFrame implements ActionListener {
 		if(e.getSource()==btn_exit) {
 			System.exit(0);
 		}
-		if(e.getSource()==btn_myKing) {
-			
-		}
-		if(e.getSource()==btn_mySlav) {
-			
-		}
+		
 	}
 // 채팅 소켓 생성
 	public void startChat() {
@@ -233,12 +219,19 @@ public class EcardGUI extends JFrame implements ActionListener {
 		String ip = Login.IP1; // Login 에서 ip를 받아옴
 		
 		try {
-			Socket s = new Socket(ip,port); //소켓입장
-			Sender sender = new Sender(s, nickName); //Sender에 소켓과 nickName 전송
+			Socket s = new Socket(ip,port);
+			Sender sender = new Sender(s, nickName); 
 			Listener listener = new Listener(s, nickName); // Listener에 소켓 전송 
 			new Thread(sender).start(); // Sender 쓰레드 시작.
 			new Thread(listener).start(); //Listener 쓰레드 시작.
-			text_msg.addKeyListener(new Sender(s,nickName));
+            btn_Ready.addActionListener(this);
+			btn_myKing.addActionListener(this);
+			btn_mySlav.addActionListener(this);
+			btn_myCtzn1.addActionListener(this);
+			btn_myCtzn2.addActionListener(this);
+			btn_myCtzn3.addActionListener(this);
+			btn_myCtzn4.addActionListener(this);
+            text_msg.addKeyListener(new Sender(s,nickName));
 			btn_exit.addActionListener(this);
 
 		}catch(UnknownHostException ue) {	
@@ -247,77 +240,87 @@ public class EcardGUI extends JFrame implements ActionListener {
 // 내부 클래스 수신
 	class Listener extends Thread{
 		Socket s;
-		InputStream is;
 		DataInputStream dis;
-		BufferedReader br;
 		String nickName;
-		String firstName;
-		String lastName;
-		//HashMap<Socket, String> map = new HashMap<Socket, String>();
+
 		public Listener(Socket s,String nickName) {
 			this.s = s;
 			this.nickName = nickName;
-
-			try {
-					dis = new DataInputStream(this.s.getInputStream());
-					is = s.getInputStream();
-					br = new BufferedReader(new InputStreamReader(is));
-			}catch(IOException ie) {}
 		}
+		public void setTimer() {
+	    	int i=30;
+	        while(i >= 0)
+	        {              
+	            try {
+	                System.out.println(i);       
+	                jTimer.setText(i+"Sec");
+	                Thread.sleep(1000);
+	                if(i==0) {
+	                	
+	                }
+	            } catch (InterruptedException e) {
+	                e.printStackTrace();
+	            }
+	            i--;     
+	        }
+	    }
+		
 		public void run() {
-			while(dis != null) {
-				try {
-					String pName = dis.readUTF(); 
-				
-					if(pName.startsWith("//Kings") && pName.indexOf(playerName.get(0)) != -1) {
-						System.out.println("내 ID확인: "playerName.get(0));
-						System.out.println("황제를 셋팅합니다");
-					}
-					else if(pName.startsWith("//Slavs") && pName.indexOf(playerName.get(0)) != -1) {
-						//System.out.println("내 ID확인: "playerName.get(0));
-						System.out.println("노예를 셋팅합니다");
-					}
-
-					while(true){
-						String msg = dis.readUTF(); //클라이언트로부터 수신되는 메세지 읽음
-						filter(msg); //메세지or게임진행 브로드캐스트
-					}
-
-				}catch(IOException ie) {}
-			}
-		}
-
-		void filter(String msg){
-			String temp = msg.substring(0,7);
-			if((msg.startsWith("//Start"))) {
+            try {
+                dis = new DataInputStream(s.getInputStream());
+                while(dis != null){
+                    String msg = dis.readUTF(); 	
+					String temp = msg.substring(0,7);
+					
+					if(msg.startsWith("//Kings") && msg.indexOf(playerName.get(0)) != -1) {
+						playerName1 = msg.substring(7);
+						btn_yourKing.setVisible(false);
+						btn_mySlav.setVisible(false);
+						btn_myBack.setVisible(false);
+						btn_yourBack.setVisible(false);
 						
-			}
-			if((msg.startsWith("//CList"))) {
-				//playerName1 = msg.substring(7, msg.indexOf(" "));
-				//playerScore = msg.substring(msg.indexOf(" ") + 1);
-			}
-			if((msg.startsWith("//Wcard"))) {
-				
-			}
-			if((temp.equals("//Chat "))) {
-				System.out.println("내용 입력했듬");
-				System.out.println(msg);
-				//text_chatLog.append(playerName1+">>"+msg+"\n");
-			}else {
-				text_chatLog.append(msg+"\n");
-			}
-		}
+					}else if(msg.startsWith("//Slavs") && msg.indexOf(playerName.get(0)) != -1) {
+						playerName2 = msg.substring(7);
+						btn_myKing.setVisible(false);
+						btn_yourSlav.setVisible(false);
+						btn_myBack.setVisible(false);
+						btn_yourBack.setVisible(false);
+					}else if((temp.equals("//Start"))) {
+						Runnable r2 = new TimeCount(this);
+						Thread t2 = new Thread(r2);
+						t2.start();
+					}else if((msg.startsWith("//CList"))) {
+						//playerName1 = msg.substring(7, msg.indexOf(" "));
+						//playerScore = msg.substring(msg.indexOf(" ") + 1);
+					}else if((msg.startsWith("//Wcard"))) {
+						
+					}else if((temp.equals("//Chat "))) {
+						System.out.println(msg);
+						//text_chatLog.append(playerName1+">>"+msg+"\n");
+					}else if(msg.equals("//King")) {
+						
+					}else if(temp.equals("//Back ") && msg.indexOf(playerName.get(0)) != 1) {
+						System.out.println(playerName);
+						btn_yourBack.setVisible(true);
+					}
+					else {
+						text_chatLog.append(msg+"\n");
+					}
+                }
+            } catch (IOException ie) {
+                System.out.println("서버 다운.. 2초 후에 종료됩니다.");
+                try{
+                    Thread.sleep(2000);
+                    System.exit(0);
+                }catch(InterruptedException ie2){
+                }
+            }finally{
+                try {
+                    if(dis != null) dis.close();
+                    if(s != null) s.close();
+                } catch (IOException ie) {}
+            }
 
-		void king(String msg, String firstName) {
-				playerName1 = msg.substring(7);
-				btn_myKing.setVisible(true);
-				btn_yourSlav.setVisible(true);
-		}
-		void slav(String msg, String lastName) {
-				System.out.println("아아아아ㅏ오냐아아아앙");
-				playerName2 = msg.substring(7);
-				btn_mySlav.setVisible(true);
-				btn_yourKing.setVisible(true);
 		}
 	}
 	class Sender extends Thread implements KeyListener, ActionListener{
@@ -328,18 +331,30 @@ public class EcardGUI extends JFrame implements ActionListener {
 			this.s = s;
 			try {
 				dos = new DataOutputStream(this.s.getOutputStream());
-				this.nickName = nickName;
-				playerName.add(nickName);
+                this.nickName = nickName;
 			}catch(IOException ie) {}
+
 		}
-		public void run() {
-			try {
+        public void run(){
+            try {
+				playerName.add(nickName);
 				dos.writeUTF(nickName);
+                dos.flush();
 			}catch(IOException ie) {}
+        }
+		public void timeinit() {
+			try {
+				dos.writeUTF("//timee");
+				dos.flush();
+				System.out.println("30초 지남..");
+			}catch(IOException ie) {
+				
+			}
 		}
 
+
 		@Override
-		public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(ActionEvent e) { //버튼입력메소드
 			// TODO Auto-generated method stub
 			if(e.getSource() == btn_Ready) {
 				try {
@@ -348,19 +363,21 @@ public class EcardGUI extends JFrame implements ActionListener {
 					dos.writeUTF("//Ready");
 					dos.flush();
 					btn_Ready.setEnabled(false);
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				} catch (IOException ie) {
 				}
-			}else if(e.getSource()==btn_myKing) {
+			}else if(e.getSource()==btn_myKing || e.getSource()==btn_mySlav || e.getSource()==btn_myCtzn1 || e.getSource()==btn_myCtzn2 || e.getSource()==btn_myCtzn3
+					|| e.getSource()==btn_myCtzn4 ) {
 				try {
-					dos.writeUTF("//Timer"+"//king"+nickName);
+					dos.writeUTF("//Click");
+					//dos.writeUTF("//Timer"+"//king"+nickName);
 					dos.flush();
+					//btn_myBack.setVisible(true);
 				} catch (IOException e1) {}
 			}else if(e.getSource()==btn_mySlav) {
 				try {
 					dos.writeUTF("//Timer"+"//Slav"+nickName);
 					dos.flush();
+					btn_myBack.setVisible(true);
 				} catch (IOException e1) {}
 			}else if(e.getSource()==btn_myCtzn1) {
 				try {
@@ -387,14 +404,9 @@ public class EcardGUI extends JFrame implements ActionListener {
 			}
 		}
 
-		public void keyTyped(KeyEvent e) {}
-		public void keyPressed(KeyEvent e) {}
-		public void keyReleased(KeyEvent e) {
-			// TODO Auto-generated method stub
+		public void keyReleased(KeyEvent e) {//채팅입력 이벤트
 			if(e.getKeyCode()==KeyEvent.VK_ENTER) {
-				
 				String chat = text_msg.getText();
-				System.out.println(chat+"afsfsa");
 				text_msg.setText("");
 				try {
 					dos.writeUTF("//Chat "+nickName+" : "+ chat);
@@ -402,9 +414,33 @@ public class EcardGUI extends JFrame implements ActionListener {
 				}catch(IOException ie) {}
 			}
 		}
+        public void keyTyped(KeyEvent e){}
+		public void keyPressed(KeyEvent e){}
 	}
 }
 
+class TimeCount implements Runnable{
+	Listener listener;
+	public TimeCount(Listener listener) {
+		this.listener = listener;
+	}
+	@Override
+	public void run() {
+		listener.setTimer();
+	}
+}
+class TimeOut implements Runnable{
+	Sender sender;
+	public TimeOut(Sender sender) {
+		// TODO Auto-generated constructor stub
+		this.sender = sender;
+	}
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		sender.timeinit();
+	}
+}
 
 
 

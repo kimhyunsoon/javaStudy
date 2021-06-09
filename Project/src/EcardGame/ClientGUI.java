@@ -27,7 +27,7 @@ public class ClientGUI extends JFrame implements ActionListener{
     //서버연결부분
     Socket sc;
     String ip = "127.0.0.1";
-    int port = 4004;
+    int port = 4003;
 
     String chatId;
     String msg;
@@ -107,7 +107,6 @@ public class ClientGUI extends JFrame implements ActionListener{
                 System.out.println(ie.getMessage());
             }
         }
-        //2. 클리어버튼 이벤트
         if(e.getSource() == clearBtn){
             try {
                 dos.writeUTF("//Timer"+"//Ctzn"+chatId);
@@ -116,6 +115,15 @@ public class ClientGUI extends JFrame implements ActionListener{
                 System.out.println(ie.getMessage());
             }
         }
+        // if(e.getSource() == clearBtn){
+        //     try {
+        //         dos.writeUTF("//Ready");
+        //         dos.flush();
+
+        //     } catch (IOException ie) {
+        //     System.out.println(ie.getMessage());
+        //     }
+        // }
         //3. 퇴장버튼 이벤트
         if(e.getSource() == exitBtn){
             try {

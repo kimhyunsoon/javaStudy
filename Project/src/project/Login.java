@@ -1,4 +1,4 @@
-package EcardGame;
+package project;
 import java.awt.*;
 
 import java.awt.event.*;
@@ -17,8 +17,6 @@ import java.net.UnknownHostException;
 
 
 class Login extends JFrame implements ActionListener {
-	String path = GameServer.class.getResource("").getPath();
-	
 	Container cp;
 	Font f = new Font("¸¼Àº °íµñ", Font.BOLD, 20);
 	JPanel jpcen, background;
@@ -31,22 +29,22 @@ class Login extends JFrame implements ActionListener {
 	JLabel laImg;
 	public static String IP, ID;
 	public static String nickName, IP1;
-	// Login() {
-	// 	try {
-	// 		background = new JPanel() {
-	// 			Image img = new ImageIcon(ImageIO.read(new File(path+"image/login_BG.png"))).getImage();
-	// 			public void paint(Graphics g) {
-	// 				g.drawImage(img, 0, 0,null);
-	// 			}
-	// 		};
-	// 	} catch (IOException e) {
-	// 		e.printStackTrace();
-	// 	}
+	Login() {
+		try {
+			background = new JPanel() {
+				Image img = new ImageIcon(ImageIO.read(new File("image/login_BG.png"))).getImage();
+				public void paint(Graphics g) {
+					g.drawImage(img, 0, 0,null);
+				}
+			};
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
-	// }
+	}
 	
 	void init() {
-		//background.setBounds(0, 0, 500, 550);
+		background.setBounds(0, 0, 500, 550);
 		frame = new JFrame();
 		laImg = new JLabel(i1);
 		laImg.setBounds(0, 0, 500, 550);
@@ -68,15 +66,15 @@ class Login extends JFrame implements ActionListener {
 		frame.add(tf_ip);
 		
 		//¹öÆ°
-		button_ip = new JButton(new ImageIcon(path+"image/getiP.png"));
+		button_ip = new JButton(new ImageIcon("image/getiP.png"));
 		button_ip.setBounds(300, 365, 83, 40);
 		frame.add(button_ip);
 		button_ip.addActionListener(this);
 		
-		start = new JButton(new ImageIcon(path+"image/loginBtn.png"));
+		start = new JButton(new ImageIcon("image/loginBtn.png"));
 		start.addActionListener(this);
 		frame.add(start);
-		//frame.add(background);
+		frame.add(background);
 		frame.add(laImg);
 		setUi();
 		Ipcheak();
@@ -129,7 +127,7 @@ class Login extends JFrame implements ActionListener {
 				start.setFocusPainted(false); 
 				start.setContentAreaFilled(false);
 				frame.setVisible(false);
-				EcardGUI eg = new EcardGUI();
+				EcardM em = new EcardM();
 
 			}
 		}
