@@ -27,12 +27,13 @@ class Login extends JFrame implements ActionListener {
 	JFrame frame;
 	ImageIcon i1;
 	JLabel laImg;
+	String path = GameServer.class.getResource("").getPath();
 	public static String IP, ID;
 	public static String nickName, IP1;
 	Login() {
 		try {
 			background = new JPanel() {
-				Image img = new ImageIcon(ImageIO.read(new File("image/login_BG.png"))).getImage();
+				Image img = new ImageIcon(ImageIO.read(new File(path + "image/login_BG.png"))).getImage();
 				public void paint(Graphics g) {
 					g.drawImage(img, 0, 0,null);
 				}
@@ -127,8 +128,7 @@ class Login extends JFrame implements ActionListener {
 				start.setFocusPainted(false); 
 				start.setContentAreaFilled(false);
 				frame.setVisible(false);
-				EcardM em = new EcardM();
-
+				EcardGUI eg = new EcardGUI();
 			}
 		}
 		
@@ -138,6 +138,7 @@ class Login extends JFrame implements ActionListener {
 		}
 		
 	}
+	
 	
 	void sound() {
 		File f = new File("sound/bgm.wav");

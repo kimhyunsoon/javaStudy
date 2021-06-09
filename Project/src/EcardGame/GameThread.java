@@ -1,11 +1,11 @@
-package project;
+package ecardGame;
 
 import java.io.*;
 import java.net.*;
 import java.util.*;
 
-import project.GameServer;
-import project.GameThread;
+import ecardGame.GameServer;
+import ecardGame.GameThread;
 
 public class GameThread extends Thread{
     private Socket gtsc;
@@ -98,6 +98,7 @@ public class GameThread extends Thread{
                     }catch(InterruptedException ie){}
                 }
                 sendMessage("//Start"); //Start 예약어 보냄	
+                readyPlayer.removeAllElements();
             }
         }else if(temp.equals("//Timer")){//타이머가 종료되었을 경우
             String cardType = msg.substring(7,13); //선택한 카드 저장

@@ -1,4 +1,4 @@
-package EcardGame;
+package ecardGame;
 
 import java.io.*;
 import java.net.*;
@@ -120,7 +120,7 @@ public class ClientGUI extends JFrame implements ActionListener{
         //         dos.writeUTF("//Ready");
         //         dos.flush();
 
-        //     } catch (IOException ie) {
+        //     } catch (IOException ie) {±×
         //     System.out.println(ie.getMessage());
         //     }
         // }

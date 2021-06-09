@@ -1,4 +1,4 @@
-package project;
+package ecardGame;
 
 import java.awt.*; 
 import java.awt.event.*;
@@ -8,7 +8,7 @@ import javax.swing.*;
 import javax.swing.border.*;
 import java.net.*;
 
-import project.GameThread;
+import ecardGame.GameThread;
 
 public class GameServer extends JFrame implements ActionListener{
 
@@ -27,7 +27,7 @@ public class GameServer extends JFrame implements ActionListener{
     JTextArea chatLog;
     static private final String newline = "\n"; //°³Çà
     ImageIcon imageIcon1, imageIcon2, imageIcon3;
-    //String path = GameServer.class.getResource("").getPath();
+    String path = GameServer.class.getResource("").getPath();
 
 
     GameServer(){
@@ -121,9 +121,9 @@ public class GameServer extends JFrame implements ActionListener{
 
     void loadImg(){
         try {
-            imageIcon1 = new ImageIcon(ImageIO.read(new File("img/serverStart.png")));
-            imageIcon2 = new ImageIcon(ImageIO.read(new File("img/serverExit.png")));
-            imageIcon3 = new ImageIcon(ImageIO.read(new File("img/serverBG.png")));
+            imageIcon1 = new ImageIcon(ImageIO.read(new File(path+"img/serverStart.png")));
+            imageIcon2 = new ImageIcon(ImageIO.read(new File(path+"img/serverExit.png")));
+            imageIcon3 = new ImageIcon(ImageIO.read(new File(path+"img/serverBG.png")));
         } catch (IOException ie) {
             //TODO: handle exception
         }

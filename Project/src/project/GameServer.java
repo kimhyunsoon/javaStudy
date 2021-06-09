@@ -28,7 +28,7 @@ public class GameServer extends JFrame implements ActionListener{
     static private final String newline = "\n"; //°³Çà
     ImageIcon imageIcon1, imageIcon2, imageIcon3;
     //String path = GameServer.class.getResource("").getPath();
-
+    String path = GameServer.class.getResource("").getPath();
 
     GameServer(){
         loadImg();
@@ -115,15 +115,16 @@ public class GameServer extends JFrame implements ActionListener{
 		btnPanel.add(closeBtn);
 		closeBtn.addActionListener(this);
 		closeBtn.setEnabled(false);
+
 		
 		setUI();
 	}
 
     void loadImg(){
         try {
-            imageIcon1 = new ImageIcon(ImageIO.read(new File("img/serverStart.png")));
-            imageIcon2 = new ImageIcon(ImageIO.read(new File("img/serverExit.png")));
-            imageIcon3 = new ImageIcon(ImageIO.read(new File("img/serverBG.png")));
+            imageIcon1 = new ImageIcon(ImageIO.read(new File(path+"img/serverStart.png")));
+            imageIcon2 = new ImageIcon(ImageIO.read(new File(path+"img/serverExit.png")));
+            imageIcon3 = new ImageIcon(ImageIO.read(new File(path+"img/serverBG.png")));
         } catch (IOException ie) {
             //TODO: handle exception
         }

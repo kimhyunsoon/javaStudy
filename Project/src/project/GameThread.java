@@ -21,7 +21,8 @@ public class GameThread extends Thread{
     private static LinkedHashMap<String, Integer> clientInfo = new LinkedHashMap<String,Integer>(GameServer.maxclient);
     private static Vector<Integer> readyPlayer = new Vector<Integer>(); 
     private static Vector<Integer> roundCount = new Vector<Integer>();
- 
+
+    
     private static String client1 = "";
     private static String client2 = "";
     private static String client1Card = "";
@@ -49,7 +50,6 @@ public class GameThread extends Thread{
                 //sendMessage("//Full ");
                 gtsc.close();
             }
-            
             sendMessage("System>> "+pName+"님이 임장하셨습니다.");
             if (client1.equals("")) {//입장순서대로 client1,client2 변수에 저장 후 카드셋팅 예약어 보냄
                 client1 = pName;
@@ -57,6 +57,7 @@ public class GameThread extends Thread{
             }else {
                 client2 = pName;
                 sendMessage("//Slav "+client2);
+              //Round //Slav
             }
             while(true){
                 String msg = dis.readUTF(); //클라이언트로부터 수신되는 메세지 읽음
@@ -78,8 +79,6 @@ public class GameThread extends Thread{
         }
     }
 
-    
-
     void filter(String msg){//클라이언트쪽에서 보내는 예약어로 게임플레이, 채팅 등 각기 다른 행위를 함
         
         String temp = msg.substring(0,7);
@@ -89,6 +88,7 @@ public class GameThread extends Thread{
             readyPlayer.addElement(1);
             System.out.println(readyPlayer.size());
             if(readyPlayer.size() == clientList.size()) { //준비버튼 배열의 사이즈와 클라이언트리스트 사이즈(최대:2) 같으면 실행
+            	
                 sendMessage("곧 게임이 시작됩니다");
                 sendMessage("//ReadyAll");
                 for(int i=3; i>0; i--){
@@ -98,8 +98,15 @@ public class GameThread extends Thread{
                     }catch(InterruptedException ie){}
                 }
                 sendMessage("//Start"); //Start 예약어 보냄	
+                readyPlayer.removeAllElements();
             }
-        }else if(temp.equals("//Timer")){//타이머가 종료되었을 경우
+        }else if(temp.equals("//Click")) {
+        	sendMessage("//Back ");
+        }else if(temp.equals("//timee")) {
+        	sendMessage("//TimeO 30초가 지났습니다... 10초후에 다시...");
+        	System.out.println(msg);
+        } if(temp.equals("//Timer")){//타이머가 종료되었을 경우
+        	System.out.println(msg);
             String cardType = msg.substring(7,13); //선택한 카드 저장
             String member = msg.substring(13);     //플레이어 저장
             if(member.equals(client1)) {
@@ -107,6 +114,10 @@ public class GameThread extends Thread{
             }else if(member.equals(client2)) {
                 client2Card = cardType;
             }
+            System.out.println("1: "+client1+"님");
+            System.out.println("카드: "+client1Card);
+            System.out.println("2: " +client2+"님");
+            System.out.println("카드: "+client2Card);
 
             if(!client2Card.equals("") && !client1Card.equals("")) {
                 switch (client1Card) {//플레이어1
@@ -115,21 +126,18 @@ public class GameThread extends Thread{
                             sendMessage(client1 +" 승 "+client2+" 패 ");
                             clientInfo.put(client1, clientInfo.get(client1)+1); //승자 점수 추가
                             sendScore();
-                            showCard();
                             countRound();
                             client1Card = client2Card = "";
                             break;
                         }else if(client2Card.equals("//Ctzn")){//플레이어2 시민
-                            sendMessage("무승부 다시 하세요");
+                            sendMessage("//Draw 무승부 다시 하세요");
                             sendScore();
-                            showCard();
                             client1Card = client2Card = "";
                             break;
                         }else if(client2Card.equals("//King")){
                             sendMessage(client1 +" 패 "+client2+" 승 ");
                             clientInfo.put(client2, clientInfo.get(client2)+1); //승자 점수 추가
                             sendScore();
-                            showCard();
                             countRound();
                             client1Card = client2Card = "";
                             break;
@@ -139,7 +147,6 @@ public class GameThread extends Thread{
                             sendMessage(client1 +" 패 "+client2+" 승 ");
                             clientInfo.put(client2, clientInfo.get(client2)+1); //승자 점수 추가
                             sendScore();
-                            showCard();
                             countRound();
                             client1Card = client2Card = "";
                             break;
@@ -147,7 +154,6 @@ public class GameThread extends Thread{
                             sendMessage(client1 +" 승 "+client2+" 패 ");
                             clientInfo.put(client1, clientInfo.get(client1)+1); //승자 점수 추가
                             sendScore();
-                            showCard();
                             countRound();
                             client1Card = client2Card = "";
                             break;
@@ -157,7 +163,6 @@ public class GameThread extends Thread{
                             sendMessage(client1 +" 승 "+client2+" 패 ");
                             clientInfo.put(client1, clientInfo.get(client1)+1); //승자 점수 추가
                             sendScore();
-                            showCard();
                             countRound();
                             client1Card = client2Card = "";
                             break;
@@ -165,7 +170,6 @@ public class GameThread extends Thread{
                             sendMessage(client1 +" 패 "+client2+" 승 ");
                             clientInfo.put(client2, clientInfo.get(client2)+1); //승자 점수 추가
                             sendScore();
-                            showCard();
                             countRound();
                             client1Card = client2Card = "";
                             break;
@@ -179,7 +183,8 @@ public class GameThread extends Thread{
     public void countRound(){
         if(roundCount.size() == 0){
             roundCount.add(2);
-            sendMessage("//Round" + 2); //이 예약어가 들어오면 라운드 표시? 안해도 상관 없을듯
+            sendMessage("//Round" + 2 +"//King "+client1); //이 예약어가 들어오면 라운드 표시? 안해도 상관 없을듯+
+            sendMessage("//Round" + 2 +"//Slav "+client2);
         }else {
             int nextRound = roundCount.get(0) + 1;
             if(nextRound > 3) {
@@ -188,21 +193,17 @@ public class GameThread extends Thread{
                 roundCount.clear();
             }else {
                 roundCount.set(0, nextRound);
-                sendMessage("//Round" + nextRound);
+                //sendMessage("//Round" + nextRound);
+                System.out.println(nextRound+"//King"+client1);
+                sendMessage("//Round"+ nextRound +"//King "+client1);
+                sendMessage("//Round"+ nextRound +"//Slav "+client2);
             }
         }
     }
 
     public void sendScore(){ //예약어와 함께 플레이어 이름, 점수 송신
-        sendMessage("//CList"+client1+" "+clientInfo.get(client1));
-        sendMessage("//CList"+client2+" "+clientInfo.get(client2));
-        sendMessage("//Times"+client1);
-        sendMessage("//Times"+client2);
-    }
-
-    public void showCard(){
-        sendMessage("//Wcard"+client1+" "+client1Card);
-        sendMessage("//Wcard"+client2+" "+client2Card);
+        sendMessage("//CList"+client1+"#&"+clientInfo.get(client1));
+        sendMessage("//CList"+client2+"#&"+clientInfo.get(client2));
     }
 
     public void sendMessage(String msg){ //메세지 송신 메소드

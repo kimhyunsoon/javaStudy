@@ -1,4 +1,4 @@
-package EcardGame;
+package ecardGame;
 
 import java.io.*;
 import java.net.*;
