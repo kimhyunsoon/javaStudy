@@ -186,7 +186,7 @@ public class GameThread extends Thread{
             if(nextRound > 3) {
                 sendMessage("//Slav " + client1); //카드 교체 로직이므로 이 예약어가 들어오면 카드를 교체해서 셋팅해주세요
                 sendMessage("//King " + client2);
-                roundCount.clear();
+                // roundCount.clear();
             }else {
                 roundCount.set(0, nextRound);
                 sendMessage("//Round" + nextRound);
