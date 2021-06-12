@@ -62,7 +62,7 @@ public class ClientGUI extends JFrame implements ActionListener{
                 if(ke2.getKeyCode()== KeyEvent.VK_ENTER){
                     msg = inputMsg.getText();
                     System.out.println(msg);
-                    sender.sendMsg(msg); //내부클래스의 송신 메소드 호출
+                    //sender.sendMsg(msg); //내부클래스의 송신 메소드 호출
                     inputMsg.setText("");
                 }
             }

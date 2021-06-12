@@ -78,7 +78,7 @@ public class ClientThread extends Thread{
 	         MessageBoxLess msgout = new MessageBoxLess(client, "연결에러", "서버에 접속할 수 없습니다.");
 	         msgout.show();
 	      }
-	   }
+	}
 
 	   public void run(){
 		   try{

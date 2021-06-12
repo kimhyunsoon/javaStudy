@@ -8,15 +8,16 @@ import javax.swing.*;
 import javax.swing.border.*;
 import java.net.*;
 
-import ecardGame.GameThread;
+import ecardGame.ServerThread;
 
-public class GameServer extends JFrame implements ActionListener{
+public class ServerGUI extends JFrame implements ActionListener{
 
+    ServerThread client;
     ServerSocket ss;
     Socket sc;
     public static final int port = 4003;
     public static final int maxclient = 2;
-    GameThread client;
+    
     
     Container cp;
     JButton startBtn;
@@ -25,12 +26,12 @@ public class GameServer extends JFrame implements ActionListener{
 	JPanel contentPane, mainPanel, textPanel, btnPanel;
 	JScrollPane scrollPane;
     JTextArea chatLog;
-    static private final String newline = "\n"; //개행
+    static private final String newline = "\n"; //????
     ImageIcon imageIcon1, imageIcon2, imageIcon3;
-    String path = GameServer.class.getResource("").getPath();
+    String path = ServerGUI.class.getResource("").getPath();
 
 
-    GameServer(){
+    ServerGUI(){
         loadImg();
         init();
     }
@@ -40,7 +41,7 @@ public class GameServer extends JFrame implements ActionListener{
         contentPane = new JPanel(){
             public void paintComponent(Graphics g) {
                 g.drawImage(imageIcon3.getImage(), 0, 0, null);
-                setOpaque(false); //그림을 표시하게 설정,투명하게 조절
+                setOpaque(false); 
                 super.paintComponent(g);
             }
         };
@@ -51,7 +52,7 @@ public class GameServer extends JFrame implements ActionListener{
 		mainPanel = new JPanel(){
             public void paintComponent(Graphics g) {
                 g.drawImage(imageIcon3.getImage(), 0, 0, null);
-                setOpaque(false); //그림을 표시하게 설정,투명하게 조절
+                setOpaque(false); 
                 super.paintComponent(g);
             }
         };
@@ -82,7 +83,7 @@ public class GameServer extends JFrame implements ActionListener{
 		btnPanel = new JPanel(){
             public void paintComponent(Graphics g) {
                 g.drawImage(imageIcon3.getImage(), 0, 0, null);
-                setOpaque(false); //그림을 표시하게 설정,투명하게 조절
+                setOpaque(false); 
                 super.paintComponent(g);
             }
         };
@@ -132,12 +133,12 @@ public class GameServer extends JFrame implements ActionListener{
 		setTitle("Ecard Game Server");
 		setSize(400,500);
 		setVisible(true);
-        setLocationRelativeTo(null); //화면 정중앙에 창을 띄움
+        setLocationRelativeTo(null); 
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
     public static void main(String[] args) {
-        new GameServer();
+        new ServerGUI();
     }
 
 	@Override
@@ -146,14 +147,15 @@ public class GameServer extends JFrame implements ActionListener{
             new Thread(){
                 public void run(){
                     try {
+                        
                         ss = new ServerSocket(port);
                         serverStatus.setText("[ Server Started ]");
-                        chatLog.append("[ 서버가 시작되었습니다 ]" + "\n");
+                        chatLog.append("[ 서버가 시작되었습니다. ]" + "\n");
                         startBtn.setEnabled(false);
                         closeBtn.setEnabled(true);
                         while(true){
                             sc = ss.accept();
-                            client = new GameThread(sc);
+                            client = new ServerThread(sc);
                             client.start();
                         }
                     } catch (IOException ie) {

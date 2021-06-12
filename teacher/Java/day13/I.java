@@ -35,7 +35,7 @@ class I { //무결성이 깨진 예
 		}
 	}
 	public static void main(String args[]){
-		new I();
+		new I().mNor();
 	}
 }
 
