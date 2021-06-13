@@ -3,6 +3,8 @@ package ecardGame;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import java.util.Map.Entry;
+import java.util.stream.Stream;
 
 import ecardGame.ServerGUI;
 import ecardGame.ServerThread;
@@ -15,23 +17,22 @@ public class ServerThread extends Thread{
     public static final int maxclient = 2;
     public String pName; //플레이어 ID
     public int score;
+    boolean gameStart;
+    
 
     //배열
     private static LinkedHashMap<String, DataOutputStream> clientList = new LinkedHashMap<String, DataOutputStream>(ServerGUI.maxclient);
     private static LinkedHashMap<String, Integer> clientInfo = new LinkedHashMap<String,Integer>(ServerGUI.maxclient);
-    boolean gameStart;
     private static Vector<Integer> readyPlayer = new Vector<Integer>(); 
     private static Vector<Integer> roundCount = new Vector<Integer>();
-    
- 
+     
     private static String client1 = "";
     private static String client2 = "";
     private static String client1Card = "";
     private static String client2Card = "";
 
     public ServerThread(Socket sc){ //생성자에서 스트림 오픈
-        gtsc = sc;
-        
+        gtsc = sc;        
         try {
             dis = new DataInputStream(sc.getInputStream());
             dos = new DataOutputStream(sc.getOutputStream());
@@ -39,25 +40,26 @@ public class ServerThread extends Thread{
             System.out.println(ie);
         }
     }
+    
 
     public void run(){//플레이어 맵에 저장, filter 메소드 실행, 플레이어 퇴장시 제거 
-        //String pName = "";
         try {
-            
             pName = dis.readUTF(); 
             if(!clientList.containsKey(pName)){ //닉네임 중복방지, 중복되면 소켓 닫음
                 clientList.put(pName,dos); //맵에 플레이어의 이름, 입력해 오는걸 저장
                 clientInfo.put(pName,score); //맵에 플레이어의 이름, 점수를 저장
-                
             }
             if(clientList.size()> ServerGUI.maxclient){ //인원수 제한
                 //sendMessage("//Full ");
                 gtsc.close();
             }
-
+            if(client1 == "") { //client1이 비어있으면 최초로 로그인한 사람 저장
+                client1 = pName;
+            } else {
+                client2 = pName;
+            }
             System.out.println("System>> "+pName+"님이 입장하셨습니다."+clientList.size()+"명");
             sendMessage("System>> "+pName+"님이 입장하셨습니다.");
-
             setClientInfo();
             while(true){
                 String msg = dis.readUTF(); //클라이언트로부터 수신되는 메세지 읽음
@@ -82,36 +84,39 @@ public class ServerThread extends Thread{
     
 
     void filter(String msg){//클라이언트쪽에서 보내는 예약어로 게임플레이, 채팅 등 각기 다른 행위를 함
-        
+        StopWatch tm = new StopWatch(); 
         String temp = msg.substring(0,7);
         if(temp.equals("//Chat ")){ //채팅을 입력받았을 경우
             sendMessage(msg.substring(7)); 
         }else if(temp.equals("//Ready")){ //준비버튼이 입력되었을 경우
             readyPlayer.addElement(1);
             System.out.println(readyPlayer.size());
-            if(readyPlayer.size() == clientList.size()) { //준비버튼 배열의 사이즈와 클라이언트리스트 사이즈(최대:2) 같으면 실행
-
-                sendMessage("//ReadyAll");
+            if(readyPlayer.size()>=2&&readyPlayer.size() == clientList.size()) { //준비버튼 배열의 사이즈와 클라이언트리스트 사이즈(최대:2) 같으면 실행
+                //sendMessage("//ReadyAll");
+                sendMessage("[곧 게임이 시작됩니다]");
                 for(int i=3; i>0; i--){
                     try{
-                        sendMessage("[곧 게임이 시작됩니다 " + i + "초 후 게임을 시작합니다 .. ]");						 	
+                        sendMessage("[ " + i + "초 후 게임을 시작합니다 .. ]");						 	
                         Thread.sleep(1000);
+                        
                     }catch(InterruptedException ie){}
                 }
-                StopWatch tm = new StopWatch(); tm.start();
+                
+                tm.start();
                 gameStart = true;
                 sendMessage("//Start"); //Start 예약어 보냄	
-                readyPlayer.removeAllElements();
+                //readyPlayer.removeAllElements();
             }
-        }else if(temp.equals("//Press")){//타이머가 종료되었을 경우
-            String cardType = msg.substring(7,14); //선택한 카드 저장
-            String member = msg.substring(14);     //플레이어 저장
-            if(member.equals(pName)) {
+        }else if(temp.equals("//Press")){//플레이어가 카드를 눌렀을 경우
+            String cardType = msg.substring(7,13); //선택한 카드 저장
+            String member = msg.substring(13);     //플레이어 저장
+            pln(msg);
+            if(member==client1) {
                 client1Card = cardType;
-            }else if(member.equals(client2)) {
+                
+            }else if(member==client2) {
                 client2Card = cardType;
             }
-
             if(!client2Card.equals("") && !client1Card.equals("")) {
                 switch (client1Card) {//플레이어1
                     case "//Ctzn": //플레이어1이 시민카드 냈을때
@@ -200,6 +205,7 @@ public class ServerThread extends Thread{
     public void setClientInfo(){
         String[] keys = new String[clientInfo.size()];
         int[] values = new int[clientInfo.size()];
+        String[] client = new String[2];
         int index = 0;
         for(Map.Entry<String, Integer> mapEntry : clientInfo.entrySet()){
             keys[index] = mapEntry.getKey();
@@ -210,6 +216,8 @@ public class ServerThread extends Thread{
         for(int i=0; i<clientList.size(); i++){
             sendMessage("//SList" + keys[i] + " " + values[i] + "#" + i); 
             System.out.println("//SList" + keys[i] + " " + values[i] + "#" + i);
+            client[i] = keys[i];
+            //System.out.println(client[i]);
         }
 
     }
@@ -247,11 +255,15 @@ public class ServerThread extends Thread{
 		long preTime = System.currentTimeMillis();
 		
 		public void run() {
-			try{
+			
+            try{
+                sleep(10);
 				while(gameStart == true){
-					sleep(10);
+					
 					long time = System.currentTimeMillis() - preTime;
 					sendMessage("//Timer" + (toTime(time)));
+                    pln("//Timer" + (toTime(time)));
+                    sleep(1000);
 					if(toTime(time).equals("00 : 00")){
 						sendMessage("//GmEnd"); // 시간 초과시, 게임 종료
 						readyPlayer.removeAllElements();
@@ -262,12 +274,12 @@ public class ServerThread extends Thread{
 					}
 				}
 			}catch (Exception e){}
+
 		}
 		
 		String toTime(long time){
-			int m = (int)(3-(time / 1000.0 / 60.0));
-			int s = (int)(60-(time % (1000.0 * 60) / 1000.0));
-			return String.format("%02d : %02d", m, s);
+			int s = (int)(30-(time % (1000.0 * 60) / 1000.0));
+			return String.format("%02d", s);
 		}
 	}
 
@@ -278,3 +290,12 @@ public class ServerThread extends Thread{
 
     
 
+// Set<Map.Entry<String, DataOutputStream>> entries = clientList.entrySet();
+// Set<String> keySet = clientList.keySet();
+// Collection<DataOutputStream> values = clientList.values();
+// Stream<Map.Entry<String, DataOutputStream>> entriesStream = entries.stream();
+// Stream<DataOutputStream> valuesStream = values.stream();
+// Stream<String> keysStream = keySet.stream();
+// clientList.entrySet().stream().forEach(entry-> {
+//     System.out.println("[key]:" + entry.getKey() + ", [value]:"+entry.getValue());
+// });
