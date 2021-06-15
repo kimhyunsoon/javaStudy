@@ -696,8 +696,275 @@
 /////////////////////////  문제2 (22_SQL2/teacher) ////////////////////////
 
 
+-- 사원번호와 부서이름을 출력하라.
+   #3 Join & SubQuery 
+   (1) 조인( Join )   
+      1) 설명 
+          하나의 테이블로는 원하는 컬럼정보를 가져올 수 없는 경우,
+	  관련된 테이블을 '논리적으로 결합'하여 원하는 컬럼정보를 가져오는 방법
 
+      2) 조건 
+          논리적으로 결합되는 2개 이상의 테이블에는 반드시 '공통컬럼'이 존재해야하며 
+	  이 공통컬럼은 동일한 데이터 타입과 공통 데이터를 의미해야 함 
+	   
+      3) 예 -- 사원번호와 부서이름을 출력
+          SQL> select EMP.EMPNO, DEPT.DNAME from EMP, DEPT where EMP.DEPTNO=DEPT.DEPTNO; --형태1
+	  SQL> select e.EMPNO, d.DNAME from EMP e, DEPT d where e.DEPTNO=d.DEPTNO; --형태2
+	  SQL> select e.EMPNO, d.DNAME from EMP e join DEPT d on e.DEPTNO=d.DEPTNO; --형태3
+	  SQL> select e.EMPNO, d.DNAME from EMP e join DEPT d using(DEPTNO); --형태4
+	  SQL> select EMPNO, DNAME from EMP join DEPT using(DEPTNO); --형태5
+	  SQL> select EMPNO, DNAME from EMP natural join DEPT; --형태6
 
+      4) 종류
+          <1> Cross 조인 
+	     2개 이상의 테이블이 조인될 때 'where절'에 의해 공통되는 컬럼에 의한 결합이 
+	     '발생하지 않는 경우' 즉, 테이블 전체행의 전체컬럼이 조인에 사용되는
+	     조인을 말한다 따라서, 모든 데이터가 검색결과가 됨 
+	     SQL> select e.EMPNO, e.ENAME, d.DNAME from EMP e, DEPT d; -- where 절이 없는 경우 
+	     SQL> select e.EMPNO, e.ENAME, s.GRADE from EMP e, SALGRADE s; -- 공통컬럼이 없는 경우 
+	     SQL> select EMPNO, ENAME, GRADE from EMP, SALGRADE; -- 공통컬럼이 없는 경우 
+	     
+	  <2> Natural 조인 ( Equi 조인 ) : 가장 일반적 
+	      where 절이 사용된 '공통컬럼'들이 동등 연산자(=)에 의해 비교되는 조인 
 
+	      -- 사원번호와 부서이름을 출력 ( 단, 30번 부서만 )
+	      1> 형태1 
+	         SQL> select EMP.EMPNO, DEPT.DNAME from EMP, DEPT where EMP.DEPTNO=DEPT.DEPTNO; --형태1
+		 SQL> select EMP.EMPNO, DEPT.DNAME from EMP, DEPT 
+		      where EMP.DEPTNO=DEPT.DEPTNO and DEPT.DEPTNO=30;
 
+              2> 형태2
+	         SQL> select e.EMPNO, d.DNAME from EMP e, DEPT d where e.DEPTNO=d.DEPTNO; --형태2
+                 SQL> select e.EMPNO, d.DNAME from EMP e, DEPT d 
+		      where e.DEPTNO=d.DEPTNO and d.DEPTNO=30;
+
+	      3> 형태3
+                 SQL> select e.EMPNO, d.DNAME from EMP e join DEPT d on e.DEPTNO=d.DEPTNO;
+		 SQL> select e.EMPNO, d.DNAME from EMP e join DEPT d 
+		      on e.DEPTNO=d.DEPTNO
+		      where d.DEPTNO=30;
+
+	      4> 형태4
+	         SQL> select e.EMPNO, d.DNAME from EMP e join DEPT d using(DEPTNO);
+		 SQL> select e.EMPNO, d.DNAME from EMP e join DEPT d 
+		      using(DEPTNO)
+                      where DEPTNO=30;
+
+	      5> 형태5
+	         SQL> select EMPNO, DNAME from EMP join DEPT using(DEPTNO);
+		 SQL> select EMPNO, DNAME from EMP join DEPT 
+		      using(DEPTNO)
+		      where DEPTNO=30;
+
+	      6> 형태6
+	         SQL> select EMPNO, DNAME from EMP natural join DEPT;
+		 SQL> select EMPNO, DNAME from EMP natural join DEPT
+		      where DEPTNO=30;
+
+          <3> Self 조인 -- SMITH의 매니져는 FORD이다 
+	     가져와야 할 컬럼이 '자신의 테이블에 있는 다른 컬럼'인 경우의 조인 
+	      1> 형태1
+	         SQL> select e.ENAME, m.ENAME from EMP e, EMP m where e.MGR = m.EMPNO;
+		 SQL> select e.ENAME||'의 매니져는 ', m.ENAME||'이다' from EMP e, EMP m where e.MGR = m.EMPNO;
+                 SQL> select e.ENAME||'의 매니져는 ', m.ENAME||'이다' from EMP e, EMP m 
+		      where e.MGR = m.EMPNO and e.ENAME='SMITH';
+              2> 형태2 
+	         SQL> select e.ENAME, m.ENAME from EMP e join EMP m on e.MGR = m.EMPNO;
+		 SQL> select e.ENAME, m.ENAME from EMP e join EMP m on e.MGR = m.EMPNO
+		      where e.ENAME='SMITH';
+
+          <4> Outer 조인
+	     한쪽 테이블에는 해당하는 데이터가 존재하고, 
+	     다른 쪽 테이블에는 데이터가 존재하지 않을 경우에 '기준 테이블'을 이용한 조인 
+	      1> Left 
+	         SQL> select T1.NO, T1.NAME, T2.NO, T2.NAME 
+		      from T1 left outer join T2
+                      on T1.NO = T2.NO;   
+	      
+	      2> Right 
+	         SQL> select T1.NO, T1.NAME, T2.NO, T2.NAME 
+		      from T1 right outer join T2
+                      on T1.NO = T2.NO;  
+
+	      3> Full 
+	         SQL> select T1.NO, T1.NAME, T2.NO, T2.NAME 
+		      from T1 full outer join T2
+                      on T1.NO = T2.NO; 
+	         
+          <5> Inner 조인        
 	    
+
+	     cf) 일반화 : 배치와 실행순서 
+	     - select XX      --------> 6
+	     - from XX        --------> 1
+	     - (join XX)      --------> 2
+	     - where XX       --------> 3 
+	     - group by XX    --------> 4 
+	     - having XX      --------> 5
+	     - order by XX    --------> 7
+
+    
+   (2) SubQuery
+      1) 설명 
+         하나의 select 문장에 포함된 또 다른 select 문장 
+	  ( 두번 이상 질의를 해야 얻을 수 있는 결과를 한번의 질의로 통합한 쿼리 )
+
+      2) 용어 
+         <1> Main-Query or Outer-Query 
+	 <2> Sub-Query or Inner-Query 
+   
+      3) 특징 
+         <1> 괄호로 묶어야 함 
+	 <2> 실생순서는 '대부분' Sub-Query 가 먼저 수행되고, Main-Query가 수행됨 
+	 <3> SUB-QUERY는 MAIN-QUERY의 다음 부분에 위치된다.
+	     - select/delete/update 문장의 from 절 / where 절 
+	     - insert 문장의 into 절 
+	     - update 문장의 set 절 
+	 <4> SUB-QUERY는 order by 절을 사용할 수 없다.
+	    (예외 : select/delete/update 문장의 from 절 )
+
+      4) 종류
+         <1> 단일행 Sub-Query
+	     실행결과가 '하나의 데이터'만 리턴해주는 쿼리 
+
+	     -- 사원번호가 7900인 사원의 부서이름 출력
+             SQL> select e.EMPNO, d.DNAME from EMP e, DEPT d 
+		  where e.DEPTNO=d.DEPTNO and e.EMPNO=7900;
+       
+             Sub> select DEPTNO from EMP where EMPNO=7900;
+	     Main> select DNAME from DEPT where DEPTNO=30;
+	     SQL> select DNAME from DEPT where DEPTNO=(select DEPTNO from EMP where EMPNO=7900);
+
+	     -- 부서번호가 10번인 사원급여와 급여가 같은 사원의 이름과 커미션을 출력(X)
+	     Sub> select SAL from EMP where DEPTNO=10;
+	     Main> select ENAME, COMM from EMP where SAL=?;
+	     Err> select ENAME, COMM from EMP where SAL=(select SAL from EMP where DEPTNO=10);
+
+	     Sub> select SAL, COMM from EMP where EMPNO=7369;
+	     Main> select ENAME, COMM from EMP where SAL=?;
+	     Err> select ENAME, COMM from EMP where SAL=(select SAL, COMM from EMP where EMPNO=7369);
+
+	     -- 평균급여보다 많은 받는 사원의 이름과 급여 출력!
+	     Err> select ENAME, SAL from EMP where SAL>avg(SAL);
+	     SQL> select ENAME, SAL from EMP where SAL>(select avg(SAL) from EMP);
+              
+
+	 <2> 복수행 Sub-Query
+	     실행결과가 '둘 이상의 데이터행'을 리턴해주는 쿼리 
+
+             -- 부서번호가 10번인 사원급여와 급여가 같은 사원의 이름과 급여을 출력
+             1> in
+	     
+	        Sub> select SAL from EMP where DEPTNO=10;
+	        Main> select ENAME, SAL from EMP where SAL=?
+	        Err> select ENAME, SAL from EMP where SAL=(select SAL from EMP where DEPTNO=10);
+
+	        SQL> select ENAME, SAL from EMP where SAL in (select SAL from EMP where DEPTNO=10);
+	        SQL> select ENAME, SAL from EMP where SAL=any(select SAL from EMP where DEPTNO=10);
+	        효과> select ENAME, SAL from EMP where SAL=2450 or SAL=5000 or SAL=1300;
+
+             -- (급여가 가장 많은) 'MANAGER'보다 급여가 같거나 많은 사원의 JOB,SAL을 출력!!
+             2> all 
+	        Sub> select SAL from EMP where JOB='MANAGER';
+		Main> select JOB, SAL from EMP where SAL>=?;
+		Err> select JOB, SAL from EMP where SAL>=(select SAL from EMP where JOB='MANAGER');
+		SQL> select JOB, SAL from EMP where SAL>=all(select SAL from EMP where JOB='MANAGER');
+		효과> select JOB, SAL from EMP where SAL>=2975 and SAL>=2850 and SAL>=2450;
+
+             -- (급여가 가장 큰) 'SALESMAN' 보다 급여가 작은 사원의 JOB, SAL을 출력!
+             3> any
+	        Sub> select SAL from EMP where JOB='SALESMAN';
+		Main> select JOB, SAL from EMP where SAL<?;
+		SQL> select JOB, SAL from EMP where SAL<all(select SAL from EMP where JOB='SALESMAN');
+		SQL> select JOB, SAL from EMP where SAL<any(select SAL from EMP where JOB='SALESMAN');
+
+             -- '부서번호'가 10인 사원이 존재하면 모든 부서의 이름을 출력! 
+             4> exists
+	        Sub> select * from EMP where DEPTNO=10;
+		Main> select DNAME from DEPT;
+                SQL> select DNAME from DEPT where exists(select * from EMP where DEPTNO=40);
+
+	 <3> 복수컬럼 Sub-Query
+	     실행결과가 '둘 이상의 컬럼' 데이터를 리턴주는 쿼리 
+
+             --'부서번호'가 30인 사원의 (SAL과 COMM)이 같은 사원들의 '이름'과 '부서번호' 출력!
+	     Sub> select SAL, COMM from EMP where DEPTNO=30;
+	     SQL> select ENAME, DEPTNO from EMP where (SAL, COMM) 
+	          in(select SAL, COMM from EMP where DEPTNO=30); --4개 
+             비교> select ENAME, DEPTNO from EMP where (SAL, nvl(COMM, 0)) 
+	          in(select SAL, nvl(COMM, 0) from EMP where DEPTNO=30); --6개 
+
+	 <4> 상호관련 Sub-Query
+	     Main-Query 절에 사용된 테이블이 Sub-Query절에 다시 재사용되는 쿼리 
+
+	     Sub> select avg(e1.SAL) from EMP e1, EMP e2
+	          where e1.DEPTNO=e2.DEPTNO;
+             Sub-Err> select avg(SAL) from EMP e2
+	          where e1.DEPTNO=e2.DEPTNO;
+	     Main> select e1.EMPNO, e1.SAL from EMP e1
+	           where SAL>(select avg(SAL) from EMP e2
+	           where e1.DEPTNO=e2.DEPTNO);
+
+
+     < Question >   
+     -- 부서번호가 10번인 사원 평균급여 보다 급여가 적은 사원의 이름과 급여
+	   -- ( 단, 급여가 높은 순으로 정렬 )
+     Sub> select avg(SAL) from EMP where DEPTNO=10;
+     SQL> select ENAME, SAL from EMP 
+          where SAL<(select avg(SAL) from EMP where DEPTNO=10)
+          order by SAL desc;
+
+     --부서번호가 10번인 사원 평균급여 보다 급여가 적은 사원들의 부서별 평균 급여
+	    --( 단 10번부서는 출력제외할 것, 부서번호 역정렬, 급여는 반올림할 것 ) 
+     Sub> select avg(SAL) from EMP where DEPTNO=10;
+     SQL> select DEPTNO, round(avg(SAL)) from EMP
+          where SAL<(select avg(SAL) from EMP where DEPTNO=10)
+          group by DEPTNO
+          having DEPTNO!=10
+	  order by DEPTNO desc;
+     
+//////////////////////////// 문제3 풀기 //////////////////////////////// 
+
+2. DML ( Data Manipulation Language )
+   (1) 설명 
+       테이블내의 데이터를 '입력', '수정', '삭제'하는 SQL문 
+
+   (2) 종류 
+       1) insert 
+          SQL> insert into DEPT2 values(50, '개발', '서울');
+	  Err> insert into EMP2 values(8000, '강정구', '개발자', 7839, SYSDATE, 5000, null, 60); --에러(FK)
+	  SQL> insert into EMP2 values(8000, '강정구', '개발자', 7839, SYSDATE, 5000, null, 50); 
+	  Err> insert into EMP2(EMPNO, ENAME, SAL, HIREDATE) values(8000, '곽치영', 6000, SYSDATE);--에러(PK)
+	  Err> insert into EMP2(ENAME, SAL, HIREDATE) values('곽치영', 6000, SYSDATE); --에러(NN)
+          SQL> insert into EMP2(EMPNO, ENAME, SAL, HIREDATE) values(9000, '곽치영', 6000, SYSDATE); 
+
+          확인> select * from EMP2 where EMPNO>=8000;
+
+       2) update 
+          SQL> update EMP2 set ENAME='강짱구', SAL=4500 where EMPNO=8000;
+	  SQL> update EMP2 set EMPNO=8001 where EMPNO=8000; --PK컬럼도 변경가능
+	  SQL> update EMP2 set DEPTNO=40 where EMPNO=8001; --FK컬럼도 변경가능
+
+       3) delete
+          SQL> delete from DEPT2 where DEPTNO=30; 
+	  -- on delete cascade 옵션으로 제약조건이 부여되었다면 자식데이터존재유무와 상관없이 삭제 됨
+	  
+	  SQL> delete from EMP2 where EMPNO=(select EMPNO from EMP2 where ENAME='JONES'); 
+
+	
+       cf1) cascade 를 이용한 부모 테이블 삭제 
+          SQL> drop table DEPT2 cascade constraint;
+
+       cf2) column 핸들링 
+          SQL> alter table DEPT2 add(ADDCOL varchar2(10) constraint DEPT2_UQ unique); --추가 
+	  SQL> insert into DEPT2 values(60, 'a', 'b', 'c');
+	  SQL> select DEPTNO, DNAME, ADDCOL from DEPT2;
+          SQL> alter table DEPT2 modify(ADDCOL varchar2(20)); --타입변경
+          SQL> alter table DEPT2 rename column ADDCOL to ADDCOL2; --이름변경
+	  SQL> alter table DEPT2 drop column ADDCOL2; --삭제 
+
+/////////////////////////////// 미션 //////////////////////////////
+  -- 복사된 emp2, dept2, emp3, dept3를 맘껏 DML을 연습해오시오 
+
+          
+3. TCL ( Transaction Control Language ) 
