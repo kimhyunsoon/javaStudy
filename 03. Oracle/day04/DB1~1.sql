@@ -95,3 +95,126 @@ join DEPT e on e.DEPTNO=d.DEPTNO where e.JOB=(select JOB from emp where ename = 
 select e.ENAME, d.DNAME, e.SAL, e.JOB from EMP e 
 join DEPT d on e.DEPTNO=d.DEPTNO 
 where e.JOB=(select JOB from emp where ename = 'ALLEN');
+select e.DEPTNO, e.ENAME, e.SAL, d.DNAME from EMP e join DEPT d on e.DEPTNO=d.DEPTNO;
+select d.DNAME from EMP e join DEPT d on e.DEPTNO = d.DEPTNO where e.ENAME = 'ALLEN';
+select d.DNAME from EMP e 
+join DEPT d 
+on e.DEPTNO = d.DEPTNO 
+where e.ENAME = 'ALLEN';
+select ENAME, EMPNO, DNAME, SAL from EMP e, DEPT d 
+where e.DEPTNO = d.DEPTNO; 
+select e.ENAME||'의 매니저는 ', m.ENAME||'이다.' from EMP e
+join EMP m on e.MGR = m.EMPNO
+where e.ENAME='SMITH';
+sub> select JOB from emp where ename = 'ALLEN';
+select e.ENAME, d.DNAME, e.SAL, e.JOB from EMP e 
+join DEPT d on e.DEPTNO=d.DEPTNO 
+where e.JOB=(select JOB from emp where ename = 'ALLEN');
+select JOB from emp where ename = 'ALLEN';
+select DEPTNO, EMPNO, ENAME, HIREDATE, SAL from EMP e 
+join DEPT d on e.DEPTNO=d.DEPTNO 
+where e.JOB=(select JOB from emp where ename = 'ALLEN');
+select DEPTNO from EMP where ENAME = 'JONES';
+select DEPTNO, EMPNO, ENAME, HIREDATE, SAL from EMP;
+select DNAME from DEPT 
+		where DEPTNO=(select DEPTNO from EMP where EMPNO=7900);
+    select ENAME, SAL from EMP 
+			where SAL in (select SAL from EMP where DEPTNO=10);
+select DEPTNO, EMPNO, ENAME, HIREDATE, SAL from EMP 
+where DEPTNO=(select DEPTNO from EMP where ENAME = 'JONES');      
+select avg(SAL) from EMP;
+select e.EMPNO, e.ENAME, e.DEPTNO, e.HIREDATE, d.LOC, e.SAL from EMP e
+join DEPT d on on e.DEPTNO=d.DEPTNO;
+select e.EMPNO, e.ENAME, e.DEPTNO, e.HIREDATE, d.LOC, e.SAL from EMP e
+join DEPT d on e.DEPTNO=d.DEPTNO;
+select e.EMPNO, e.ENAME, e.DEPTNO, e.HIREDATE, d.LOC, e.SAL from EMP e
+join DEPT d on e.DEPTNO=d.DEPTNO where SAL>(select avg(SAL) from EMP);
+select JOB from EMP where DEPTNO=10;
+select e.EMPNO, e.JOB, e.ENAME, d.DNAME, e.HIREDATE, d.LOC from EMP e
+join DEPT d on e.DEPTNO=d.DEPTNO;
+select JOB from EMP where DEPTNO=10;
+select e.EMPNO, e.JOB, e.ENAME, d.DNAME, e.HIREDATE, d.LOC from EMP e
+join DEPT d on e.DEPTNO=d.DEPTNO;
+select e.EMPNO, e.JOB, e.ENAME, d.DNAME, e.HIREDATE, d.LOC from EMP e
+join DEPT d on e.DEPTNO=d.DEPTNO where DEPTNO =10;
+select e.EMPNO, e.JOB, e.ENAME, d.DNAME, e.HIREDATE, d.LOC from EMP e
+join DEPT d on e.DEPTNO=d.DEPTNO 
+where JOB=(select JOB from EMP where DEPTNO=20;);
+select e.EMPNO, e.JOB, e.ENAME, d.DNAME, e.HIREDATE, d.LOC from EMP e
+join DEPT d on e.DEPTNO=d.DEPTNO 
+where JOB=(select JOB from EMP where DEPTNO=20);
+select e.EMPNO, e.JOB, e.ENAME, d.DNAME, e.HIREDATE, d.LOC from EMP e
+join DEPT d on e.DEPTNO=d.DEPTNO 
+where JOB=(select JOB from EMP where DEPTNO=20);
+group by DEPTNO
+having DEPTNO=10;
+select e.EMPNO, e.JOB, e.ENAME, d.DNAME, e.HIREDATE, d.LOC from EMP e
+join DEPT d on e.DEPTNO=d.DEPTNO 
+where JOB=(select JOB from EMP where DEPTNO=20);
+having DEPTNO=10;
+select e.EMPNO, e.JOB, e.ENAME, d.DNAME, e.HIREDATE, d.LOC from EMP e
+join DEPT d on e.DEPTNO=d.DEPTNO 
+where JOB=(select JOB from EMP where DEPTNO=20)
+group by DEPTNO
+having DEPTNO=10;
+select JOB from EMP where DEPTNO=20;
+select JOB from EMP where DEPTNO=10;
+select e. DEPTNO, e.EMPNO, e.JOB, e.ENAME, d.DNAME, e.HIREDATE, d.LOC from EMP e
+join DEPT d on e.DEPTNO=d.DEPTNO;
+select e.EMPNO, e.JOB, e.ENAME, d.DNAME, e.HIREDATE, d.LOC from EMP e
+join DEPT d on e.DEPTNO=d.DEPTNO 
+where JOB=(select JOB from EMP where DEPTNO=20);
+select e. DEPTNO, e.EMPNO, e.JOB, e.ENAME, d.DNAME, e.HIREDATE, d.LOC from EMP e
+join DEPT d on e.DEPTNO=d.DEPTNO 
+where JOB=any(select JOB from EMP where DEPTNO=20);
+select e. DEPTNO, e.EMPNO, e.JOB, e.ENAME, d.DNAME, e.HIREDATE, d.LOC from EMP e
+join DEPT d on e.DEPTNO=d.DEPTNO 
+where JOB=any(select JOB from EMP where DEPTNO=20) and e.DEPTNO=10;
+select JOB from EMP where DEPTNO=30;
+select JOB from EMP where DEPTNO=10;
+select e.EMPNO, e.JOB, e.ENAME, d.DNAME, e.HIREDATE, d.LOC from EMP e
+join DEPT d on e.DEPTNO=d.DEPTNO 
+where JOB=all(select JOB from EMP where DEPTNO=30) and e.DEPTNO=10;
+select e.EMPNO, e.JOB, e.ENAME, d.DNAME, e.HIREDATE, d.LOC from EMP e
+join DEPT d on e.DEPTNO=d.DEPTNO 
+where !JOB=any(select JOB from EMP where DEPTNO=30) and e.DEPTNO=10;
+select e.DEPTNO, e.EMPNO, e.JOB, e.ENAME, d.DNAME, e.HIREDATE, d.LOC from EMP e
+join DEPT d on e.DEPTNO=d.DEPTNO 
+where JOB !=any(select JOB from EMP where DEPTNO=30) and e.DEPTNO=10;
+select e.EMPNO, e.JOB, e.ENAME, d.DNAME, e.HIREDATE, d.LOC from EMP e
+join DEPT d on e.DEPTNO=d.DEPTNO 
+where JOB !=all(select JOB from EMP where DEPTNO=30) and e.DEPTNO=10;
+select e.EMPNO, e.JOB, e.ENAME, e.DEPTNO, d.DNAME, d.LOC, e.SAL from EMP e
+join DEPT d on e.DEPTNO=d.DEPTNO 
+where JOB=any(select JOB from EMP where DEPTNO=10)
+order by e.SAL desc;
+select e.EMPNO, e.JOB, e.ENAME, e.DEPTNO, d.DNAME, d.LOC, e.SAL from EMP e
+join DEPT d on e.DEPTNO=d.DEPTNO 
+where JOB=any(select JOB from EMP where DEPTNO=10)
+group by DEPTNO
+having DEPTNO!=10
+order by e.SAL desc;
+select e.EMPNO, e.JOB, e.ENAME, e.DEPTNO, d.DNAME, d.LOC, e.SAL from EMP e
+join DEPT d on e.DEPTNO=d.DEPTNO 
+where JOB=any(select JOB from EMP where DEPTNO=10)
+group by e.DEPTNO
+having e.DEPTNO!=10
+order by e.SAL desc;
+select e.EMPNO, e.JOB, e.ENAME, e.DEPTNO, d.DNAME, d.LOC, e.SAL from EMP e
+join DEPT d on e.DEPTNO=d.DEPTNO 
+where JOB=any(select JOB from EMP where DEPTNO=10)
+order by e.SAL desc;
+select ENAME from EMP where ENAME = 'SCOTT' ;
+select SAL, ENAME from EMP where ENAME = 'MARTIN' and 'SCOTT';
+select SAL, ENAME from EMP where ENAME =any('MARTIN', 'SCOTT');
+select SAL, ENAME from EMP where ENAME in('MARTIN', 'SCOTT');
+select ENAME, DEPTNO from EMP where DEPTNO in(10, 20, 100);
+select SAL, ENAME from EMP where ENAME in('MARTIN',  'SCOTT');
+select EMPNO, ENAME, SAL from EMP
+where SAL=(select SAL from EMP where ENAME in('MARTIN', 'SCOTT'));
+select max(SAL) from EMP where DEPTNO=30;
+select EMPNO, ENAME, SAL from EMP
+where SAL > all(select max(SAL) from EMP where DEPTNO=30);
+select min(SAL) from EMP where DEPTNO=30;
+select EMPNO, ENAME, SAL from EMP
+where SAL < all(select min(SAL) from EMP where DEPTNO=30);
