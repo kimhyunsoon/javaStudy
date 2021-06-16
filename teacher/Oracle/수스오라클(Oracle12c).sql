@@ -1097,7 +1097,7 @@
 
 	  복사방법2>  
 	     create table DDLTEST3 as select * from DDLTEST;
-	     alter table DDLTEST3 add constraint DDLTEST3_PK primary key(NO);
+	     alter table DDLTEST3 add constraint DDLTEST3_PK primary key(NO)
  
        2) alter : 객체를 변경할 때 
            ( 옵션: add, modify, rename column, drop column, 
@@ -1106,7 +1106,9 @@
 	      SQL> alter table DDLTEST add(ADDR varchar2(20));
 	      SQL> insert into DDLTEST values(2000, 'scott', 'tiger', 'seoul');
 	      SQL> select * from DDLTEST;
-	      
+	      SQL> alter table DDLTEST drop column ADDR;
+              SQL> select * from DDLTEST;
+
 	  <2> modify
 	      SQL> alter table DDLTEST modify(ID varchar2(15), PWD varchar2(15));
 	      SQL> desc DDLTEST
@@ -1116,345 +1118,19 @@
               SQL> desc DDLTEST
 
 	  <4> drop column
-	      SQL> alter table DDLTEST drop column ADDR;
-              SQL> select * from DDLTEST;
 
 	  <5> drop constraint
 	      SQL> alter table DDLTEST drop constraint DDLTEST_PK;
 	      SQL> desc DDLTEST
       
        3) drop : 객체를 삭제할 때 
-          SQL> drop table EMP3;
-	  SQL> select TNAME from tab; 
-	  --SQL> purge recyclebin; --휴지통비우기 
-	  --SQL> flashback table EMP3 to before drop; --휴지통에서 복구 
 
        4) rename : 객체 이름 변경시 
-          SQL> rename DDLTEST to DDLTEST2;
 
        5) comment : 객체에 대한 주석 저장시 
-          <1> 테이블 주석
-	      SQL> comment on table DDLTEST2 is 'DDL테스트용 테이블';
-	      SQL> desc user_tab_comments
-	      SQL> select TABLE_NAME, COMMENTS from user_tab_comments where TABLE_NAME='DDLTEST2';
 
-	  <2> 컬럼 주석 
-	      SQL> comment on column DDLTEST2.ID is '회원 아이디';
-	      SQL> desc user_col_comments
-	      SQL> select TABLE_NAME, COLUMN_NAME, COMMENTS from user_col_comments 
-	           where TABLE_NAME='DDLTEST2';
-
-       6) truncate : '모든' 행(row)을 삭제시 
-          SQL> truncate table DDLTEST2;
-	  SQL> select * from DDLTEST2;
-
-	  질문) delete 문과 차이점 
-	   - 되돌릴 수 없음 ( rollback 안됨! )
-	   - where 절 사용 X
-	   - when ? 속도가 무쟈게 빠름 
+       6) truncate : 모든 행(row)을 삭제시 
           
 
-5. DCL ( Data Control Language )     
-   (1) 설명 
-       계정에 권한을 부여하거나 빼앗을 때 사용하는 SQL 
-
-   (2) 계정생성  
-      1) 실행창(Win + R)
-         <방법1> sqlplus / as sysdba
-	 <방법2> sqlplus sys/java1234 as sysdba
-
-      2) scott / tiger 계정 생성 
-         SQL> alter session set "_oracle_script"=true;   
-         SQL> create user TEST1 identified by JAVA1;
-
-   (3) 권한 부여 
-       SQL> grant CONNECT, RESOURCE, CREATE VIEW to TEST1;
-       SQL> conn TEST1/JAVA1;
-       SQL> show user;
-
-   (4) 권한 제거 
-       SQL> revoke CONNECT from TEST1;
-       SQL> conn TEST1/JAVA1; -- 불가!
-
-   (5) 계정 수정  
-       1) 접속 
-          실행창(Win + R)에서 
-	  sqlplus sys/java1234 as sysdba;
-
-       2) 비번수정 
-          SQL> alter user TEST1 identified by JAVAC1;
-
-       3) 수정확인 
-	  SQL> grant CONNECT to TEST1;
-	  SQL> conn TEST1/JAVAC1;
-   
-    (6) 계정 삭제
-        SQL> drop user TEST1; -- 안됨 
-
-
-       1) 해당 user의 테이블이 없는 경우 
-	   SQL> alter session set "_oracle_script"=true; 
-	   SQL> drop user TEST1; -- 삭제됨
-
-       2) 해당 user의 테이블이 있는 경우
-	   SQL> alter session set "_oracle_script"=true; 
-	   SQL> drop user TEST1 cascade; -- 삭제됨
-
+       
          
-------------------------- SQL 끝 ---------------------------------
-	  
-         
-[ Part4 : SQL외.. ]      
-1. Data Dictionary  
-    (1) 설명 
-       Oracle 테이블은 2가지 종류가 있다 
-       첫번째, DB가 생성될 때 기본적으로 만들어지는 '자료사전테이블'
-       두번째, User가 데이터를 저장하고 관리하기 위한 '사용자정의테이블'
-       전자가 Data Dictionary 이다    
-       
-    (2) 종류 
-       1) DBA_XXX : DB전체의 관련정보를 저장한 테이블 
-       2) ALL_XXX : 자신이 볼 수 있는 Object 정보 테이블 
-       3) USER_XXX : 자신이 생성한 Object 정보 테이블 
-       4) X$_XXX : DB의 성능 분석/통계 정보 테이블 ( DB튜닝시 수정함 )
-       5) V$_XXX : X$_XXX의 VIEW ( 성능 참조 ) 
-       
-       <예1>
-          SQL> select * from dictionary;
-	  SQL> select * from dict_columns;
-
-	     cf) Ctl + C : 명령실행 정지 
-
-       <예2> user_( ***** )
-          SQL> desc user_tables
-	  SQL> select TABLE_NAME from user_tables;
-
-          SQL> desc user_indexes
-	  SQL> select INDEX_NAME, INDEX_TYPE, TABLE_NAME from user_indexes;
-
-	  SQL> desc user_constraints 
-	  SQL> select TABLE_NAME, CONSTRAINT_NAME, CONSTRAINT_TYPE from user_constraints;
-
-	  SQL> desc user_views
-	  SQL> select VIEW_NAME, TEXT from user_views;
-
-	  cf) view 생성예 
-	  SQL> conn system/java1234;
-	  SQL> grant create view to scott;
-	  SQL> conn scott/tiger;
-	  SQL> create or replace view VIEW1 as 
-	          select DEPTNO "부서번호", round(avg(SAL)) "평균급여" from EMP
-	          where SAL<(select avg(SAL) from EMP where DEPTNO=10)
-	          group by DEPTNO
-	          having DEPTNO!=10
-	          order by DEPTNO desc;
-          SQL> select VIEW_NAME, TEXT from user_views;
-          SQL> select * from VIEW1;
-	  
-       <예3> all_
-          SQL> select * from all_tables;
-	  SQL> select OWNER, TABLE_NAME from all_tables where TABLE_NAME='DUAL';
-	  SQL> desc all_tables
-	    
-       <예4> dba_
-          SQL> select * from dba_tables; --이런 테이블은 없음 
-	  SQL> conn system/java1234
-	  SQL> select * from dba_tables;
-
-
-2. Data Type 
-  (1) 설명 
-     Oracle에서 제공하는 데이터 타입 
-
-  (2) 종류
-     1) 스칼라(Scalar) 타입	 
-        cf) Scalar : 실수로 표시할 수 있는 수량 
-
-	<1> '하나의 데이터 타입컬럼'에 오직, '하나의 데이터'만 저장할 수 있는 타입 
-	<2> '문자/숫자/날짜' 데이터를 저장 
-	<3> 종류 
-	    1> number ( -38 ~ +38 자리수 )
-	    2> binary_integer ( -2^31 ~ 2^31-1 )
-	    3> char(0~255), nchar 
-	       - char(10) -> 나머지 공간을 space 로 채움 
-	       - nchar(10) -> 다양한 언어의 문자값을 저장 
-            4> varchar, varchar2(4000), nvarchar2(4000)
-	       - varchar2(10) -> 필요한 공간만 채움 
-	       - nvarchar2(10) -> 다양한 언어의 문자값을 저장 
-            5> blob, long row, clob, long 
-	       - blob -> 바이어리 데이터를 4G
-	       - long row -> 바이어리 데이터를 2G
-	       - clob -> 문자 데이터를 4G
-	       - long -> 문자 데이터를 2G
-	    6> date ( 초단위 데이터 저장 )
-	    7> timestamp ( 마이크로초 저장 )
-	       - timestamp with time zone
-	       - timestamp with local zone 
-	       - interval year to month 
-
-	       cf1) java.sql.Timestamp 를 이용 
-	       cf2) '1/10^6'초까지 저장은 가능하나 
-	            컴퓨터에 생성할 수 있는 유효한 시간은 
-		    '1/10^3'초이므로 실제저장시간은 '1/1000'초 임 
-            8> boolean ( true / false 저장 ) 
-
-	   
-     2) 모음(Collection) 타입
-        <1> 하나의 데이터 타입 컬럼에 
-	    '여러개의 데이터(배열/테이블)'을 저장할 수 있는 타입 
-	<2> 배열/테이블 데이터를 저장 
-	<3> 종류 
-	    1> varray
-	    2> nested table 
-
-  (3) 시간 관련 함수 
-      1) current_date 함수 ( sysdate )
-
-         cf1) 시간 포멧 수정 
-	 SQL> alter session set 
-	      NLS_DATE_FORMAT='YYYY-MM-DD AM HH:MI:SS DAY';
-	 SQL> alter session set NLS_LANGUAGE='ENGLISH';
-
-	 cf2) NLS( National Language Support ) 
-
-      2) current_timestamp ( ***** )
-         SQL> select current_timestamp from dual;
-	 SQL> alter session set TIME_ZONE='-08:00';
-	 SQL> select current_timestamp from dual;
-	 SQL> alter session set TIME_ZONE='00:00';
-	 SQL> select current_timestamp from dual;
-   
-      3) localtimestamp
-         SQL> select current_timestamp, localtimestamp from dual;
-
-	 cf) TST 테이블 
-	 SQL> create table TST(
-	     NO number, 
-	     RDATE date, 
-	     TS timestamp);
-	 SQL> insert into TST values(10, sysdate, current_timestamp);
-	 SQL> insert into TST values(20, sysdate, current_timestamp);
-	 SQL> insert into TST values(30, sysdate, current_timestamp);
-	 SQL> select * from TST;
-   
-  (4) ROWID 와 ROWNUM 컬럼 ( ***** )
-      1) 설명 
-         oracle 에서 테이블을 생성하면 기본적으로 제공되는 컬럼 
-  
-      2) 종류
-         1) ROWID
-	     -> ROW 의 고유 ID 
-	       ( 중간에 row 수정해도 불변 )
-	 2) ROWNUM
-	     -> 행의 index 
-	       ( 중간에 row 삭제시 변함 )
-
-	   SQL> select NO, ROWID, ROWNUM from TST; 
-	   SQL> select count(*) from TST;
-	   SQL> select max(ROWNUM) from TST;
-
-
-3. 일련번호 ( Sequence )
-   (1) 설명 
-       연속적인 숫자값을 자동으로 증감해주는 객체(Object)
-       즉, 시퀀스는 생성한 후, 호출만하면 연속적으로 번호를 
-       증가 or 감소시켜 제공해 줌   
- 
-   (2) 문법 
-       create sequence 시퀀스명 
-        [ increment by N ]
-	[ start with N ]
-	[ maxvalue N | nomaxvalue ]
-	[ minvalue N | nominvalue ]
-	[ cycle | nocycle ]
-	[ cache | nocache ]
-
-   (3) 생성 예 
-       SQL> create sequence DEPT2_SEQ increment by 1 start with 1 nocache;
-       SQL> desc seq
-       SQL> select SEQUENCE_NAME, INCREMENT_BY, MIN_VALUE, MAX_VALUE from seq;
-
-   (4) 사용 
-       1) nextval 
-           SQL> select DEPT2_SEQ.nextval from DUAL;
-
-       2) currval 
-           SQL> select DEPT2_SEQ.currval from DUAL;
-
-	   cf) 시퀀스 생성 후 '적어도 한번은' nextval 호출해줘야 값이 셋팅됨
-
-   (5) 삭제 
-       SQL> drop sequence DEPT2_SEQ;
-       SQL> select SEQUENCE_NAME, INCREMENT_BY, MIN_VALUE, MAX_VALUE from seq;
-
-
-4. 제약조건 ( Constraint )    
-   (1) 설명 
-       테이블에 컬럼에 '원치않는 데이터를 입력/변경/삭제되는 것을 방지'
-       하기위해 테이블 생성(create)시 또는 변경(alter)시 설정하는 조건  
-       
-       cf) 제약 조건명(constraint 변수명)을 개발자가 직접부여하면 
-           추후 해당 constraint 관리가 용이 
-
-   (2) 종류 
-       1) primary key ( 기본키 == 식별키 )
-          하나의 ROW 데이터를 특정하는 키
-           - 하나의 테이블에 오직 '하나'만 존재 가능 ( 0 or 1 )
-	   - 제약조건 이름과 같은 인덱스 객체가 자동으로 생성되어 부여됨 
-	   
-       2) foreign key ( 참조키 == 외래키 )
-          부모 테이블의 'PK/UK'를 참조하는 키 
-	   - 여러개 가능 
-
-       3) unique key ( 유일키 )
-          PK가 아니더라고 컬럼의 모든 값이 유일해야 하는 경우에 사용되는 키 
-	  ( 즉, 중복데이터를 허용하지 않는 컬럼에 부여 )
-
-	  cf) PK와 차이점 
-	  - null 을 입력하 수 있음 
-          - 하나의 테이블에 '여러개' 생성 가능 
-
-       4) check 
-          조건에 맞는 입력되도록 조건을 부여한 제약조건 
-          cf) 조건이란 ? 
-	    - 데이터 값의 범위
-	    - 특정 패턴 숫자 
-	    - 문자값 설정
-	     ... 
-
-       5) not null 
-          null이 입력되어서는 안되는 컬럼에 부여하는 제약조건 
-	  ( 컬럼 레벨에서만 부여 가능 )
-
-	  cf) Tip 
-	   - PK는 not null 포함 
-	   - default 는 제약조건이 아님 
-	   - not null 조건도 contraint_type이 'C'로 표시 
-   
-   (3) 특징 
-       1) 제약조건 수정하려면, 삭제하고 다시 만들어야 함 
-       2) disable constraint, enable constraint 는 왠만하면 사용 안하는 걸 추천 
-
-   (4) 제약 조건 부여 방법 
-       1) column level
-           <1> 이름을 부여 X 
-	      방법1) ct1.sql
-	   <2> 이름을 부여 O 
-	      방법2) ct2.sql
-
-       2) table level 
-           <1> 테이블 생성 
-              1> 이름을 부여 X
-                 방법3) ct3.sql
-              2> 이름을 부여 O
-	         방법4) ct4.sql
-	       
-	   <2> 테이블 변경 ( alter table ) 
-	      방법5) ct5.sql
-
-
-
-	  
-
-	  
-	      
