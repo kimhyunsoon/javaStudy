@@ -1453,8 +1453,104 @@
 	      방법5) ct5.sql
 
 
+[ Part5 : 백업과 복구 ]  
+1. 백업( exp.exe ) 
+   (1) 전체 데이터베이스 ( Full Level Export )
+   (2) 특정 사용자 ( User Level Export ) *****
+       C:\>exp scott/tiger file='C:\SOO\Oracle\4_BACKUP\dump1.dmp'
+       C:\>exp userid=system/java1234 owner=scott file='C:\SOO\Oracle\4_BACKUP\dump2.dmp'
+   (3) 특정 테이블 ( Table Level Export )
+       C:\>exp userid=system/java1234 file='C:\SOO\Oracle\4_BACKUP\dump3.dmp' tables=(scott.EMP, scott.DEPT)
 
-	  
+2. 복구( imp.exe )   
+   (1) 전체 데이터베이스 ( Full Level Import )
+   (2) 특정 사용자 ( User Level Import ) ***** 
+       #시도1> C:\>imp userid=system/java1234 file='C:\SOO\Oracle\4_BACKUP\dump1.dmp' fromuser=scott touser=scott2
+       1) 에러 발생 메세지 
+           KO16MSWIN949 문자집합과 AL16UTF16 NCHAR 문자 집합에 임포트가 완성되었습니다
+           AL32UTF8 문자 집합을 사용해서 서버를 임포트합니다 (문자집합 변환이 가능합니다)
+           IMP-00030: 쓰기 모드로 import_sys 파일을 만드는데 실패했습니다
+           IMP-00000: 임포트가 실패로 끝났습니다
 
-	  
-	      
+       2) 해결 시도 
+          <1> 현재 오라클의 문자셋을 조회 
+	      SQL> conn sqlplus sys/java1234 as sysdba;
+	      SQL> select * from nls_database_parameters where parameter='NLS_CHARACTERSET';
+                   -- AL32UTF8
+
+          <2> AL32UTF8을 KO16MSWIN949로 변경 
+	      SQL> conn sqlplus sys/java1234 as sysdba;
+	      SQL> shutdown immediate;
+	      SQL> startup mount;
+	      SQL> alter system enable restricted session;
+	      SQL> alter system set aq_tm_processes=0;
+	      SQL> alter database open;
+	      SQL> alter database character set internal_use KO16MSWIN949;
+	      SQL> shutdown immediate;
+	      SQL> startup;
+
+          <3> 변경된 문자셋 조회 
+	      SQL> select * from nls_database_parameters where parameter='NLS_CHARACTERSET';
+	          -- KO16MSWIN949
+
+          <4> 다시 백업과 복구 시도 
+
+	 
+	#시도2> C:\>imp userid=system/java1234 file='C:\SOO\Oracle\4_BACKUP\dump1.dmp' fromuser=scott touser=scott2    
+	1) 복구 실패 
+
+	2) 해결 시도
+	    '관리자모드로 명령프롬프트'를 열어서, 복구 시도! 
+	    -> 복구 성공! but.. 한글데이터가 깨짐?
+	    
+	3) 원래의 문자셋으로 변경( KO16MSWIN949 -> AL32UTF8 )
+	    SQL> conn sqlplus sys/java1234 as sysdba;
+	    SQL> shutdown immediate;
+	    SQL> startup mount;
+	    SQL> alter system enable restricted session;
+	    SQL> alter system set aq_tm_processes=0;
+	    SQL> alter database open;
+	    SQL> alter database character set internal_use AL32UTF8;
+	    SQL> shutdown immediate;
+	    SQL> startup;
+
+	4) scott2 로 접근 후 한글데이터 확인 
+	    -> 한글 성공!! 
+	       
+        
+   (3) 특정 테이블 ( Table Level Import )
+        C:\>imp userid=system/java1234 file='C:\SOO\Oracle\4_BACKUP\dump3.dmp' fromuser=scott touser=scott3 
+            '관리자모드로 명령프롬프트'를 열어서, 복구 시도! 
+	     -> 복구 성공! but.. 한글데이터가 깨짐? 
+	     -> 원래의 문자셋으로 변경 
+	     -> 한글 성공!! 
+
+
+   <결론> (AL32UTF8->KO16MSWIN949) -> 백업/복구('관리자모드CMD') -> (KO16MSWIN949->AL32UTF8)
+
+	
+[ Part6 : PL-SQL ]	
+1. Procedure
+   (1) 설명 
+       일련의 '작업처리순서'를 정의해 놓은 것으로 미리 DBMS에 컴파일되어져있어서,  
+       '프로그램 or 사용자'로부터 '호출'되면 실행되는 알고리즘 
+
+   (2) 예 
+        5_PLSQL/pro1.sql , pro2.sql
+     
+
+2. Trigger 
+   (1) 설명 
+       일련의 '작업처리순서'를 정의해 놓은 것으로 미리 DBMS에 컴파일되어져있어서, 
+       어떤 조건이 만족되어지는 상황('DML수행')이 발생되면, '자동'호출되어져서 작동되는 알고리즘 
+
+   (2) 예 
+       5_PLSQL/tri.sql 
+
+       SQL> @C:\SOO\Oracle\5_PLSQL\tri.sql
+       SQL> insert into EMP_TRI(EMPNO, ENAME) values(8000, '정구');
+       SQL> select * from EMP_TRI;
+
+
+   (3) 문제 
+       5_PLSQL/tri_question.sql 
