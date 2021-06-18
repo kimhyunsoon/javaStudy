@@ -1,0 +1,10 @@
+hupaper
+
+idx 고유번호
+sendid 보내는 사람
+receiveid 받는사람
+sendmsg 보낼메세지
+isreceive 수신여부
+plive 생존여부 (영구삭제/영구보관)
+senddate 보낸날짜
+receivedate 받는날짜

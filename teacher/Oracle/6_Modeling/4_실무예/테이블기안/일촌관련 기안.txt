@@ -1,0 +1,14 @@
+hu_friend
+일촌관리 테이블
+
+idx 고유번호
+melid 홈주인 아이디
+mename 일촌명
+youlid 일촌 아이디
+youname 일촌명
+gidx 일촌그룹
+fmsg 일촌신청멘트
+fdiv 구분(일촌신청 1, 일촌거부 9, 수락 5)
+udate 수정날짜
+idate 입력날짜
+

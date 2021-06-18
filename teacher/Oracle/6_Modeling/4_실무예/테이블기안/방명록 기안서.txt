@@ -1,0 +1,67 @@
+방명록
+hu_guestbook
+
+
+idx 순번
+lid 아이디
+no 번호
+name 이름
+pwd 비번
+content 글
+host 아이피
+secret 비밀글여부
+udate 수정날짜
+idate 입력날짜
+
+
+
+방명록 코멘트
+hu_guestbookRe
+
+
+idx 고유번호
+gidx 방명록 글의 코멘트
+lid 로그인아이디
+content 글
+idate 입력날짜
+
+
+일반 게시판(사진, 게시판, 프로필)
+hu_bbs
+
+idx  고유번호
+lid 아이디
+gidx 그룹idx
+glevel 글레벨
+no 번호
+name 이름
+pwd 비번
+subject 주제
+content 비밀번호
+host 아이피
+ofilename 실제 파일내임
+filename 파일명
+filesize 파일사이즈
+ref 레퍼
+lev 레벨
+sunbun 순번
+read_num 조회수
+scrapcount 스크랩수
+oridx 원본글 idx
+udate 수정시간
+idate 입력시간
+
+
+일반게시판 코멘트
+hu_bbsRe
+
+
+idx 고유번호
+bidx 게시글 글의 코멘트
+writelid 로그인아이디
+content 글
+idate 입력날짜
+
+
+
+

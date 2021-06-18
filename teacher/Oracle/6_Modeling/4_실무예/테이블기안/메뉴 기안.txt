@@ -1,0 +1,10 @@
+메뉴리스트
+hu_menu
+
+idx 고유번호
+lid 유저아이디
+mname 메뉴이름
+use 사용여부
+level 사용권한(회원만/비회원만)
+udate 수정날짜
+idate 입력날짜

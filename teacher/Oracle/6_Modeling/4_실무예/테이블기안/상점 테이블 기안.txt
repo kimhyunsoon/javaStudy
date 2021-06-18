@@ -1,0 +1,40 @@
+hustore
+
+idx 상점고유번호
+sname 상품명
+scoment 상품설명
+sdiv 상품구분(스킨/아이템/미니룸/음악) = s, m, r, i
+ofilename 실제파일명
+filename 파일명
+filesize 파일사이지
+lid 파일올린사람
+point 포인트
+udate 수정일
+idate 입력일
+
+
+create SEQUENCE hustore_seq start with 1 increment by 1 nocache;
+
+
+선물함 테이블
+huGife
+
+idx 순번
+sendid 보낸사람 id
+receiveid 받는 사람 id
+sidx 상품 고유번호
+sendmsg 보낼멘트
+receivemsg 보낼멘트
+senddate 보낸날짜
+receivedate 받은날짜
+isreceive 수신 여부
+
+create SEQUENCE hugift_seq start with 1 increment by 1 nocache;
+
+구매리스트
+hubuy
+
+idx 순번
+lid 구매자id
+sidx 상품idx
+idate 구입일

@@ -1,0 +1,1 @@
+drop table hu_login_user;

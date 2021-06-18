@@ -1,0 +1,2 @@
+drop trigger atri_myhometotcount_ins;
+drop trigger atri_myhometotcount_ups;

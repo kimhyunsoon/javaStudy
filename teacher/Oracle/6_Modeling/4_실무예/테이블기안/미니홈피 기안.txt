@@ -1,0 +1,48 @@
+미니홈피 
+hu_myhome
+
+idx 고유번호
+lid 아이디
+hname 홈이름
+hmsg 멘트
+haddr 홈주소
+todaycount 오늘방문자
+totcount 총방문자
+scrapcount 스트랩 카운트
+giftcount 선물함 카운트 trigger 구현
+ofilename 파일실제이름 --메인사진
+filename 파일 이름 --메인사진
+keyword1 키워드1
+keyword2 키워드2
+keyword3 키워드3
+udate 수정날짜
+idate 입력날짜
+
+
+일촌평
+hu_friendment
+
+idx 고유번호
+melid 홈주인
+youlid 일촌id
+msg 일촌평
+idate 입력날짜
+
+
+
+미니룸 아이템 상자
+hu_myitem
+
+
+idx 고유번호
+lid 아이디
+sidx 상점 고유번호
+zidex: zindex값
+left : (왼쪽)절대위치 
+top : (위쪽) 절대위치
+msg : 메세지
+use : 사용여부
+usedate:사용날짜
+remaindate: 남은날짜
+udate : 수정날짜
+idate : 입력날짜

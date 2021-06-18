@@ -1,0 +1,213 @@
+
+
+			% 규칙 %
+
+
+1. 모든 페키지는 el로 시작한다.
+
+2. 모든 클래스나 파일명은 EL(EndLine)로 시작한다.
+   -클래스명은 대문자 EL , 일반파일은 소문자 el_로 시작한다.
+   ex) ELAction.java, el_login.java
+
+3. 상수는 무조건 대문자이다..
+
+4. 이름은 규칙이 있게 _ 로 구분한다.(자바는 대문자, DB는 _)
+
+5. 규칙있는페이지(list,view,insert...)이름 참조
+   리스트 페이지 =  ***list.jsp
+   쓰는 페이지 =  ***write.jsp
+   보는 페이지 = ***view.jsp
+   수정 페이지 = ***edit.jsp
+   삭제 페이지 = ***del.jsp
+   리플 페이지 = ***reply.jsp
+   각세션의 결과페이지는 ***msg.jsp로 통일한다..
+
+6. 첨부파일의 용량은 5메가로 제한한다.
+
+7. 주석
+각 메소드 마다 : /*
+	          * 주석을 달자..
+	          */
+
+8. 변수명은 의미있게.
+
+-----------------------------------------------------------------------------------------
+/* 데이터 베이스 상수값 비고 */
+Member 테이블
+- authority  필드명
+1 : 관리자  2 : 부관리자	3 : 그룹마스터  4 : 보드마스터  5: 정회원 6: 준회원 9:게스트
+
+/* 보드관리 */
+- bdiv 필드명
+1:자유게시판
+2:방명록
+3:자료실형게시판
+
+
+/* 관리자 페이지 */
+- div 필드명
+1: 관리자 9:불량리스트
+
+
+/*  답변형 게시판의 notice */
+1:전체공지 2:그룹공지 3:보드공지 9:일반글
+
+/* 공통 사항 */
+- level 필드명
+1 : 관리자  2 : 부관리자	3 : 그룹마스터  4 : 보드마스터  5: 정회원 6: 준회원 9:게스트
+
+
+- live 필드명 (공통사항)
+0 : 존재 5 : 삭제대기 9 : 삭제
+
+
+-----------------------------------------------------------------------------------------
+
+/* 카페 관리를 위한 세션명 */
+loginUser : 로그인한 유저들의 정보 모임
+gtname : 그룹명(어떤그룹인지 그룹아이디를 저장할것)
+btname : 게시판명(어떤게시판인지인지 게시판아이디를 저장할것)
+         -- 테이블명은 gtname+btname을 합친것..
+cp : 현재 페이지
+ps : 페이지 사이즈
+idx : 글넘버(리플이나 코멘트일경우 사용하므로...)
+mentdto 각각멘트를 저장
+
+------------------------------------------------------------------------------------------
+
+/*  주로 사용할 request scope..  */ 
+result 결과에 대한 boolean값
+result_int 결과에 대한 int값
+list arrayList를 저장
+dto dto를 저장
+
+
+-------------------------------------------------------------------------------------------
+※. 데이터 베이스명과 필드는 별지 참조
+
+  
+
+
+-------------------------------------------------------------------------------------------
+※. 패키지 구분
+
+1. 회원가입관리 파트 패키지
+  el.member.controller.*
+    -ELMemberAction.java --일반 엑션 컨트롤러
+
+  el.member.model.*
+    -ELMemberManager.java -- 비지니스 로직 분류
+    -ELMemberDAO.java -- 실제 비지니스로직 처리
+    -ELMemberDTO.java -- DTO
+  //DynaActionForm 빈 사용
+
+
+2. 로그인 파트 패키지
+  el.login.controller.*
+    -ELLoginAction.java --일반 엑션 컨트롤러
+
+  el.login.model.*
+    -ELLoginManager.java -- 비지니스 로직 분류
+    -ELLoginDAO.java -- 실제 비지니스로직 처리
+    -ELLoginDTO.java -- DTO
+  //DynaActionForm 빈 사용
+
+
+
+3. 그룹 파트 패키지명
+  el.group.controller.*
+    -ELGroupAction.java --일반 엑션 컨트롤러
+
+  el.group.model.*
+    -ELGroupManager.java -- 비지니스 로직 분류
+    -ELGroupDAO.java -- 실제 비지니스로직 처리
+    -ELGroupDTO.java -- DTO
+  //DynaActionForm 빈 사용
+
+
+4. 보드 파트 패키지명
+  el.board.controller.*
+    -ELBoardAction.java --일반 엑션 컨트롤러
+
+  el.board.model.*
+    -ELBoardManager.java -- 비지니스 로직 분류
+    -ELBoardDAO.java -- 실제 비지니스로직 처리
+    -ELBoardDTO.java -- DTO
+  //DynaActionForm 빈 사용
+
+
+5. 답변형게시판 파트 패키지명
+  el.rb.controller.*
+    -ELRbAction.java --일반 엑션 컨트롤러
+    -ELRbForm.java -- 파일업로드기능상 form빈 따로 사용
+    -ELRbWriteAction.java -- MultipartRequest 사용하므로 엑션을 따로함. -- 일반글
+    -ELRbReWriteAction.java -- MultipartRequest 사용하므로 엑션을 따로함 -- 리플
+
+  el.rb.model.*
+    -ELRbManager.java -- 비지니스 로직 분류
+    -ELRbDAO.java -- 실제 비지니스로직 처리
+    -ELRbDTO.java -- DTO
+
+
+
+6. SQL관련 파트 패키지명
+  el.sql.*;
+    -ELMemberSQL.java -- 회원가입파트 sql문
+    -ELLoginSQL.java  -- 회원로그인파트 sql문
+    -ELGroupSQL.java  -- 그룹 파트 sql문
+    -ELBoardSQL.java  -- 보드 파트 sql문
+    -ELRbSQL.java -- 답변형 파트 sql문
+
+
+
+7. Path페이지
+  el.path.*;
+    -ELProjectPath.java
+
+
+
+8. 한글인코딩관련
+  el.util.filter
+    -EncodingFilter.java --한글필터링 관련
+
+
+
+9. html컨버팅
+  el.util.htmlText
+    -ReplaceUp.java --html과 text 변환
+
+
+--------------------------------------------------------------------------------------------------
+실제 들어가는 폴더및명..(실파일명)
+
+
+// 폴더 분류
+MEMBER	- IMG
+LOGIM	- IMG
+GROUP	- IMG
+BOARD	- IMG
+
+REBOARD - IMG
+	- STORE - ..
+		- ..
+		- ..
+CSS
+SCRIPT
+
+--------------------------------------------------------------------------------------------------
+스트러츠 셋팅(기본 prameter는 메소드) --(스트러츠 forward)
+a-main
+
+a-member
+a-login
+
+a-group
+
+a-board
+
+a-reboard
+a-reboard-write
+a-reboard-rewrite
+
+
+

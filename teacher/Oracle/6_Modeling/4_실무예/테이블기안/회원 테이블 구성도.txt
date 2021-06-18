@@ -1,0 +1,47 @@
+/*--------------------------------*/
+회원관리(HU_MEMBER)
+/*--------------------------------*/
+
+idx- 시퀀스 number
+lid - p.k varchar2(15); --중복체크
+pwd - n.n varchar2(15);
+name - n.n varchar2(15);
+nickname - n.n u.k varchar(20); --중복체크
+birth - u.k, n.m varchar2(8); --> 
+addr1 - n.n varchar2(6); 우편번호
+addr2 - n.n varchar2(50); 집주소
+addr3 - n.n varchar2(50); 나머지 집주소
+email - n.n, u.k varchar2(50) - 중복체크 및 비밀번호 분실시..
+homepage - varchar(50);
+pwdsearch - n.n varchar2(1); 비밀번호 잃어버렸을시 질문
+pwdsearchOk - n.n varchar2(40); 비밀번호 잃어버렸을시 답
+authority - n.n default 9 number - 회원 권한 관리자,부관리자, 상점관리자,정회원(9)기본값
+mlive - n.n default 0 number -  회원의 존재여부 탈퇴하면 9로 바꾼다. ..계속된 가입 막기..
+panelty - n.n default 0 number- 누적 경고 횟수.. 3회면 자동 아웃..
+visiteCount n.n default 0 number - 방문횟수 카운ㅌ,
+logdate - sysdate 로그인 날짜
+udate - sysdate 수정날짜
+idate - sysdate 가입날짜
+
+/*---------------------------------*/
+시퀀스
+create SEQUENCE humember_seq start with 1 increment by 1 nocache;
+
+
+/*--------------------------------*/
+회원관리 1:1 관계
+/*--------------------------------*/
+lid - p.k varchar2(15) ;
+pwd - varchar2(15)
+
+
+
+/*--------------------------------*/
+로그인 리스트 로그인된 회원의 수 체크
+/*-------------------------------*/
+
+lid - p.k 아이디 varchar2(15)
+logdate -  로그인시간 data		
+logoutdate - 로그아웃시간 data		
+islogin - 로그인여부	 0 or 1 number
+

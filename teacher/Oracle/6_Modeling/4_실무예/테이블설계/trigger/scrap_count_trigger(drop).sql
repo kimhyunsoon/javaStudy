@@ -1,0 +1,1 @@
+drop trigger atri_myhomescrap_ins;

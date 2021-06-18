@@ -1,0 +1,11 @@
+일촌평
+hu_friendment
+
+idx 고유번호
+melid 홈주인
+youlid 일촌id
+msg 일촌평
+udate 수정날짜
+idate 입력날짜
+
+

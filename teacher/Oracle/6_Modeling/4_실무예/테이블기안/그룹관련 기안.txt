@@ -1,0 +1,10 @@
+/*싸이월드상 모든 그룹 테이블*/
+
+idx 순번 pk
+lid 아이디
+gdiv 종류(일촌그룹(friend), 쥬크박스(music), 사진첩(picture), 게시판(bbs))
+underline 밑줄여부
+gname 그룹명
+glever 권한
+udate  수정날짜
+idate 입력날짜

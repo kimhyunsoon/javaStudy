@@ -1,0 +1,7 @@
+검색어카운트
+hu_find
+
+idx 순번
+name 검색어명
+count 검색카운트
+idate 입력날짜
