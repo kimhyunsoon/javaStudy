@@ -1,4 +1,6 @@
 package ecardGame;
+import ecardGame.EcardGUI;
+import ecardGame.Login;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -7,53 +9,44 @@ import java.net.*;
 import java.util.*;
 import javax.swing.JOptionPane;
 
-import ecardGame.ClientGUI;
-
 public class ClientThread extends Thread{
-    Sender sender;
-    ClientGUI cg; //ClientGUI 객체
-    Socket sc; 
+    //Sender sender; //내부클래스 Sender
+    EcardGUI eg; //EcardGUI 객체
+    //ClientGUI cg; //ClientGUI 객체
+    //Socket sc; 
     int port = 4003;
     DataInputStream dis;
     DataOutputStream dos;
     Thread thisThread; 
     String chatID;
     String msg;
-    String ip = "127.0.0.1"; // Login 에서 ip를 받아옴
+    String ip;
+    //String ip = "127.0.0.1"; // Login 에서 ip를 받아옴
     boolean gameStart; 
     String playerName, playerScore, playerIdx; 
+    Login login;
     
-    public ClientThread(ClientGUI client){//채팅 소켓 생성
+    public ClientThread(){//채팅 소켓 생성
+        String chatID = Login.nickName; // Login 에서 nickName 를 받아옴.
+		String ip = Login.IP; // Login 에서 ip를 받아옴
+        
         try {
-            this.cg = client;
-            sc = new Socket(ip,port);
+            //this.login = client;
+            Socket sc = new Socket(ip,port);
+            Sender sender = new Sender(sc, chatID);
             dis = new DataInputStream(sc.getInputStream());
             dos = new DataOutputStream(sc.getOutputStream());
             
             //<-------이벤트리스너-------->
-            ClientGUI.enterBtn.addActionListener(new Sender(sc, chatID));
-            ClientGUI.clearBtn.addActionListener(new Sender(sc, chatID));
-            ClientGUI.exitBtn.addActionListener(new Sender(sc, chatID));
-            ClientGUI.inputName.addKeyListener(new KeyAdapter(){
-                public void keyPressed(KeyEvent ke){
-                    if(ke.getKeyCode() == KeyEvent.VK_ENTER){//엔터 누르면 실행
-                        ClientGUI.chatLog.append("서버에연결되었습니다 \n");
-						chatID = ClientGUI.inputName.getText(); //입력받은 텍스트를 아이디로 저장
-						sender = new Sender(sc, chatID);
-                        
-                    }
-                }
-            });
-            ClientGUI.inputMsg.addKeyListener(new KeyAdapter(){
-                public void keyPressed(KeyEvent ke2){
-                    if(ke2.getKeyCode()== KeyEvent.VK_ENTER){
-                        msg = ClientGUI.inputMsg.getText();
-                        System.out.println(msg);
-                        sender.send(msg); //내부클래스의 송신 메소드 호출
-                        ClientGUI.inputMsg.setText("");
-                    }
-                }
-            });
+            EcardGUI.text_msg.addKeyListener(new Sender(sc,chatID));
+			EcardGUI.btn_exit.addActionListener(new Sender(sc, chatID));
+			EcardGUI.btn_Ready.addActionListener(new Sender(sc, chatID));
+			EcardGUI.btn_myKing.addActionListener(new Sender(sc, chatID));
+			EcardGUI.btn_mySlav.addActionListener(new Sender(sc, chatID));
+			EcardGUI.btn_myCtzn1.addActionListener(new Sender(sc, chatID));
+			EcardGUI.btn_myCtzn2.addActionListener(new Sender(sc, chatID));
+			EcardGUI.btn_myCtzn3.addActionListener(new Sender(sc, chatID));
+			EcardGUI.btn_myCtzn4.addActionListener(new Sender(sc, chatID));
 
             thisThread = this;
             start();
@@ -92,18 +85,18 @@ public class ClientThread extends Thread{
                     updateClientList(); 
                 }else if(msg.startsWith("//Start")){
                     gameStart = true;
-                    ClientGUI.chatLog.append("Game Start"+ "\n");
-                    pln("Game Start");
+                    //ClientGUI.chatLog.append("Game Start"+ "\n");
+                    //pln("Game Start");
                 }else if(msg.startsWith("//Timer")){
                     //label_Timer.setText(msg.substring(7));
                     pln(msg.substring(7));
                 }else{
-                    ClientGUI.chatLog.append(msg + "\n");
+                    //ClientGUI.chatLog.append(msg + "\n");
                 }
             }//while문 종료(쓰레드 종료)
         }catch(IOException e){
             try{
-                ClientGUI.chatLog.append("[ 서버와의 연결이 끊어졌습니다. ]\n[ 3초 후 프로그램을 종료합니다 .. ]");       
+                //ClientGUI.chatLog.append("[ 서버와의 연결이 끊어졌습니다. ]\n[ 3초 후 프로그램을 종료합니다 .. ]");       
                 Thread.sleep(3000);         
                 //release();}
             }catch (InterruptedException ite) {
@@ -118,7 +111,7 @@ public class ClientThread extends Thread{
     }
 
     //내부클래스 -- 닉네임과 채팅 송신
-    public class Sender implements ActionListener{
+    public class Sender implements ActionListener, KeyListener{
         Socket sc;
         String chatID0;
         String msg;
@@ -143,7 +136,7 @@ public class ClientThread extends Thread{
             }
         }
         public void actionPerformed(ActionEvent e){
-            if(e.getSource() == ClientGUI.enterBtn){
+            if(e.getSource() == EcardGUI.btn_myKing){
                 System.out.println("//Press"+"//King"+chatID);
                 try {
                     dos.writeUTF("//Press"+"//King"+chatID);
@@ -160,7 +153,7 @@ public class ClientThread extends Thread{
             //         e1.printStackTrace();
             //     }
             // }
-            if(e.getSource() ==  ClientGUI.clearBtn) {
+            if(e.getSource() ==  EcardGUI.btn_Ready) {
                 try {
                     dos.writeUTF("//Ready");
                     dos.flush();
@@ -168,7 +161,7 @@ public class ClientThread extends Thread{
                     e1.printStackTrace();
                 }
             }
-            if(e.getSource() == ClientGUI.exitBtn){
+            if(e.getSource() == EcardGUI.btn_mySlav){
                 try {
                     dos.writeUTF("//Press"+"//Slav"+chatID);
                     dos.flush();
@@ -177,5 +170,54 @@ public class ClientThread extends Thread{
                 }
             }
         }
+        @Override
+        public void keyTyped(KeyEvent e) {
+            // TODO Auto-generated method stub
+            
+        }
+        @Override
+        public void keyPressed(KeyEvent e) {
+            // TODO Auto-generated method stub
+            
+        }
+        @Override
+        public void keyReleased(KeyEvent e) {
+            // TODO Auto-generated method stub
+            
+        }
     }
+
+
+
+
 }
+
+
+
+// EcardGUI.enterBtn.addActionListener(new Sender(sc, chatID));
+// EcardGUI.clearBtn.addActionListener(new Sender(sc, chatID));
+// EcardGUI.exitBtn.addActionListener(new Sender(sc, chatID));
+
+
+// EcardGUI.inputName.addKeyListener(new KeyAdapter(){
+//     public void keyPressed(KeyEvent ke){
+//         if(ke.getKeyCode() == KeyEvent.VK_ENTER){//엔터 누르면 실행
+//             ClientGUI.chatLog.append("서버에연결되었습니다 \n");
+//             chatID = ClientGUI.inputName.getText(); //입력받은 텍스트를 아이디로 저장
+//             sender = new Sender(sc, chatID);
+            
+//         }
+//     }
+// });
+
+
+// ClientGUI.inputMsg.addKeyListener(new KeyAdapter(){
+//     public void keyPressed(KeyEvent ke2){
+//         if(ke2.getKeyCode()== KeyEvent.VK_ENTER){
+//             msg = ClientGUI.inputMsg.getText();
+//             System.out.println(msg);
+//             sender.send(msg); //내부클래스의 송신 메소드 호출
+//             ClientGUI.inputMsg.setText("");
+//         }
+//     }
+// });
