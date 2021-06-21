@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<workbench progressCount="8" version="2.0">
+<workbench progressCount="16" version="2.0">
 <workbenchAdvisor/>
-<window height="851" width="1666" x="104" y="104">
+<window height="851" maximized="true" width="1666" x="196" y="115">
 <fastViewData fastViewLocation="1024"/>
 <perspectiveBar>
 <itemSize x="160"/>
@@ -26,12 +26,20 @@
 <folder appearance="1" expanded="2">
 <presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
 <part id="0"/>
+<part id="1"/>
+<part id="2"/>
 </presentation>
 </folder>
 </info>
 </editorArea>
 <editor activePart="true" focus="true" id="com.tomato.exerd.editor.DiagramEditor" name="untitled.exerd" partName="untitled.exerd" path="C:/KAEUN/gitStudy/03. Oracle/workspace/ModelP1/untitled.exerd" title="untitled.exerd" tooltip="ModelP1/untitled.exerd" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/ModelP1/untitled.exerd"/>
+</editor>
+<editor id="com.tomato.exerd.editor.DiagramEditor" name="TEST.exerd" partName="TEST.exerd" title="TEST.exerd" tooltip="C:\KAEUN\gitStudy\03. Oracle\workspace\ModelP1\TEST.exerd" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.ide.FileStoreEditorInputFactory" uri="file:/C:/KAEUN/gitStudy/03.%20Oracle/workspace/ModelP1/TEST.exerd"/>
+</editor>
+<editor id="com.tomato.exerd.editor.DiagramEditor" name="dog_hospital.exerd" partName="dog_hospital.exerd" path="C:/KAEUN/gitStudy/03. Oracle/workspace/ModelP1/dog_hospital.exerd" title="dog_hospital.exerd" tooltip="ModelP1/dog_hospital.exerd" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/ModelP1/dog_hospital.exerd"/>
 </editor>
 </editors>
 <views>
@@ -51,11 +59,15 @@
 <view id="com.tomato.exerd.ui.views.thumbnail" partName="썸네일">
 <viewState/>
 </view>
-<view id="com.tomato.exerd.validate.ui.ValidateView" partName="검토"/>
+<view id="com.tomato.exerd.validate.ui.ValidateView" partName="검토">
+<viewState/>
+</view>
 <view id="com.tomato.exerd.modelview3.ModelView3" partName="모델">
 <viewState/>
 </view>
-<view id="org.eclipse.ui.console.ConsoleView" partName="콘솔"/>
+<view id="org.eclipse.ui.console.ConsoleView" partName="콘솔">
+<viewState/>
+</view>
 <view id="com.tomato.exerd.ui.views.domain" partName="도메인">
 <viewState/>
 </view>
@@ -109,16 +121,15 @@
 </presentation>
 </folder>
 </info>
-<info folder="true" part="org.eclipse.ui.internal.ViewStack@1ec8477" ratio="0.75" ratioLeft="750" ratioRight="250" relationship="2" relative="leftFolder">
+<info folder="true" part="stickyFolderRight" ratio="0.7496955" ratioLeft="1231" ratioRight="411" relationship="2" relative="leftFolder">
 <folder appearance="2" expanded="2">
 <page content="org.eclipse.help.ui.HelpView" label="LabelNotFound"/>
 <page content="org.eclipse.ui.internal.introview" label="LabelNotFound"/>
 <page content="org.eclipse.ui.cheatsheets.views.CheatSheetView" label="LabelNotFound"/>
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
 </folder>
 </info>
-<info part="org.eclipse.ui.editorss" ratio="0.18" ratioLeft="180" ratioRight="820" relationship="2" relative="leftFolder"/>
-<info folder="true" part="org.eclipse.ui.internal.ViewStack@1ab9dd6" ratio="0.77926826" ratioLeft="639" ratioRight="181" relationship="2" relative="org.eclipse.ui.editorss">
+<info part="org.eclipse.ui.editorss" ratio="0.10110005" ratioLeft="193" ratioRight="1716" relationship="2" relative="leftFolder"/>
+<info folder="true" part="org.eclipse.ui.internal.ViewStack@6ddbc8" ratio="0.8995914" ratioLeft="1541" ratioRight="172" relationship="2" relative="org.eclipse.ui.editorss">
 <folder activePageID="com.tomato.exerd.ui.views.thumbnail" appearance="2" expanded="2">
 <page content="com.tomato.exerd.ui.views.thumbnail" label="썸네일"/>
 <presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
@@ -126,7 +137,7 @@
 </presentation>
 </folder>
 </info>
-<info folder="true" part="rightFolder" ratio="0.249226" ratioLeft="161" ratioRight="485" relationship="4" relative="org.eclipse.ui.internal.ViewStack@1ab9dd6">
+<info folder="true" part="rightFolder" ratio="0.24965706" ratioLeft="182" ratioRight="547" relationship="4" relative="org.eclipse.ui.internal.ViewStack@6ddbc8">
 <folder activePageID="com.tomato.exerd.modelview3.ModelView3" appearance="2" expanded="2">
 <page content="com.tomato.exerd.modelview3.ModelView3" label="모델"/>
 <page content="org.eclipse.ui.views.ContentOutline" label="아웃라인"/>
@@ -136,8 +147,8 @@
 </presentation>
 </folder>
 </info>
-<info folder="true" part="bottomFolder" ratio="0.57713497" ratioLeft="419" ratioRight="307" relationship="4" relative="org.eclipse.ui.editorss">
-<folder activePageID="com.tomato.exerd.ui.views.domain" appearance="2" expanded="2">
+<info folder="true" part="bottomFolder" ratio="0.80451125" ratioLeft="749" ratioRight="182" relationship="4" relative="org.eclipse.ui.editorss">
+<folder activePageID="com.tomato.exerd.validate.ui.ValidateView" appearance="2" expanded="2">
 <page content="com.tomato.exerd.ui.views.domain" label="도메인"/>
 <page content="com.tomato.exerd.validate.ui.ValidateView" label="검토"/>
 <page content="org.eclipse.ui.console.ConsoleView" label="콘솔"/>
@@ -149,7 +160,7 @@
 </presentation>
 </folder>
 </info>
-<info folder="true" part="org.eclipse.ui.internal.ViewStack@1a056f1" ratio="0.2987616" ratioLeft="193" ratioRight="453" relationship="4" relative="leftFolder">
+<info folder="true" part="org.eclipse.ui.internal.ViewStack@1c0bbc6" ratio="0.29903978" ratioLeft="218" ratioRight="511" relationship="4" relative="leftFolder">
 <folder activePageID="org.eclipse.gef.ui.palette_view" appearance="2" expanded="2">
 <page content="org.eclipse.gef.ui.palette_view" label="Palette"/>
 <presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
@@ -165,8 +176,65 @@
 <navigationHistory>
 <editors>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.tomato.exerd.editor.DiagramEditor" path="/ModelP1/untitled.exerd"/>
+<editor factoryID="org.eclipse.ui.ide.FileStoreEditorInputFactory" id="com.tomato.exerd.editor.DiagramEditor" uri="file:/C:/KAEUN/gitStudy/03.%20Oracle/workspace/ModelP1/dos_hospital.exerd"/>
+<editor factoryID="org.eclipse.ui.ide.FileStoreEditorInputFactory" id="com.tomato.exerd.editor.DiagramEditor" uri="file:/C:/KAEUN/gitStudy/03.%20Oracle/workspace/ModelP1/TEST.exerd"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.tomato.exerd.editor.DiagramEditor" path="/ModelP1/untitled.exerd"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.tomato.exerd.editor.DiagramEditor" path="/ModelP1/dog_hospital.exerd"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.tomato.exerd.editor.DiagramEditor" path="/ModelP1/untitled11.exerd"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.tomato.exerd.editor.DiagramEditor" path="/ModelP1/test1.exerd"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.tomato.exerd.editor.DiagramEditor" path="/ModelP1/untitled.exerd"/>
+<editor factoryID="org.eclipse.ui.ide.FileStoreEditorInputFactory" id="com.tomato.exerd.editor.DiagramEditor" uri="file:/C:/KAEUN/gitStudy/일일과제/26_모델링/03.%20논리적모델링/확정.exerd"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.tomato.exerd.editor.DiagramEditor" path="/eXERD-Samples/study.exerd"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.tomato.exerd.editor.DiagramEditor" path="/ModelP1/untitled.exerd"/>
 </editors>
-<item active="true" historyLabel="untitled.exerd" index="0"/>
+<item historyLabel="untitled.exerd" index="0"/>
+<item historyLabel="dos_hospital.exerd" index="1"/>
+<item historyLabel="untitled.exerd" index="0"/>
+<item historyLabel="dos_hospital.exerd" index="1"/>
+<item historyLabel="TEST.exerd" index="2"/>
+<item historyLabel="dos_hospital.exerd" index="1"/>
+<item historyLabel="TEST.exerd" index="2"/>
+<item historyLabel="dos_hospital.exerd" index="1"/>
+<item historyLabel="untitled.exerd" index="3"/>
+<item historyLabel="dog_hospital.exerd" index="4"/>
+<item historyLabel="untitled11.exerd" index="5"/>
+<item historyLabel="dog_hospital.exerd" index="4"/>
+<item historyLabel="test1.exerd" index="6"/>
+<item historyLabel="dog_hospital.exerd" index="4"/>
+<item historyLabel="test1.exerd" index="6"/>
+<item historyLabel="dog_hospital.exerd" index="4"/>
+<item historyLabel="test1.exerd" index="6"/>
+<item historyLabel="dog_hospital.exerd" index="4"/>
+<item historyLabel="test1.exerd" index="6"/>
+<item historyLabel="dog_hospital.exerd" index="4"/>
+<item historyLabel="test1.exerd" index="6"/>
+<item historyLabel="dog_hospital.exerd" index="4"/>
+<item historyLabel="test1.exerd" index="6"/>
+<item historyLabel="dog_hospital.exerd" index="4"/>
+<item historyLabel="test1.exerd" index="6"/>
+<item historyLabel="dog_hospital.exerd" index="4"/>
+<item historyLabel="test1.exerd" index="6"/>
+<item historyLabel="dog_hospital.exerd" index="4"/>
+<item historyLabel="test1.exerd" index="6"/>
+<item historyLabel="dog_hospital.exerd" index="4"/>
+<item historyLabel="test1.exerd" index="6"/>
+<item historyLabel="dog_hospital.exerd" index="4"/>
+<item historyLabel="test1.exerd" index="6"/>
+<item historyLabel="dog_hospital.exerd" index="4"/>
+<item historyLabel="test1.exerd" index="6"/>
+<item historyLabel="dog_hospital.exerd" index="4"/>
+<item historyLabel="test1.exerd" index="6"/>
+<item historyLabel="dog_hospital.exerd" index="4"/>
+<item historyLabel="test1.exerd" index="6"/>
+<item historyLabel="dog_hospital.exerd" index="4"/>
+<item historyLabel="test1.exerd" index="6"/>
+<item historyLabel="dog_hospital.exerd" index="4"/>
+<item historyLabel="test1.exerd" index="6"/>
+<item historyLabel="untitled.exerd" index="7"/>
+<item historyLabel="확정.exerd" index="8"/>
+<item historyLabel="study.exerd" index="9"/>
+<item historyLabel="확정.exerd" index="8"/>
+<item active="true" historyLabel="untitled.exerd" index="10"/>
 </navigationHistory>
 <input factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/" type="8"/>
 </page>
@@ -184,6 +252,27 @@
 </trimLayout>
 </window>
 <mruList>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.tomato.exerd.editor.DiagramEditor" name="study.exerd" tooltip="eXERD-Samples/study.exerd">
+<persistable path="/eXERD-Samples/study.exerd"/>
+</file>
+<file factoryID="org.eclipse.ui.ide.FileStoreEditorInputFactory" id="com.tomato.exerd.editor.DiagramEditor" name="확정.exerd" tooltip="C:\KAEUN\gitStudy\일일과제\26_모델링\03. 논리적모델링\확정.exerd">
+<persistable uri="file:/C:/KAEUN/gitStudy/일일과제/26_모델링/03.%20논리적모델링/확정.exerd"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.tomato.exerd.editor.DiagramEditor" name="test1.exerd" tooltip="ModelP1/test1.exerd">
+<persistable path="/ModelP1/test1.exerd"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.tomato.exerd.editor.DiagramEditor" name="untitled11.exerd" tooltip="ModelP1/untitled11.exerd">
+<persistable path="/ModelP1/untitled11.exerd"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.tomato.exerd.editor.DiagramEditor" name="dog_hospital.exerd" tooltip="ModelP1/dog_hospital.exerd">
+<persistable path="/ModelP1/dog_hospital.exerd"/>
+</file>
+<file factoryID="org.eclipse.ui.ide.FileStoreEditorInputFactory" id="com.tomato.exerd.editor.DiagramEditor" name="TEST.exerd" tooltip="C:\KAEUN\gitStudy\03. Oracle\workspace\ModelP1\TEST.exerd">
+<persistable uri="file:/C:/KAEUN/gitStudy/03.%20Oracle/workspace/ModelP1/TEST.exerd"/>
+</file>
+<file factoryID="org.eclipse.ui.ide.FileStoreEditorInputFactory" id="com.tomato.exerd.editor.DiagramEditor" name="dos_hospital.exerd" tooltip="C:\KAEUN\gitStudy\03. Oracle\workspace\ModelP1\dos_hospital.exerd">
+<persistable uri="file:/C:/KAEUN/gitStudy/03.%20Oracle/workspace/ModelP1/dos_hospital.exerd"/>
+</file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="com.tomato.exerd.editor.DiagramEditor" name="untitled.exerd" tooltip="ModelP1/untitled.exerd">
 <persistable path="/ModelP1/untitled.exerd"/>
 </file>
