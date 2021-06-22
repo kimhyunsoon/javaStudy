@@ -10,7 +10,7 @@ import java.util.*;
 import javax.swing.JOptionPane;
 
 public class ClientThread extends Thread{
-    //Sender sender; //내부클래스 Sender
+    Sender sender; //내부클래스 Sender
     EcardGUI eg; //EcardGUI 객체
     //ClientGUI cg; //ClientGUI 객체
     //Socket sc; 
@@ -27,32 +27,47 @@ public class ClientThread extends Thread{
     Login login;
     
     public ClientThread(){//채팅 소켓 생성
+        EcardGUI eg = new EcardGUI();
         String chatID = Login.nickName; // Login 에서 nickName 를 받아옴.
-		String ip = Login.IP; // Login 에서 ip를 받아옴
+		ip = Login.IP; // Login 에서 ip를 받아옴
+        
         
         try {
             //this.login = client;
             Socket sc = new Socket(ip,port);
-            Sender sender = new Sender(sc, chatID);
+            sender = new Sender(sc, chatID); //송신메소드 시작
             dis = new DataInputStream(sc.getInputStream());
-            dos = new DataOutputStream(sc.getOutputStream());
+            start(); //수신 스레드 시작
+
+
             
             //<-------이벤트리스너-------->
-            EcardGUI.text_msg.addKeyListener(new Sender(sc,chatID));
 			EcardGUI.btn_exit.addActionListener(new Sender(sc, chatID));
-			EcardGUI.btn_Ready.addActionListener(new Sender(sc, chatID));
-			EcardGUI.btn_myKing.addActionListener(new Sender(sc, chatID));
-			EcardGUI.btn_mySlav.addActionListener(new Sender(sc, chatID));
-			EcardGUI.btn_myCtzn1.addActionListener(new Sender(sc, chatID));
-			EcardGUI.btn_myCtzn2.addActionListener(new Sender(sc, chatID));
-			EcardGUI.btn_myCtzn3.addActionListener(new Sender(sc, chatID));
-			EcardGUI.btn_myCtzn4.addActionListener(new Sender(sc, chatID));
+			//EcardGUI.btn_Ready.addActionListener(new Sender(sc, chatID));
+			// EcardGUI.btn_myKing.addActionListener(new Sender(sc, chatID));
+			// EcardGUI.btn_mySlav.addActionListener(new Sender(sc, chatID));
+			// EcardGUI.btn_myCtzn1.addActionListener(new Sender(sc, chatID));
+			// EcardGUI.btn_myCtzn2.addActionListener(new Sender(sc, chatID));
+			// EcardGUI.btn_myCtzn3.addActionListener(new Sender(sc, chatID));
+			// EcardGUI.btn_myCtzn4.addActionListener(new Sender(sc, chatID));
 
-            thisThread = this;
-            start();
+            EcardGUI.text_msg.addKeyListener(new KeyAdapter(){
+                public void keyPressed(KeyEvent ke2){
+                    if(ke2.getKeyCode()== KeyEvent.VK_ENTER){
+                        msg = EcardGUI.text_msg.getText();
+                        System.out.println(msg);
+                        sender.send(msg); //내부클래스의 송신 메소드 호출
+                        EcardGUI.text_msg.setText("");
+                    }
+                }
+            });
+            //thisThread = this;
             //cg = client; //객체변수에 할당
         } catch (UnknownHostException ue){
+            pln("호스트를 찾을 수 없음");
         } catch (IOException ie) {
+            pln("서버가 닫혀있는거 같음");
+			System.exit(0);
         }
     }
 
@@ -77,26 +92,30 @@ public class ClientThread extends Thread{
         try {
             //Thread thread = Thread.currentThread();//currentThread()를 실행하는 Thread 인스턴스의 레퍼런스를 반환
             while(dis != null){
+
                 String msg = dis.readUTF();
+                System.out.println(msg);
+
                 if(msg.startsWith("//SList")){
                     playerName = msg.substring(7, msg.indexOf(" "));
                     playerScore = msg.substring(msg.indexOf(" ") + 1, msg.indexOf("#"));
                     playerIdx = msg.substring(msg.indexOf("#") + 1);
                     updateClientList(); 
+
                 }else if(msg.startsWith("//Start")){
                     gameStart = true;
-                    //ClientGUI.chatLog.append("Game Start"+ "\n");
-                    //pln("Game Start");
+                    EcardGUI.text_chatLog.append("Game Start"+ "\n");
+                    pln("Game Start");
                 }else if(msg.startsWith("//Timer")){
                     //label_Timer.setText(msg.substring(7));
                     pln(msg.substring(7));
                 }else{
-                    //ClientGUI.chatLog.append(msg + "\n");
+                    EcardGUI.text_chatLog.append(msg + "\n");
                 }
             }//while문 종료(쓰레드 종료)
-        }catch(IOException e){
+        }catch(IOExqception e){
             try{
-                //ClientGUI.chatLog.append("[ 서버와의 연결이 끊어졌습니다. ]\n[ 3초 후 프로그램을 종료합니다 .. ]");       
+                EcardGUI.text_chatLog.append("[ 서버와의 연결이 끊어졌습니다. ]\n[ 3초 후 프로그램을 종료합니다 .. ]");       
                 Thread.sleep(3000);         
                 //release();}
             }catch (InterruptedException ite) {
@@ -104,6 +123,8 @@ public class ClientThread extends Thread{
             }
             //release();
         }
+
+   
     }
     public void release(){ };
     public void pln(String str){
@@ -111,7 +132,7 @@ public class ClientThread extends Thread{
     }
 
     //내부클래스 -- 닉네임과 채팅 송신
-    public class Sender implements ActionListener, KeyListener{
+    public class Sender implements ActionListener{
         Socket sc;
         String chatID0;
         String msg;
@@ -119,16 +140,24 @@ public class ClientThread extends Thread{
         Sender(Socket sc, String chatID){
             this.sc = sc;
             this.chatID0 = chatID;
+            
+
+
+            System.out.println("test");
+            System.out.println(chatID0);
             try {
+                dos = new DataOutputStream(sc.getOutputStream());
                 dos.writeUTF(chatID);
             } catch (Exception e) {
             }           
         }
+
+
         //채팅 송신 메소드
         public void send(String msg){
             if(dos !=null){
                 try {
-                    dos.writeUTF("//Chat "+chatID+">> "+msg);
+                    dos.writeUTF("//Chat "+chatID0+">> "+msg);
                     dos.flush();
                 } catch (Exception e) {
                     //TODO: handle exception
@@ -145,14 +174,6 @@ public class ClientThread extends Thread{
                     e1.printStackTrace();
                 }
             }
-            // if(e.getSource() == ClientGUI.clearBtn){
-            //     try {
-            //         dos.writeUTF("//Press"+"//Ctzn"+chatID);
-            //         dos.flush();
-            //     } catch (IOException e1) {
-            //         e1.printStackTrace();
-            //     }
-            // }
             if(e.getSource() ==  EcardGUI.btn_Ready) {
                 try {
                     dos.writeUTF("//Ready");
@@ -170,21 +191,7 @@ public class ClientThread extends Thread{
                 }
             }
         }
-        @Override
-        public void keyTyped(KeyEvent e) {
-            // TODO Auto-generated method stub
-            
-        }
-        @Override
-        public void keyPressed(KeyEvent e) {
-            // TODO Auto-generated method stub
-            
-        }
-        @Override
-        public void keyReleased(KeyEvent e) {
-            // TODO Auto-generated method stub
-            
-        }
+
     }
 
 

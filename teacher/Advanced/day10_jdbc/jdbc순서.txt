@@ -1,0 +1,24 @@
+< JDBC 순서 >
+
+(1) 드라이버 로딩 
+    Class.forName("oracle.jdbc.driver.OracleDriver");
+
+(2) DB연결 
+    con = DriverManager.getConnection(url, usr, pwd);
+
+(3) stmt 생성 
+    stmt = con.createStatement();
+
+(4) stmt 실행 
+    - stmt.execute(sql); //그외 SQL
+    - stmt.executeUpdate(sql); //DML 
+    - stmt.executeQuery(sql); //DQL 
+
+(5) rs데이터 추출( (4)번이 select 경우)     
+    - rs.getXXX(int index);
+    - rs.getXXX(String columnName);
+
+(6) 연결객체 닫기 
+   - rs.close();
+   - stmt.close();
+   - con.close();

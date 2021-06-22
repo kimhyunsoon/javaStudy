@@ -13,7 +13,7 @@ class EcardGUI extends JFrame{
     //GUI ฐüทร
     Font font;
 	JFrame frame;
-    JTextArea text_chatLog;
+    static JTextArea text_chatLog;
 	static JTextField text_msg;
 	JScrollPane scroll;
     JPanel background;

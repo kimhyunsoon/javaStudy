@@ -50,6 +50,7 @@ public class ServerThread extends Thread{
                 clientInfo.put(pName,score); //맵에 플레이어의 이름, 점수를 저장
             }
             if(clientList.size()> ServerGUI.maxclient){ //인원수 제한
+                System.out.println("풀방");
                 //sendMessage("//Full ");
                 gtsc.close();
             }
@@ -72,7 +73,8 @@ public class ServerThread extends Thread{
             pln(pName+"님 퇴장!");
             readyPlayer.removeElement(1);
             System.out.println(readyPlayer.size());
-        } finally{
+        } 
+        finally{
             try {
                 if(dis != null) dis.close(); 
                 if(dos != null) dos.close(); 
@@ -90,6 +92,7 @@ public class ServerThread extends Thread{
         String temp = msg.substring(0,7);
         
         if(temp.equals("//Chat ")){ //채팅을 입력받았을 경우
+            pln(msg.substring(7));
             sendMessage(msg.substring(7)); 
         }else if(temp.equals("//Ready")){ //준비버튼이 입력되었을 경우
             readyPlayer.addElement(1);

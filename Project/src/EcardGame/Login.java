@@ -63,7 +63,7 @@ public class Login extends JFrame implements ActionListener {
 		tf_ip = new JTextField("127.0.0.1");
 		tf_ip.setBounds(95, 290, 306, 63);
 		tf_ip.setFont(f);
-		tf_ip.setEnabled(false);
+		tf_ip.setEnabled(true);
 		frame.add(tf_ip);
 		
 		//버튼
@@ -119,6 +119,10 @@ public class Login extends JFrame implements ActionListener {
 					IP = temp;
 					JOptionPane.showMessageDialog(null, "로그인 성공!", "ECARD GAME LOGIN", JOptionPane.INFORMATION_MESSAGE);
 					start.setEnabled(false);
+					start.setBorderPainted(false); 
+					start.setFocusPainted(false); 
+					start.setContentAreaFilled(false);
+					frame.setVisible(false);
 					tf_id.setEnabled(false);
 					setVisible(false);
 					ClientThread ct = new ClientThread();

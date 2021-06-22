@@ -82,3 +82,4 @@ create table EMP (
 
 --»Æ¿Œ
 select TNAME from TAB;
+select CONSTRAINT_NAME, TABLE_NAME from user_constraints;
