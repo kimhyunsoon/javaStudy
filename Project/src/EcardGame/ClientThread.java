@@ -113,7 +113,7 @@ public class ClientThread extends Thread{
                     EcardGUI.text_chatLog.append(msg + "\n");
                 }
             }//while문 종료(쓰레드 종료)
-        }catch(IOExqception e){
+        }catch(IOException e){
             try{
                 EcardGUI.text_chatLog.append("[ 서버와의 연결이 끊어졌습니다. ]\n[ 3초 후 프로그램을 종료합니다 .. ]");       
                 Thread.sleep(3000);         

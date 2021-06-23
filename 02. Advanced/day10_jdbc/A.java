@@ -34,6 +34,7 @@ class A
         //closeAll();
 	}
 
+	//[1] DDL
     String tname = "JDBCT";
     void createTable(){       
         
@@ -47,9 +48,22 @@ class A
         } catch (SQLException se) {
             pln("(4) " +tname+"테이블 생성 실패");
         }
-
-
     }
+
+	//[2] DML
+	void insertData(int no, String name, String phone){
+		String sql="insert into"+tname+"values("+no+",'"+name+"','"+phone+"', SYSDATE)";
+		try {
+			int i =stmt.executeUpdate(sql); //int로 반환 : 변화된 row의 갯수
+		} catch (Exception e) {
+			//TODO: handle exception
+		}
+	}
+
+
+
+
+
     void closeAll(){
 		try{
 			stmt.close();
