@@ -138,7 +138,8 @@ class A
 			System.out.println("NO \t NAME \t PHONE \t RDATE");
 			System.out.println("-----------------------------------------");
 			while(rs.next()){
-				int no = rs.getInt(1);
+				//int no = rs.getInt(1);
+				int no = rs.getInt("NO");
 				String name = rs.getString(2);
 				String phone = rs.getString(3);
 				Date rdate = rs.getDate(4);
