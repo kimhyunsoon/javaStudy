@@ -32,7 +32,7 @@ class A
 		}
 		
 		//createT();
-		//createTnoExist(); //미션!! 
+		createTnoExist(); //미션!! 
 		//dropT();
 
 		//insertD(10, "홍길동", "01012341234");
@@ -60,7 +60,18 @@ class A
 	}
 	void createTnoExist(){
         String sql = "select TABLE_NAME from user_tables where TABLE_NAME='"+tname+"'";
-		//나중에 함 해봐! 
+
+        ResultSet rs = null;
+        try{
+			rs = stmt.executeQuery(sql);  
+			boolean flag = rs.next();
+			if(!flag) createT();
+		}catch(SQLException se){
+		}finally{
+			try{
+				rs.close();
+			}catch(SQLException se){}
+		}
 	}
 	void dropT(){
 		String sql = "drop table "+tname;
@@ -138,8 +149,7 @@ class A
 			System.out.println("NO \t NAME \t PHONE \t RDATE");
 			System.out.println("-----------------------------------------");
 			while(rs.next()){
-				//int no = rs.getInt(1);
-				int no = rs.getInt("NO");
+				int no = rs.getInt(1);
 				String name = rs.getString(2);
 				String phone = rs.getString(3);
 				Date rdate = rs.getDate(4);
