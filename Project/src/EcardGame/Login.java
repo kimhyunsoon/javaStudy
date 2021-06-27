@@ -7,7 +7,7 @@ import java.awt.Image;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
-import java.net.*;
+//import java.net.*;
 import javax.imageio.ImageIO;
 import javax.sound.sampled.*;
 import javax.swing.*;
@@ -125,7 +125,7 @@ public class Login extends JFrame implements ActionListener {
 					frame.setVisible(false);
 					tf_id.setEnabled(false);
 					setVisible(false);
-					ClientThread ct = new ClientThread();
+					EcardGUI eg = new EcardGUI();
 				}else{
 					JOptionPane.showMessageDialog(null, "IP 주소를 정확하게 입력해 주세요! ", "ERROR!", JOptionPane.WARNING_MESSAGE);
 				}

@@ -3,10 +3,10 @@ package ecardGame;
 import java.io.*;
 import java.net.*;
 import java.util.*;
-import java.util.Map.Entry;
-import java.util.stream.Stream;
+// import java.util.Map.Entry;
+// import java.util.stream.Stream;
 
-import ecardGame.ServerGUI;
+//import ecardGame.ServerGUI;
 import ecardGame.ServerThread;
 
 public class ServerThread extends Thread{
@@ -56,8 +56,10 @@ public class ServerThread extends Thread{
             }
             if(client1 == "") { //client1이 비어있으면 최초로 로그인한 사람 저장
                 client1 = pName;
+                sendMessage("//King "+client1);
             } else {
                 client2 = pName;
+                sendMessage("//Slav "+client2);
             }
             System.out.println("System>> "+pName+"님이 입장하셨습니다."+clientList.size()+"명");
             sendMessage("System>> "+pName+"님이 입장하셨습니다.");
@@ -96,7 +98,6 @@ public class ServerThread extends Thread{
             sendMessage(msg.substring(7)); 
         }else if(temp.equals("//Ready")){ //준비버튼이 입력되었을 경우
             readyPlayer.addElement(1);
-            System.out.println(readyPlayer.size());
             if(readyPlayer.size()>=2&&readyPlayer.size() == clientList.size()) { //준비버튼 배열의 사이즈와 클라이언트리스트 사이즈(최대:2) 같으면 실행
                 sendMessage("[곧 게임이 시작됩니다]");
                 for(int i=3; i>0; i--){
@@ -113,34 +114,37 @@ public class ServerThread extends Thread{
         }else if(temp.equals("//Press")){//플레이어가 카드를 눌렀을 경우
             String cardType = msg.substring(7,13); //선택한 카드 저장
             String member = msg.substring(13);     //플레이어 저장
-            pln(msg);
-            if(member==client1) {
+            readyPlayer.removeAllElements();
+            if(member.equals(client1)) {
                 client1Card = cardType;
-                
-            }else if(member==client2) {
+            }else if(member.equals(client2)) {
                 client2Card = cardType;
             }
             if(!client2Card.equals("") && !client1Card.equals("")) {
+
                 switch (client1Card) {//플레이어1
                     case "//Ctzn": //플레이어1이 시민카드 냈을때
                         if(client2Card.equals("//Slav")){//플레이어2 노예
                             sendMessage(client1 +" 승 "+client2+" 패 ");
                             clientInfo.put(client1, clientInfo.get(client1)+1); //승자 점수 추가
-                            sendScore();
+                            setClientInfo();
+                            //sendScore();
                             showCard();
                             countRound();
                             client1Card = client2Card = "";
                             break;
                         }else if(client2Card.equals("//Ctzn")){//플레이어2 시민
                             sendMessage("무승부 다시 하세요");
-                            sendScore();
+                            setClientInfo();
+                            //sendScore();
                             showCard();
                             client1Card = client2Card = "";
                             break;
                         }else if(client2Card.equals("//King")){
                             sendMessage(client1 +" 패 "+client2+" 승 ");
                             clientInfo.put(client2, clientInfo.get(client2)+1); //승자 점수 추가
-                            sendScore();
+                            setClientInfo();
+                            //sendScore();
                             showCard();
                             countRound();
                             client1Card = client2Card = "";
@@ -150,7 +154,8 @@ public class ServerThread extends Thread{
                         if(client2Card.equals("//Slav")){//플레이어2 노예
                             sendMessage(client1 +" 패 "+client2+" 승 ");
                             clientInfo.put(client2, clientInfo.get(client2)+1); //승자 점수 추가
-                            sendScore();
+                            setClientInfo();
+                            //sendScore();
                             showCard();
                             countRound();
                             client1Card = client2Card = "";
@@ -158,7 +163,8 @@ public class ServerThread extends Thread{
                         }else if(client2Card.equals("//Ctzn")){//플레이어2 시민
                             sendMessage(client1 +" 승 "+client2+" 패 ");
                             clientInfo.put(client1, clientInfo.get(client1)+1); //승자 점수 추가
-                            sendScore();
+                            setClientInfo();
+                            //sendScore();
                             showCard();
                             countRound();
                             client1Card = client2Card = "";
@@ -168,7 +174,8 @@ public class ServerThread extends Thread{
                         if(client2Card.equals("//King")){//플레이어2 왕
                             sendMessage(client1 +" 승 "+client2+" 패 ");
                             clientInfo.put(client1, clientInfo.get(client1)+1); //승자 점수 추가
-                            sendScore();
+                            setClientInfo();
+                            //sendScore();
                             showCard();
                             countRound();
                             client1Card = client2Card = "";
@@ -176,7 +183,8 @@ public class ServerThread extends Thread{
                         }else if(client2Card.equals("//Ctzn")){//플레이어2 시민
                             sendMessage(client1 +" 패 "+client2+" 승 ");
                             clientInfo.put(client2, clientInfo.get(client2)+1); //승자 점수 추가
-                            sendScore();
+                            setClientInfo();
+                            //sendScore();
                             showCard();
                             countRound();
                             client1Card = client2Card = "";
@@ -208,7 +216,7 @@ public class ServerThread extends Thread{
     public void setClientInfo(){ //clientInfo  key값은 플레이어명, value값은 스코어
         String[] keys = new String[clientInfo.size()];
         int[] values = new int[clientInfo.size()];
-        String[] client = new String[2];
+        //String[] client = new String[2];
         int index = 0;
         for(Map.Entry<String, Integer> mapEntry : clientInfo.entrySet()){
             keys[index] = mapEntry.getKey();
@@ -218,7 +226,7 @@ public class ServerThread extends Thread{
         for(int i=0; i<clientList.size(); i++){
             sendMessage("//SList" + keys[i] + " " + values[i] + "#" + i); 
             System.out.println("//SList" + keys[i] + " " + values[i] + "#" + i);
-            client[i] = keys[i];
+            //client[i] = keys[i];
             //System.out.println(client[i]);
         }
 
@@ -227,8 +235,8 @@ public class ServerThread extends Thread{
     public void sendScore(){ //예약어와 함께 플레이어 이름, 점수 송신
         sendMessage("//CList"+client1+" "+clientInfo.get(client1));
         sendMessage("//CList"+client2+" "+clientInfo.get(client2));
-        sendMessage("//Times"+client1);
-        sendMessage("//Times"+client2);
+        // sendMessage("//Times"+client1);
+        // sendMessage("//Times"+client2);
     }
 
     public void showCard(){
@@ -264,7 +272,7 @@ public class ServerThread extends Thread{
 					sleep(10);
 					long time = System.currentTimeMillis() - preTime;
 					sendMessage("//Timer" + (toTime(time)));
-                    pln("//Timer" + (toTime(time)));
+                    //pln("//Timer" + (toTime(time)));
                     sleep(1000);
 					if(toTime(time).equals("00 : 00")){
 						sendMessage("//GmEnd"); // 시간 초과시, 게임 종료

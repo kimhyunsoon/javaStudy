@@ -1,8 +1,8 @@
 package ecardGame;
 import java.awt.*;
-import java.awt.event.*;
+//import java.awt.event.*;
 import java.io.*;
-import java.net.*;
+//import java.net.*;
 import java.util.*;
 
 import javax.imageio.*;
@@ -17,100 +17,43 @@ class EcardGUI extends JFrame{
 	static JTextField text_msg;
 	JScrollPane scroll;
     JPanel background;
-    JLabel jTimer,tenTimer;
-	ImageIcon img_king, img_slav, img_ctzn1, img_ctzn2, img_ctzn3, img_ctzn4, img_chatLog, img_msg, img_background, img_ready, img_exit, img_backCard; //기본 이미지
-	ImageIcon change_img_king, change_img_slav, change_img_ctzn1, change_img_ctzn2, change_img_ctzn3, change_img_ctzn4, change_img_chatLog, change_img_msg,
-				change_img_background, change_img_ready, change_img_exit, change_img_backCard; //크기 변경후 이미지
-	Image i_king, i_slav, i_ctzn1, i_ctzn2, i_ctzn3, i_ctzn4, i_chatLog, i_msg, i_background, i_ready, i_exit, i_backCard; // 기본 아이콘 -> 이미지
-	Image change_i_king, change_i_slav, change_i_ctzn1, change_i_ctzn2, change_i_ctzn3, change_i_ctzn4, change_i_chatLog, change_i_msg, change_i_background,
-			change_i_ready, change_i_exit, change_i_backCard; // 이미지 크기 변경후 -> 아이콘으로 이동
+    static JLabel jTimer,tenTimer;
+	static JLabel jSlave, jKing;
+	static JLabel yLabel, mLabel;
+	static JLabel yourScore1, yourScore2, myScore1, myScore2;
+	ImageIcon img_king, img_slav, img_ctzn1, img_ctzn2, img_ctzn3, img_ctzn4, img_background, img_ready, img_exit, img_backCard, slaveSet, kingSet;
+	
 	static JButton btn_myKing, btn_mySlav, btn_myCtzn1, btn_myCtzn2, btn_myCtzn3, btn_myCtzn4;
-	static JButton btn_yourKing, btn_yourSlav, btn_yourCtzn1, btn_yourCtzn2, btn_yourCtzn3, btn_yourCtzn4;
 	static JButton btn_myBack, btn_yourBack;
 	static JButton btn_Ready, btn_exit;
 
     //지우면 안됨
 	private static final long serialVersionUID = 1L;
-    //String path = ServerGUI.class.getResource("").getPath();
     public static ClientThread ccThread; //ClientThread 객체
     public static EcardGUI ecardGUI; //자기 자신의 객체
 
-    //지울 예정
-	String playerName1, playerScore, playerIdx,playerName2; 
-	public static LinkedList<String> playerName = new LinkedList<String>();
-	public static HashMap<String, String> map = new HashMap<String, String>();
-	public static HashMap<String, String> ctzn = new HashMap<String, String>();
-	int port = 7777;
 	
 	
 	EcardGUI() {
 		loadImg();
 		setPanel();
+		ClientThread ccThread= new ClientThread();
+		ccThread.startChat();
 	}
 
 	void loadImg() {
 		try {
 			img_king = new ImageIcon(ImageIO.read(new File("img/king.png")));
-			i_king = img_king.getImage();
-			change_i_king = i_king.getScaledInstance(150, 238, Image.SCALE_SMOOTH);
-			change_img_king = new ImageIcon(change_i_king);
-			
 			img_slav = new ImageIcon(ImageIO.read(new File("img/slav.png")));
-			i_slav = img_slav.getImage();
-			change_i_slav = i_slav.getScaledInstance(150, 238, Image.SCALE_SMOOTH);
-			change_img_slav = new ImageIcon(change_i_slav);
-			
 			img_ctzn1 = new ImageIcon(ImageIO.read(new File("img/ctzn1.png")));
-			i_ctzn1 = img_ctzn1.getImage();
-			change_i_ctzn1 = i_ctzn1.getScaledInstance(150, 238, Image.SCALE_SMOOTH);
-			change_img_ctzn1 = new ImageIcon(change_i_ctzn1);
-			
 			img_ctzn2 = new ImageIcon(ImageIO.read(new File("img/ctzn2.png")));
-			i_ctzn2 = img_ctzn2.getImage();
-			change_i_ctzn2 = i_ctzn2.getScaledInstance(150, 238, Image.SCALE_SMOOTH);
-			change_img_ctzn2 = new ImageIcon(change_i_ctzn2);
-			
 			img_ctzn3 = new ImageIcon(ImageIO.read(new File("img/ctzn3.png")));
-			i_ctzn3 = img_ctzn3.getImage();
-			change_i_ctzn3 = i_ctzn3.getScaledInstance(150, 238, Image.SCALE_SMOOTH);
-			change_img_ctzn3 = new ImageIcon(change_i_ctzn3);
-			
 			img_ctzn4 = new ImageIcon(ImageIO.read(new File("img/ctzn4.png")));
-			i_ctzn4 = img_ctzn4.getImage();
-			change_i_ctzn4 = i_ctzn4.getScaledInstance(150, 238, Image.SCALE_SMOOTH);
-			change_img_ctzn4 = new ImageIcon(change_i_ctzn4);
-			
-			/*img_chatLog = new ImageIcon(ImageIO.read(new File("")));
-			i_chatLog = img_chatLog.getImage();
-			change_i_chatLog = i_chatLog.getScaledInstance(150, 238, Image.SCALE_SMOOTH);
-			change_img_chatLog = new ImageIcon(change_i_chatLog);
-			
-			img_msg = new ImageIcon(ImageIO.read(new File("")));
-			i_msg = img_msg.getImage();
-			change_i_msg = i_msg.getScaledInstance(150, 238, Image.SCALE_SMOOTH);
-			change_img_msg = new ImageIcon(change_i_msg);
-			
-			img_background = new ImageIcon(ImageIO.read(new File("")));
-			i_background = img_background.getImage();
-			change_i_background = i_background.getScaledInstance(150, 238, Image.SCALE_SMOOTH);
-			change_img_background = new ImageIcon(change_i_background);*/
-			
-			img_ready = new ImageIcon(ImageIO.read(new File("img/read.png")));
-			i_ready = img_ready.getImage();
-			change_i_ready = i_ready.getScaledInstance(320, 90, Image.SCALE_SMOOTH);
-			change_img_ready = new ImageIcon(change_i_ready);
-
+			img_ready = new ImageIcon(ImageIO.read(new File("img/ready.png")));
 			img_exit = new ImageIcon(ImageIO.read(new File("img/exit.png")));
-			i_exit = img_exit.getImage();
-			change_i_exit = i_exit.getScaledInstance(320, 90, Image.SCALE_SMOOTH);
-			change_img_exit = new ImageIcon(change_i_exit);
-			
 			img_backCard = new ImageIcon(ImageIO.read(new File("img/backCard.png")));
-			i_backCard = img_backCard.getImage();
-			change_i_backCard = i_backCard.getScaledInstance(150, 238, Image.SCALE_SMOOTH);
-			change_img_backCard = new ImageIcon(change_i_backCard);
-			
-			
+			slaveSet = new ImageIcon(ImageIO.read(new File("img/slaveSet.png")));
+			kingSet = new ImageIcon(ImageIO.read(new File("img/kingSet.png")));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -135,55 +78,94 @@ class EcardGUI extends JFrame{
 		}
 
 		jTimer = new JLabel("30");
-		tenTimer = new JLabel("10");
-		tenTimer.setFont(font);
 		jTimer.setFont(font);
 		jTimer.setLayout(null);
 		jTimer.setBounds(1300, 120, 150, 150);
-		tenTimer.setLayout(null);
-		tenTimer.setBounds(1300, 120, 150, 150);
-		tenTimer.setVisible(false);
 
-		btn_myKing = new JButton(change_img_king); btn_mySlav = new JButton(change_img_slav);
-		btn_myCtzn1 = new JButton(change_img_ctzn1); btn_myCtzn2 = new JButton(change_img_ctzn2);
-		btn_myCtzn3 = new JButton(change_img_ctzn3); btn_myCtzn4 = new JButton(change_img_ctzn4);
-		btn_yourKing = new JButton(change_img_king); btn_yourSlav = new JButton(change_img_slav);
-		btn_yourCtzn1 = new JButton(change_img_ctzn1); btn_yourCtzn2 = new JButton(change_img_ctzn2);
-		btn_yourCtzn3 = new JButton(change_img_ctzn3); btn_yourCtzn4 = new JButton(change_img_ctzn4);
-		btn_Ready = new JButton(change_img_ready); btn_exit = new JButton(change_img_exit);
-		btn_myBack = new JButton(change_img_backCard); btn_yourBack = new JButton(change_img_backCard);
+		jKing = new JLabel(kingSet);
+		jKing.setBounds(390,80,790,238);
+		jSlave = new JLabel(slaveSet);
+		jSlave.setBounds(390,80,790,238);
+
+		Color color = new Color(0xf4ead0);
+		
+		yLabel = new JLabel("[ 상대방 점수 ]");
+		yLabel.setForeground(color);
+		yLabel.setFont(new Font("맑은 고딕", Font.BOLD, 20));
+		yLabel.setBounds(155, 270, 300, 150);
+		mLabel = new JLabel("[ 내 점수 ]");
+		mLabel.setForeground(color);
+		mLabel.setFont(new Font("맑은 고딕", Font.BOLD, 20));
+		mLabel.setBounds(170, 430, 300, 150);
+
+
+		yourScore1 = new JLabel("0");
+		yourScore1.setForeground(color);
+		yourScore1.setFont(new Font("맑은 고딕", Font.BOLD, 70));
+		yourScore1.setBounds(200, 325, 150, 150);
+		yourScore2 = new JLabel("0");
+		yourScore2.setForeground(color);
+		yourScore2.setFont(new Font("맑은 고딕", Font.BOLD, 70));
+		yourScore2.setBounds(200, 325, 150, 150);
+		myScore1 = new JLabel("0");
+		myScore1.setForeground(color);
+		myScore1.setFont(new Font("맑은 고딕", Font.BOLD, 70));
+		myScore1.setBounds(200, 485, 150, 150);
+		myScore2 = new JLabel("0");
+		myScore2.setForeground(color);
+		myScore2.setFont(new Font("맑은 고딕", Font.BOLD, 70));
+		myScore2.setBounds(200, 485, 150, 150);
+		btn_myKing = new JButton(img_king); 
+		btn_mySlav = new JButton(img_slav);
+		btn_myCtzn1 = new JButton(img_ctzn1); 
+		btn_myCtzn2 = new JButton(img_ctzn2);
+		btn_myCtzn3 = new JButton(img_ctzn3); 
+		btn_myCtzn4 = new JButton(img_ctzn4);
+		
+		btn_Ready = new JButton(img_ready); 
+		btn_exit = new JButton(img_exit);
+		btn_myBack = new JButton(img_backCard); 
+		btn_yourBack = new JButton(img_backCard);
 		
         
-        text_chatLog = new JTextArea(); text_msg = new JTextField();
+        text_chatLog = new JTextArea(); 
+		text_msg = new JTextField();
 		scroll = new JScrollPane(text_chatLog);
 		
 		
 		background.setBounds(0, 0, 1580, 960);
 		
-		btn_yourKing.setBounds(390, 80, 150, 238); btn_yourCtzn1.setBounds(550, 80, 150, 238); 
-		btn_yourCtzn2.setBounds(710, 80, 150, 238); btn_yourCtzn3.setBounds(870, 80, 150, 238);
-		btn_yourCtzn4.setBounds(1030, 80, 150, 238); btn_yourSlav.setBounds(390, 80, 150, 238);
-		btn_myKing.setBounds(390, 640, 150, 238); btn_myCtzn1.setBounds(550, 640, 150, 238);
-		btn_myCtzn2.setBounds(710, 640, 150, 238); btn_myCtzn3.setBounds(870, 640, 150, 238);
-		btn_myCtzn4.setBounds(1030, 640, 150, 238); btn_mySlav.setBounds(390, 640, 150, 238);
-		btn_yourBack.setBounds(630, 328, 150, 238); btn_myBack.setBounds(790, 392, 150, 238);
-		btn_Ready.setBounds(60, 660, 320, 90); btn_exit.setBounds(60, 780, 320, 90);
 		
-		scroll.setBounds(1200, 318, 330, 510); text_msg.setBounds(1200, 828, 330, 50);
+		btn_myKing.setBounds(390, 640, 150, 238); 
+		btn_myCtzn1.setBounds(550, 640, 150, 238);
+		btn_myCtzn2.setBounds(710, 640, 150, 238); 
+		btn_myCtzn3.setBounds(870, 640, 150, 238);
+		btn_myCtzn4.setBounds(1030, 640, 150, 238); 
+		btn_mySlav.setBounds(390, 640, 150, 238);
+		btn_yourBack.setBounds(630, 328, 150, 238); 
+		btn_myBack.setBounds(790, 392, 150, 238);
+		btn_Ready.setBounds(60, 660, 320, 90); 
+		btn_exit.setBounds(60, 780, 320, 90);
+		
+		scroll.setBounds(1200, 318, 330, 510); 
+		text_msg.setBounds(1200, 828, 330, 50);
 		
 		frame.add(btn_myKing); frame.add(btn_myCtzn1); frame.add(btn_myCtzn2);
 		frame.add(btn_myCtzn3); frame.add(btn_myCtzn4); frame.add(btn_mySlav);
-		frame.add(btn_yourSlav); frame.add(btn_yourCtzn1); frame.add(btn_yourCtzn2);
-		frame.add(btn_yourCtzn3); frame.add(btn_yourCtzn4); frame.add(btn_yourKing);
+
+		frame.add(jKing); frame.add(jSlave);
+		frame.add(yLabel); frame.add(mLabel);
+		frame.add(yourScore1); frame.add(yourScore2);
+		frame.add(myScore1); frame.add(myScore2);
+		
 		frame.add(btn_myBack); frame.add(btn_yourBack);
 		frame.add(btn_Ready); frame.add(btn_exit);
 		frame.add(scroll);
 		//frame.add(text_chatLog); 
 		frame.add(text_msg);
-		frame.add(jTimer); frame.add(tenTimer);
+		frame.add(jTimer);
 		frame.add(background);
-		
-        //btn_exit.addActionListener(this);
+
 		revalidate();
 		repaint();
 		frame.getContentPane().setLayout(null);

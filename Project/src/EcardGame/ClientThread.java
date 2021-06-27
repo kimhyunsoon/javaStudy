@@ -1,16 +1,18 @@
 package ecardGame;
-import ecardGame.EcardGUI;
-import ecardGame.Login;
+// import ecardGame.EcardGUI;
+// import ecardGame.Login;
 
-import java.awt.*;
+// import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
-import javax.swing.JOptionPane;
+// import javax.swing.JOptionPane;
 
-public class ClientThread extends Thread{
+
+public class ClientThread extends Thread implements ActionListener{
     Sender sender; //내부클래스 Sender
+    
     EcardGUI eg; //EcardGUI 객체
     //ClientGUI cg; //ClientGUI 객체
     //Socket sc; 
@@ -25,9 +27,12 @@ public class ClientThread extends Thread{
     boolean gameStart; 
     String playerName, playerScore, playerIdx; 
     Login login;
+    public static LinkedList<String> cardHost = new LinkedList<String>();
+
     
-    public ClientThread(){//채팅 소켓 생성
-        EcardGUI eg = new EcardGUI();
+    public void startChat(){//채팅 소켓 생성
+        //EcardGUI eg = new EcardGUI();
+        disableBtn();
         String chatID = Login.nickName; // Login 에서 nickName 를 받아옴.
 		ip = Login.IP; // Login 에서 ip를 받아옴
         
@@ -36,31 +41,35 @@ public class ClientThread extends Thread{
             //this.login = client;
             Socket sc = new Socket(ip,port);
             sender = new Sender(sc, chatID); //송신메소드 시작
-            dis = new DataInputStream(sc.getInputStream());
+            Listener listener = new Listener(sc);
+            new Thread(sender).start();
+            new Thread(listener).start();
+            // dis = new DataInputStream(sc.getInputStream());
             start(); //수신 스레드 시작
 
 
             
             //<-------이벤트리스너-------->
+            EcardGUI.text_msg.addKeyListener(new Sender(sc, chatID));
 			EcardGUI.btn_exit.addActionListener(new Sender(sc, chatID));
-			//EcardGUI.btn_Ready.addActionListener(new Sender(sc, chatID));
-			// EcardGUI.btn_myKing.addActionListener(new Sender(sc, chatID));
-			// EcardGUI.btn_mySlav.addActionListener(new Sender(sc, chatID));
-			// EcardGUI.btn_myCtzn1.addActionListener(new Sender(sc, chatID));
-			// EcardGUI.btn_myCtzn2.addActionListener(new Sender(sc, chatID));
-			// EcardGUI.btn_myCtzn3.addActionListener(new Sender(sc, chatID));
-			// EcardGUI.btn_myCtzn4.addActionListener(new Sender(sc, chatID));
+			EcardGUI.btn_Ready.addActionListener(new Sender(sc, chatID));
+			EcardGUI.btn_myKing.addActionListener(new Sender(sc, chatID));
+			EcardGUI.btn_mySlav.addActionListener(new Sender(sc, chatID));
+			EcardGUI.btn_myCtzn1.addActionListener(new Sender(sc, chatID));
+			EcardGUI.btn_myCtzn2.addActionListener(new Sender(sc, chatID));
+			EcardGUI.btn_myCtzn3.addActionListener(new Sender(sc, chatID));
+			EcardGUI.btn_myCtzn4.addActionListener(new Sender(sc, chatID));
 
-            EcardGUI.text_msg.addKeyListener(new KeyAdapter(){
-                public void keyPressed(KeyEvent ke2){
-                    if(ke2.getKeyCode()== KeyEvent.VK_ENTER){
-                        msg = EcardGUI.text_msg.getText();
-                        System.out.println(msg);
-                        sender.send(msg); //내부클래스의 송신 메소드 호출
-                        EcardGUI.text_msg.setText("");
-                    }
-                }
-            });
+            // EcardGUI.text_msg.addKeyListener(new KeyAdapter(){
+            //     public void keyPressed(KeyEvent ke2){
+            //         if(ke2.getKeyCode()== KeyEvent.VK_ENTER){
+            //             msg = EcardGUI.text_msg.getText();
+            //             System.out.println(msg);
+            //             sender.send(msg); //내부클래스의 송신 메소드 호출
+            //             EcardGUI.text_msg.setText("");
+            //         }
+            //     }
+            // });
             //thisThread = this;
             //cg = client; //객체변수에 할당
         } catch (UnknownHostException ue){
@@ -73,66 +82,122 @@ public class ClientThread extends Thread{
 
     public void updateClientList(){
         if(Integer.parseInt(playerIdx)==0){
-            pln("플레이어1: "+playerName+" >>황제를 셋팅합니다");
-            pln("플레이어1 번호: "+playerIdx);
+
+            EcardGUI.myScore1.setText(playerScore);
+            EcardGUI.yourScore2.setText(playerScore);
             deleteClientList();
         }else if(Integer.parseInt(playerIdx) == 1){
-            pln("플레이어2: "+playerName+" >>노예를 셋팅합니다");
-            pln("플레이어2 번호: "+playerIdx);
+            EcardGUI.myScore2.setText(playerScore);
+            EcardGUI.yourScore1.setText(playerScore);
+            deleteClientList();
         }
     }
     public void deleteClientList(){
         if(Integer.parseInt(playerIdx)==0){
             pln("1명이 들어와있음");
+
         }
     }
 
-    //수신하는 쓰레드
-    public void run(){
-        try {
-            //Thread thread = Thread.currentThread();//currentThread()를 실행하는 Thread 인스턴스의 레퍼런스를 반환
-            while(dis != null){
-
-                String msg = dis.readUTF();
-                System.out.println(msg);
-
-                if(msg.startsWith("//SList")){
-                    playerName = msg.substring(7, msg.indexOf(" "));
-                    playerScore = msg.substring(msg.indexOf(" ") + 1, msg.indexOf("#"));
-                    playerIdx = msg.substring(msg.indexOf("#") + 1);
-                    updateClientList(); 
-
-                }else if(msg.startsWith("//Start")){
-                    gameStart = true;
-                    EcardGUI.text_chatLog.append("Game Start"+ "\n");
-                    pln("Game Start");
-                }else if(msg.startsWith("//Timer")){
-                    //label_Timer.setText(msg.substring(7));
-                    pln(msg.substring(7));
-                }else{
-                    EcardGUI.text_chatLog.append(msg + "\n");
-                }
-            }//while문 종료(쓰레드 종료)
-        }catch(IOException e){
-            try{
-                EcardGUI.text_chatLog.append("[ 서버와의 연결이 끊어졌습니다. ]\n[ 3초 후 프로그램을 종료합니다 .. ]");       
-                Thread.sleep(3000);         
-                //release();}
-            }catch (InterruptedException ite) {
-                System.out.println(ite);
-            }
-            //release();
-        }
-
-   
-    }
-    public void release(){ };
     public void pln(String str){
         System.out.println(str);
     }
 
+    void enableBtn() {
+        EcardGUI.btn_myKing.setEnabled(true);
+        EcardGUI.btn_mySlav.setEnabled(true);
+        EcardGUI.btn_myCtzn1.setEnabled(true);
+        EcardGUI.btn_myCtzn2.setEnabled(true);
+        EcardGUI.btn_myCtzn3.setEnabled(true);
+        EcardGUI.btn_myCtzn4.setEnabled(true);
+    }
+
+    void disableBtn() {
+        EcardGUI.btn_myKing.setEnabled(false);
+        EcardGUI.btn_mySlav.setEnabled(false);
+        EcardGUI.btn_myCtzn1.setEnabled(false);
+        EcardGUI.btn_myCtzn2.setEnabled(false);
+        EcardGUI.btn_myCtzn3.setEnabled(false);
+        EcardGUI.btn_myCtzn4.setEnabled(false);
+    }
+
+    //수신하는 쓰레드
+    class Listener extends Thread{
+        Socket sc;
+        DataInputStream dis;
+
+        Listener(Socket sc){
+            this.sc = sc;
+            try {
+                dis = new DataInputStream(sc.getInputStream());
+            } catch (IOException ie) {
+            }
+        }
+
+        public void run(){
+            while(dis !=null){
+                try {
+                    String msg = dis.readUTF();
+                    System.out.println(msg);
+                    //먼저 들어온 플레이어에게 왕 카드 셋팅
+                    if(msg.startsWith("//King ") && msg.indexOf(cardHost.get(0)) != -1){
+                        EcardGUI.btn_mySlav.setVisible(false);
+                        EcardGUI.btn_myKing.setVisible(true);
+                        EcardGUI.jKing.setVisible(false);
+                        EcardGUI.jSlave.setVisible(true);
+                        EcardGUI.myScore2.setVisible(false);
+                        EcardGUI.myScore1.setVisible(true);
+                        EcardGUI.yourScore2.setVisible(false);
+                        EcardGUI.yourScore1.setVisible(true);
+                        
+                        
+                    }else if(msg.startsWith("//Slav ") && msg.indexOf(cardHost.get(0)) != -1){
+                        EcardGUI.btn_myKing.setVisible(false);
+                        EcardGUI.btn_mySlav.setVisible(true);
+                        EcardGUI.jSlave.setVisible(false);
+                        EcardGUI.jKing.setVisible(true);
+                        EcardGUI.myScore1.setVisible(false);
+                        EcardGUI.myScore2.setVisible(true);
+                        EcardGUI.yourScore1.setVisible(false);
+                        EcardGUI.yourScore2.setVisible(true);
+                        
+                    }
+                    if(msg.startsWith("//SList")){
+                        playerName = msg.substring(7, msg.indexOf(" "));
+                        playerScore = msg.substring(msg.indexOf(" ") + 1, msg.indexOf("#"));
+                        playerIdx = msg.substring(msg.indexOf("#") + 1);
+                        updateClientList();
+                        EcardGUI.btn_Ready.setEnabled(true); 
+    
+                    }else if(msg.startsWith("//Start")){
+                        enableBtn();
+                        gameStart = true;
+                        EcardGUI.text_chatLog.append("Game Start"+ "\n");
+                        pln("Game Start");
+                    }else if(msg.startsWith("//Timer")){
+                        EcardGUI.jTimer.setText(msg.substring(7));
+                        //pln(msg.substring(7));
+                    }else{
+                        EcardGUI.text_chatLog.append(msg + "\n");
+                    }
+                } catch (IOException io) {
+                    EcardGUI.text_chatLog.append("[ 서버와의 연결이 끊어졌습니다. ]\n[ 3초 후 프로그램을 종료합니다 .. ]");     
+                    try{
+                        Thread.sleep(3000);         
+                        System.exit(0);
+                    }catch (InterruptedException ite) {
+                        System.out.println(ite);
+                    }
+                }
+            }
+       
+        }
+        
+    }
+
+
     //내부클래스 -- 닉네임과 채팅 송신
-    public class Sender implements ActionListener{
+    public class Sender extends Thread implements KeyListener, ActionListener{
         Socket sc;
         String chatID0;
         String msg;
@@ -140,58 +205,115 @@ public class ClientThread extends Thread{
         Sender(Socket sc, String chatID){
             this.sc = sc;
             this.chatID0 = chatID;
-            
-
-
-            System.out.println("test");
-            System.out.println(chatID0);
             try {
-                dos = new DataOutputStream(sc.getOutputStream());
-                dos.writeUTF(chatID);
+                dos = new DataOutputStream(this.sc.getOutputStream());
             } catch (Exception e) {
             }           
         }
 
+        public void run(){
+            try {
+                dos.writeUTF(chatID0);
+                cardHost.add(chatID0);
+            } catch (IOException ie) {
+            }
+        }
 
-        //채팅 송신 메소드
-        public void send(String msg){
-            if(dos !=null){
+        public void keyPressed(KeyEvent ke){
+            if(ke.getKeyCode() == KeyEvent.VK_ENTER){
+                msg = EcardGUI.text_msg.getText();
+                System.out.println(msg);
+                EcardGUI.text_msg.setText("");
                 try {
                     dos.writeUTF("//Chat "+chatID0+">> "+msg);
                     dos.flush();
-                } catch (Exception e) {
-                    //TODO: handle exception
+                } catch (IOException ie) {
                 }
             }
         }
+        public void keyTyped(KeyEvent e){}
+		public void keyReleased(KeyEvent e){}
+
         public void actionPerformed(ActionEvent e){
-            if(e.getSource() == EcardGUI.btn_myKing){
-                System.out.println("//Press"+"//King"+chatID);
-                try {
-                    dos.writeUTF("//Press"+"//King"+chatID);
-                    dos.flush();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-            }
             if(e.getSource() ==  EcardGUI.btn_Ready) {
                 try {
                     dos.writeUTF("//Ready");
                     dos.flush();
+                    EcardGUI.btn_Ready.setEnabled(false);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+            if(e.getSource() == EcardGUI.btn_myKing){
+                try {
+                    dos.writeUTF("//Press"+"//King"+chatID0);
+                    EcardGUI.text_chatLog.append("[ 당신이 선택한 카드는 <King> 카드입니다 .. ] \n");
+                    EcardGUI.btn_myKing.setEnabled(false);
+                    dos.flush();
+
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
             }
             if(e.getSource() == EcardGUI.btn_mySlav){
                 try {
-                    dos.writeUTF("//Press"+"//Slav"+chatID);
+                    dos.writeUTF("//Press"+"//Slav"+chatID0);
+                    EcardGUI.text_chatLog.append("[ 당신이 선택한 카드는 <Slave> 카드입니다 .. ] \n");
+                    EcardGUI.btn_mySlav.setEnabled(false);
                     dos.flush();
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
             }
+            if(e.getSource()== EcardGUI.btn_myCtzn1){
+                try {
+                    dos.writeUTF("//Press"+"//Ctzn"+chatID0);
+                    EcardGUI.text_chatLog.append("[ 당신이 선택한 카드는 <citizen> 카드입니다 .. ] \n");
+                    EcardGUI.btn_myCtzn1.setEnabled(false);
+                    dos.flush();
+                } catch (IOException e1) {
+                    //TODO: handle exception
+                }
+            }
+            if(e.getSource()== EcardGUI.btn_myCtzn2){
+                try {
+                    dos.writeUTF("//Press"+"//Ctzn"+chatID0);
+                    EcardGUI.text_chatLog.append("[ 당신이 선택한 카드는 <citizen> 카드입니다 .. ] \n");
+                    EcardGUI.btn_myCtzn2.setEnabled(false);
+                    dos.flush();
+                } catch (IOException e1) {
+                    //TODO: handle exception
+                }
+            }
+            if(e.getSource()== EcardGUI.btn_myCtzn3){
+                try {
+                    dos.writeUTF("//Press"+"//Ctzn"+chatID0);
+                    EcardGUI.text_chatLog.append("[ 당신이 선택한 카드는 <citizen> 카드입니다 .. ] \n");
+                    EcardGUI.btn_myCtzn3.setEnabled(false);
+                    dos.flush();
+                } catch (IOException e1) {
+                    //TODO: handle exception
+                }
+            }
+            if(e.getSource()== EcardGUI.btn_myCtzn4){
+                try {
+                    dos.writeUTF("//Press"+"//Ctzn"+chatID0);
+                    EcardGUI.text_chatLog.append("[ 당신이 선택한 카드는 <citizen> 카드입니다 .. ] \n");
+                    EcardGUI.btn_myCtzn4.setEnabled(false);
+                    dos.flush();
+                } catch (IOException e1) {
+                    //TODO: handle exception
+                }
+            }
         }
 
+    }
+
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        // TODO Auto-generated method stub
+        
     }
 
 
