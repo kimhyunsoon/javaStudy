@@ -136,21 +136,23 @@ public class ClientThread extends Thread implements ActionListener{
                     if(msg.startsWith("//Chnge")){
                         String temp = msg.substring(7,13);
                         String cName = msg.substring(msg.indexOf(" ")+1);
-                        pln(temp); //교체될 카드 타입
-                        pln(cName); //플레이어 저장
-                        invisibleCard();
+                        pln(temp + " 카드카드"); //교체될 카드 타입
+                        pln(cName + " 플레이어"); //플레이어 저장
+                        // invisibleCard();
                         EcardGUI.btn_Ready.setEnabled(false);
-                        if(cName.equals(cardHost.get(0))){
-                            EcardGUI.btn_myKing.setVisible(false);
-                            EcardGUI.btn_mySlav.setVisible(true);
-                            EcardGUI.jSlave.setVisible(false);
-                            EcardGUI.jKing.setVisible(true);
-                        }else if(cName.equals(cardHost.get(1))){
+                        if(temp.equals("//King") && cName.equals(cardHost.get(0))){
                             EcardGUI.btn_mySlav.setVisible(false);
                             EcardGUI.btn_myKing.setVisible(true);
                             EcardGUI.jKing.setVisible(false);
                             EcardGUI.jSlave.setVisible(true);
+                            
+                        }else if(temp.equals("//Slav") && cName.equals(cardHost.get(0))){
+                            EcardGUI.btn_myKing.setVisible(false);
+                            EcardGUI.btn_mySlav.setVisible(true);
+                            EcardGUI.jSlave.setVisible(false);
+                            EcardGUI.jKing.setVisible(true);
                         }
+                    
 
 
                     }
