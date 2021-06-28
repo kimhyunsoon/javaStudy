@@ -11,19 +11,14 @@ import java.util.*;
 
 
 public class ClientThread extends Thread implements ActionListener{
-    Sender sender; //내부클래스 Sender
-    
-    EcardGUI eg; //EcardGUI 객체
-    //ClientGUI cg; //ClientGUI 객체
-    //Socket sc; 
+    Sender sender; //내부클래스 Sender    
+    Listener listener; //내부클래스 Listener
     int port = 4003;
     DataInputStream dis;
     DataOutputStream dos;
-    Thread thisThread; 
     String chatID;
     String msg;
     String ip;
-    //String ip = "127.0.0.1"; // Login 에서 ip를 받아옴
     boolean gameStart; 
     String playerName, playerScore, playerIdx; 
     Login login;
@@ -31,24 +26,17 @@ public class ClientThread extends Thread implements ActionListener{
 
     
     public void startChat(){//채팅 소켓 생성
-        //EcardGUI eg = new EcardGUI();
-        disableBtn();
-        String chatID = Login.nickName; // Login 에서 nickName 를 받아옴.
+        disableBtn(); //카드 버튼 비활성화
+        chatID = Login.nickName; // Login 에서 nickName 를 받아옴.
 		ip = Login.IP; // Login 에서 ip를 받아옴
-        
-        
+
         try {
-            //this.login = client;
             Socket sc = new Socket(ip,port);
-            sender = new Sender(sc, chatID); //송신메소드 시작
-            Listener listener = new Listener(sc);
+            sender = new Sender(sc, chatID);
+            listener = new Listener(sc);
             new Thread(sender).start();
             new Thread(listener).start();
-            // dis = new DataInputStream(sc.getInputStream());
-            start(); //수신 스레드 시작
 
-
-            
             //<-------이벤트리스너-------->
             EcardGUI.text_msg.addKeyListener(new Sender(sc, chatID));
 			EcardGUI.btn_exit.addActionListener(new Sender(sc, chatID));
@@ -59,19 +47,6 @@ public class ClientThread extends Thread implements ActionListener{
 			EcardGUI.btn_myCtzn2.addActionListener(new Sender(sc, chatID));
 			EcardGUI.btn_myCtzn3.addActionListener(new Sender(sc, chatID));
 			EcardGUI.btn_myCtzn4.addActionListener(new Sender(sc, chatID));
-
-            // EcardGUI.text_msg.addKeyListener(new KeyAdapter(){
-            //     public void keyPressed(KeyEvent ke2){
-            //         if(ke2.getKeyCode()== KeyEvent.VK_ENTER){
-            //             msg = EcardGUI.text_msg.getText();
-            //             System.out.println(msg);
-            //             sender.send(msg); //내부클래스의 송신 메소드 호출
-            //             EcardGUI.text_msg.setText("");
-            //         }
-            //     }
-            // });
-            //thisThread = this;
-            //cg = client; //객체변수에 할당
         } catch (UnknownHostException ue){
             pln("호스트를 찾을 수 없음");
         } catch (IOException ie) {
@@ -80,22 +55,14 @@ public class ClientThread extends Thread implements ActionListener{
         }
     }
 
+    //클라이언트 정보 업데이트
     public void updateClientList(){
         if(Integer.parseInt(playerIdx)==0){
-
             EcardGUI.myScore1.setText(playerScore);
             EcardGUI.yourScore2.setText(playerScore);
-            deleteClientList();
         }else if(Integer.parseInt(playerIdx) == 1){
             EcardGUI.myScore2.setText(playerScore);
             EcardGUI.yourScore1.setText(playerScore);
-            deleteClientList();
-        }
-    }
-    public void deleteClientList(){
-        if(Integer.parseInt(playerIdx)==0){
-            pln("1명이 들어와있음");
-
         }
     }
 
@@ -103,6 +70,7 @@ public class ClientThread extends Thread implements ActionListener{
         System.out.println(str);
     }
 
+    //버튼 활성화
     void enableBtn() {
         EcardGUI.btn_myKing.setEnabled(true);
         EcardGUI.btn_mySlav.setEnabled(true);
@@ -112,6 +80,7 @@ public class ClientThread extends Thread implements ActionListener{
         EcardGUI.btn_myCtzn4.setEnabled(true);
     }
 
+    //버튼 비활성화
     void disableBtn() {
         EcardGUI.btn_myKing.setEnabled(false);
         EcardGUI.btn_mySlav.setEnabled(false);
@@ -121,7 +90,12 @@ public class ClientThread extends Thread implements ActionListener{
         EcardGUI.btn_myCtzn4.setEnabled(false);
     }
 
-    //수신하는 쓰레드
+    void invisibleCard(){
+        EcardGUI.jKing.setVisible(false);
+        EcardGUI.jSlave.setVisible(false);
+    }
+
+    //수신 쓰레드
     class Listener extends Thread{
         Socket sc;
         DataInputStream dis;
@@ -149,8 +123,6 @@ public class ClientThread extends Thread implements ActionListener{
                         EcardGUI.myScore1.setVisible(true);
                         EcardGUI.yourScore2.setVisible(false);
                         EcardGUI.yourScore1.setVisible(true);
-                        
-                        
                     }else if(msg.startsWith("//Slav ") && msg.indexOf(cardHost.get(0)) != -1){
                         EcardGUI.btn_myKing.setVisible(false);
                         EcardGUI.btn_mySlav.setVisible(true);
@@ -160,9 +132,29 @@ public class ClientThread extends Thread implements ActionListener{
                         EcardGUI.myScore2.setVisible(true);
                         EcardGUI.yourScore1.setVisible(false);
                         EcardGUI.yourScore2.setVisible(true);
-                        
                     }
-                    if(msg.startsWith("//SList")){
+                    if(msg.startsWith("//Chnge")){
+                        String temp = msg.substring(7,13);
+                        String cName = msg.substring(msg.indexOf(" ")+1);
+                        pln(temp); //교체될 카드 타입
+                        pln(cName); //플레이어 저장
+                        invisibleCard();
+                        EcardGUI.btn_Ready.setEnabled(false);
+                        if(cName.equals(cardHost.get(0))){
+                            EcardGUI.btn_myKing.setVisible(false);
+                            EcardGUI.btn_mySlav.setVisible(true);
+                            EcardGUI.jSlave.setVisible(false);
+                            EcardGUI.jKing.setVisible(true);
+                        }else if(cName.equals(cardHost.get(1))){
+                            EcardGUI.btn_mySlav.setVisible(false);
+                            EcardGUI.btn_myKing.setVisible(true);
+                            EcardGUI.jKing.setVisible(false);
+                            EcardGUI.jSlave.setVisible(true);
+                        }
+
+
+                    }
+                    if(msg.startsWith("//SList")){ //플레이어 점수 받아옴
                         playerName = msg.substring(7, msg.indexOf(" "));
                         playerScore = msg.substring(msg.indexOf(" ") + 1, msg.indexOf("#"));
                         playerIdx = msg.substring(msg.indexOf("#") + 1);
@@ -173,10 +165,8 @@ public class ClientThread extends Thread implements ActionListener{
                         enableBtn();
                         gameStart = true;
                         EcardGUI.text_chatLog.append("Game Start"+ "\n");
-                        pln("Game Start");
                     }else if(msg.startsWith("//Timer")){
                         EcardGUI.jTimer.setText(msg.substring(7));
-                        //pln(msg.substring(7));
                     }else{
                         EcardGUI.text_chatLog.append(msg + "\n");
                     }
@@ -219,7 +209,7 @@ public class ClientThread extends Thread implements ActionListener{
             }
         }
 
-        public void keyPressed(KeyEvent ke){
+        public void keyPressed(KeyEvent ke){ //채팅입력
             if(ke.getKeyCode() == KeyEvent.VK_ENTER){
                 msg = EcardGUI.text_msg.getText();
                 System.out.println(msg);
@@ -248,7 +238,7 @@ public class ClientThread extends Thread implements ActionListener{
                 try {
                     dos.writeUTF("//Press"+"//King"+chatID0);
                     EcardGUI.text_chatLog.append("[ 당신이 선택한 카드는 <King> 카드입니다 .. ] \n");
-                    EcardGUI.btn_myKing.setEnabled(false);
+                    disableBtn();
                     dos.flush();
 
                 } catch (IOException e1) {
@@ -259,7 +249,7 @@ public class ClientThread extends Thread implements ActionListener{
                 try {
                     dos.writeUTF("//Press"+"//Slav"+chatID0);
                     EcardGUI.text_chatLog.append("[ 당신이 선택한 카드는 <Slave> 카드입니다 .. ] \n");
-                    EcardGUI.btn_mySlav.setEnabled(false);
+                    disableBtn();
                     dos.flush();
                 } catch (IOException e1) {
                     e1.printStackTrace();
@@ -269,7 +259,7 @@ public class ClientThread extends Thread implements ActionListener{
                 try {
                     dos.writeUTF("//Press"+"//Ctzn"+chatID0);
                     EcardGUI.text_chatLog.append("[ 당신이 선택한 카드는 <citizen> 카드입니다 .. ] \n");
-                    EcardGUI.btn_myCtzn1.setEnabled(false);
+                    disableBtn();
                     dos.flush();
                 } catch (IOException e1) {
                     //TODO: handle exception
@@ -279,7 +269,7 @@ public class ClientThread extends Thread implements ActionListener{
                 try {
                     dos.writeUTF("//Press"+"//Ctzn"+chatID0);
                     EcardGUI.text_chatLog.append("[ 당신이 선택한 카드는 <citizen> 카드입니다 .. ] \n");
-                    EcardGUI.btn_myCtzn2.setEnabled(false);
+                    disableBtn();
                     dos.flush();
                 } catch (IOException e1) {
                     //TODO: handle exception
@@ -289,7 +279,7 @@ public class ClientThread extends Thread implements ActionListener{
                 try {
                     dos.writeUTF("//Press"+"//Ctzn"+chatID0);
                     EcardGUI.text_chatLog.append("[ 당신이 선택한 카드는 <citizen> 카드입니다 .. ] \n");
-                    EcardGUI.btn_myCtzn3.setEnabled(false);
+                    disableBtn();
                     dos.flush();
                 } catch (IOException e1) {
                     //TODO: handle exception
@@ -299,7 +289,7 @@ public class ClientThread extends Thread implements ActionListener{
                 try {
                     dos.writeUTF("//Press"+"//Ctzn"+chatID0);
                     EcardGUI.text_chatLog.append("[ 당신이 선택한 카드는 <citizen> 카드입니다 .. ] \n");
-                    EcardGUI.btn_myCtzn4.setEnabled(false);
+                    disableBtn();
                     dos.flush();
                 } catch (IOException e1) {
                     //TODO: handle exception
@@ -322,31 +312,3 @@ public class ClientThread extends Thread implements ActionListener{
 }
 
 
-
-// EcardGUI.enterBtn.addActionListener(new Sender(sc, chatID));
-// EcardGUI.clearBtn.addActionListener(new Sender(sc, chatID));
-// EcardGUI.exitBtn.addActionListener(new Sender(sc, chatID));
-
-
-// EcardGUI.inputName.addKeyListener(new KeyAdapter(){
-//     public void keyPressed(KeyEvent ke){
-//         if(ke.getKeyCode() == KeyEvent.VK_ENTER){//엔터 누르면 실행
-//             ClientGUI.chatLog.append("서버에연결되었습니다 \n");
-//             chatID = ClientGUI.inputName.getText(); //입력받은 텍스트를 아이디로 저장
-//             sender = new Sender(sc, chatID);
-            
-//         }
-//     }
-// });
-
-
-// ClientGUI.inputMsg.addKeyListener(new KeyAdapter(){
-//     public void keyPressed(KeyEvent ke2){
-//         if(ke2.getKeyCode()== KeyEvent.VK_ENTER){
-//             msg = ClientGUI.inputMsg.getText();
-//             System.out.println(msg);
-//             sender.send(msg); //내부클래스의 송신 메소드 호출
-//             ClientGUI.inputMsg.setText("");
-//         }
-//     }
-// });

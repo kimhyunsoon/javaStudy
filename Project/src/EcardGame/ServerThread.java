@@ -128,7 +128,6 @@ public class ServerThread extends Thread{
                             sendMessage(client1 +" 승 "+client2+" 패 ");
                             clientInfo.put(client1, clientInfo.get(client1)+1); //승자 점수 추가
                             setClientInfo();
-                            //sendScore();
                             showCard();
                             countRound();
                             client1Card = client2Card = "";
@@ -136,7 +135,6 @@ public class ServerThread extends Thread{
                         }else if(client2Card.equals("//Ctzn")){//플레이어2 시민
                             sendMessage("무승부 다시 하세요");
                             setClientInfo();
-                            //sendScore();
                             showCard();
                             client1Card = client2Card = "";
                             break;
@@ -144,7 +142,6 @@ public class ServerThread extends Thread{
                             sendMessage(client1 +" 패 "+client2+" 승 ");
                             clientInfo.put(client2, clientInfo.get(client2)+1); //승자 점수 추가
                             setClientInfo();
-                            //sendScore();
                             showCard();
                             countRound();
                             client1Card = client2Card = "";
@@ -155,7 +152,6 @@ public class ServerThread extends Thread{
                             sendMessage(client1 +" 패 "+client2+" 승 ");
                             clientInfo.put(client2, clientInfo.get(client2)+1); //승자 점수 추가
                             setClientInfo();
-                            //sendScore();
                             showCard();
                             countRound();
                             client1Card = client2Card = "";
@@ -164,7 +160,6 @@ public class ServerThread extends Thread{
                             sendMessage(client1 +" 승 "+client2+" 패 ");
                             clientInfo.put(client1, clientInfo.get(client1)+1); //승자 점수 추가
                             setClientInfo();
-                            //sendScore();
                             showCard();
                             countRound();
                             client1Card = client2Card = "";
@@ -175,7 +170,6 @@ public class ServerThread extends Thread{
                             sendMessage(client1 +" 승 "+client2+" 패 ");
                             clientInfo.put(client1, clientInfo.get(client1)+1); //승자 점수 추가
                             setClientInfo();
-                            //sendScore();
                             showCard();
                             countRound();
                             client1Card = client2Card = "";
@@ -184,7 +178,6 @@ public class ServerThread extends Thread{
                             sendMessage(client1 +" 패 "+client2+" 승 ");
                             clientInfo.put(client2, clientInfo.get(client2)+1); //승자 점수 추가
                             setClientInfo();
-                            //sendScore();
                             showCard();
                             countRound();
                             client1Card = client2Card = "";
@@ -203,8 +196,8 @@ public class ServerThread extends Thread{
         }else {
             int nextRound = roundCount.get(0) + 1;
             if(nextRound > 3) {
-                sendMessage("//Slav " + client1); //카드 교체 로직이므로 이 예약어가 들어오면 카드를 교체해서 셋팅해주세요
-                sendMessage("//King " + client2);
+                sendMessage("//Chnge"+"//Slav" +" "+client1); //카드 교체 로직이므로 이 예약어가 들어오면 카드를 교체해서 셋팅해주세요
+                sendMessage("//Chnge"+"//King" +" "+client2);
                 // roundCount.clear();
             }else {
                 roundCount.set(0, nextRound);
