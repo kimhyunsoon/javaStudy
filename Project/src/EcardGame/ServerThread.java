@@ -129,7 +129,7 @@ public class ServerThread extends Thread{
                             clientInfo.put(client1, clientInfo.get(client1)+1); //승자 점수 추가
                             setClientInfo();
                             showCard();
-                            countRound();
+                            setRound();
                             client1Card = client2Card = "";
                             break;
                         }else if(client2Card.equals("//Ctzn")){//플레이어2 시민
@@ -143,7 +143,7 @@ public class ServerThread extends Thread{
                             clientInfo.put(client2, clientInfo.get(client2)+1); //승자 점수 추가
                             setClientInfo();
                             showCard();
-                            countRound();
+                            setRound();
                             client1Card = client2Card = "";
                             break;
                         }
@@ -153,7 +153,7 @@ public class ServerThread extends Thread{
                             clientInfo.put(client2, clientInfo.get(client2)+1); //승자 점수 추가
                             setClientInfo();
                             showCard();
-                            countRound();
+                            setRound();
                             client1Card = client2Card = "";
                             break;
                         }else if(client2Card.equals("//Ctzn")){//플레이어2 시민
@@ -161,7 +161,7 @@ public class ServerThread extends Thread{
                             clientInfo.put(client1, clientInfo.get(client1)+1); //승자 점수 추가
                             setClientInfo();
                             showCard();
-                            countRound();
+                            setRound();
                             client1Card = client2Card = "";
                             break;
                         }
@@ -171,7 +171,7 @@ public class ServerThread extends Thread{
                             clientInfo.put(client1, clientInfo.get(client1)+1); //승자 점수 추가
                             setClientInfo();
                             showCard();
-                            countRound();
+                            setRound();
                             client1Card = client2Card = "";
                             break;
                         }else if(client2Card.equals("//Ctzn")){//플레이어2 시민
@@ -179,7 +179,7 @@ public class ServerThread extends Thread{
                             clientInfo.put(client2, clientInfo.get(client2)+1); //승자 점수 추가
                             setClientInfo();
                             showCard();
-                            countRound();
+                            setRound();
                             client1Card = client2Card = "";
                             break;
                         }
@@ -189,22 +189,65 @@ public class ServerThread extends Thread{
         }
     }
 
-    public void countRound(){
+    // public void countRound(){
+    //     if(roundCount.size() == 0){
+    //         roundCount.add(2);
+    //         sendMessage("//Round2"); //이 예약어가 들어오면 라운드 표시? 안해도 상관 없을듯
+    //     }else {
+    //         int nextRound = roundCount.get(0) + 1;
+    //         if(nextRound > 3) {
+    //             sendMessage("//Chnge"+"//Slav" +" "+client1); 
+    //             sendMessage("//Chnge"+"//King" +" "+client2);
+    //             roundCount.clear();
+    //         }else {
+    //             roundCount.set(0, nextRound);
+    //             sendMessage("//Round" + nextRound);
+    //         }
+    //     }
+    // }
+
+    // public void setRound(){
+    //     if(roundCount.size() == 0){
+    //         roundCount.add(2);
+    //         sendMessage("//Round2"); //이 예약어가 들어오면 라운드 표시? 안해도 상관 없을듯
+    //     }else {
+    //         for (int i = 0; i<7; i++){
+    //             int nextRound = roundCount.get(0) + 1;
+    //             if(nextRound==3){
+    //                 sendMessage("//Chnge"+"//Slav" +" "+client1); 
+    //                 sendMessage("//Chnge"+"//King" +" "+client2);
+    //                 break;
+    //             }else{
+    //                 roundCount.set(0, nextRound);
+    //                 sendMessage("//Round" + nextRound);
+    //             }
+    //         }
+            
+    //     }
+    // }
+
+    public void setRound(){
         if(roundCount.size() == 0){
             roundCount.add(2);
             sendMessage("//Round2"); //이 예약어가 들어오면 라운드 표시? 안해도 상관 없을듯
         }else {
             int nextRound = roundCount.get(0) + 1;
-            if(nextRound > 3) {
+            if(nextRound == 4) {
+                roundCount.set(0, nextRound);
+                sendMessage("//Round" + nextRound);
                 sendMessage("//Chnge"+"//Slav" +" "+client1); 
                 sendMessage("//Chnge"+"//King" +" "+client2);
-                roundCount.clear();
+            }else if(nextRound == 7){
+                System.out.println("끝~~~~~~~");
+                //종료 메쏘드
             }else {
                 roundCount.set(0, nextRound);
                 sendMessage("//Round" + nextRound);
             }
+                
         }
     }
+
 
     public void setClientInfo(){ //clientInfo  key값은 플레이어명, value값은 스코어
         String[] keys = new String[clientInfo.size()];
