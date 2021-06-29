@@ -136,8 +136,6 @@ public class ClientThread extends Thread implements ActionListener{
                     if(msg.startsWith("//Chnge")){
                         String temp = msg.substring(7,13);
                         String cName = msg.substring(msg.indexOf(" ")+1);
-                        pln(temp + " 카드카드"); //교체될 카드 타입
-                        pln(cName + " 플레이어"); //플레이어 저장
                         // invisibleCard();
                         EcardGUI.btn_Ready.setEnabled(false);
                         if(temp.equals("//King") && cName.equals(cardHost.get(0))){

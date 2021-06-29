@@ -6,7 +6,7 @@ import java.util.*;
 // import java.util.Map.Entry;
 // import java.util.stream.Stream;
 
-//import ecardGame.ServerGUI;
+// import ecardGame.ServerGUI;
 import ecardGame.ServerThread;
 
 public class ServerThread extends Thread{
@@ -196,11 +196,7 @@ public class ServerThread extends Thread{
         }else {
             int nextRound = roundCount.get(0) + 1;
             if(nextRound > 3) {
-                sendMessage("//Chnge"+"//Slav" +" "+client1); //카드 교체 로직이므로 이 예약어가 들어오면 카드를 교체해서 셋팅해주세요
-                pln("zzz");
-                pln(client1);
-                pln("sss");
-                pln(client2);
+                sendMessage("//Chnge"+"//Slav" +" "+client1); 
                 sendMessage("//Chnge"+"//King" +" "+client2);
                 // roundCount.clear();
             }else {
@@ -292,17 +288,3 @@ public class ServerThread extends Thread{
 
 
 }
-
-
-
-    
-
-// Set<Map.Entry<String, DataOutputStream>> entries = clientList.entrySet();
-// Set<String> keySet = clientList.keySet();
-// Collection<DataOutputStream> values = clientList.values();
-// Stream<Map.Entry<String, DataOutputStream>> entriesStream = entries.stream();
-// Stream<DataOutputStream> valuesStream = values.stream();
-// Stream<String> keysStream = keySet.stream();
-// clientList.entrySet().stream().forEach(entry-> {
-//     System.out.println("[key]:" + entry.getKey() + ", [value]:"+entry.getValue());
-// });
