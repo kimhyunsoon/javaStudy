@@ -2,12 +2,14 @@ package ecardGame;
 // import ecardGame.EcardGUI;
 // import ecardGame.Login;
 
-// import java.awt.*;
+import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
 // import javax.swing.JOptionPane;
+
+import javax.swing.*;
 
 
 public class ClientThread extends Thread implements ActionListener{
@@ -134,21 +136,25 @@ public class ClientThread extends Thread implements ActionListener{
                         EcardGUI.yourScore2.setVisible(true);
                     }
                     if(msg.startsWith("//Chnge")){
+                        
                         String temp = msg.substring(7,13);
                         String cName = msg.substring(msg.indexOf(" ")+1);
                         // invisibleCard();
-                        EcardGUI.btn_Ready.setEnabled(false);
+                        //EcardGUI.btn_Ready.setEnabled(false);
                         if(temp.equals("//King") && cName.equals(cardHost.get(0))){
                             EcardGUI.btn_mySlav.setVisible(false);
                             EcardGUI.btn_myKing.setVisible(true);
                             EcardGUI.jKing.setVisible(false);
                             EcardGUI.jSlave.setVisible(true);
+                            EcardGUI.dialog();
                             
                         }else if(temp.equals("//Slav") && cName.equals(cardHost.get(0))){
                             EcardGUI.btn_myKing.setVisible(false);
                             EcardGUI.btn_mySlav.setVisible(true);
                             EcardGUI.jSlave.setVisible(false);
                             EcardGUI.jKing.setVisible(true);
+                            EcardGUI.dialog();
+
                         }
                     
 

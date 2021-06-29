@@ -1,6 +1,6 @@
 package ecardGame;
 import java.awt.*;
-//import java.awt.event.*;
+import java.awt.event.*;
 import java.io.*;
 //import java.net.*;
 import java.util.*;
@@ -8,7 +8,7 @@ import java.util.*;
 import javax.imageio.*;
 import javax.swing.*;
 
-class EcardGUI extends JFrame{
+public class EcardGUI extends JFrame{
 
     //GUI 관련
     Font font;
@@ -37,8 +37,12 @@ class EcardGUI extends JFrame{
 	EcardGUI() {
 		loadImg();
 		setPanel();
+
 		ClientThread ccThread= new ClientThread();
 		ccThread.startChat();
+	}
+	static void dialog(){
+		JOptionPane.showConfirmDialog(null, "카드를 변경합니다", "EcardGame", JOptionPane.PLAIN_MESSAGE);
 	}
 
 	void loadImg() {
@@ -176,6 +180,9 @@ class EcardGUI extends JFrame{
     }
 
 }
+
+
+
 	// @Override
 	// public void actionPerformed(ActionEvent e) {
 

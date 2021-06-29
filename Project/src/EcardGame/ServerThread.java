@@ -192,13 +192,13 @@ public class ServerThread extends Thread{
     public void countRound(){
         if(roundCount.size() == 0){
             roundCount.add(2);
-            sendMessage("//Round" + 2); //이 예약어가 들어오면 라운드 표시? 안해도 상관 없을듯
+            sendMessage("//Round2"); //이 예약어가 들어오면 라운드 표시? 안해도 상관 없을듯
         }else {
             int nextRound = roundCount.get(0) + 1;
             if(nextRound > 3) {
                 sendMessage("//Chnge"+"//Slav" +" "+client1); 
                 sendMessage("//Chnge"+"//King" +" "+client2);
-                // roundCount.clear();
+                roundCount.clear();
             }else {
                 roundCount.set(0, nextRound);
                 sendMessage("//Round" + nextRound);
