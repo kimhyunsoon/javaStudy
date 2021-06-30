@@ -15,16 +15,18 @@ public class EcardGUI extends JFrame{
 	JFrame frame;
     static JTextArea text_chatLog;
 	static JTextField text_msg;
-	JScrollPane scroll;
+	static JScrollPane scroll;
     JPanel background;
     static JLabel jTimer,tenTimer;
 	static JLabel jSlave, jKing;
 	static JLabel yLabel, mLabel;
+	static JLabel btn_myBack, btn_yourBack;
+	static JLabel laftKing, laftSlav, laftCtzn;
+	static JLabel rightKing, rightSlav, rightCtzn;
 	static JLabel yourScore1, yourScore2, myScore1, myScore2;
 	ImageIcon img_king, img_slav, img_ctzn1, img_ctzn2, img_ctzn3, img_ctzn4, img_background, img_ready, img_exit, img_backCard, slaveSet, kingSet;
 	
 	static JButton btn_myKing, btn_mySlav, btn_myCtzn1, btn_myCtzn2, btn_myCtzn3, btn_myCtzn4;
-	static JButton btn_myBack, btn_yourBack;
 	static JButton btn_Ready, btn_exit;
 
     //지우면 안됨
@@ -42,7 +44,37 @@ public class EcardGUI extends JFrame{
 		ccThread.startChat();
 	}
 	static void dialog(){
-		JOptionPane.showConfirmDialog(null, "카드를 변경합니다", "EcardGame", JOptionPane.PLAIN_MESSAGE);
+		JOptionPane.showConfirmDialog(null, "카드를 변경합니다.", "EcardGame", JOptionPane.PLAIN_MESSAGE);
+	}
+
+	static void gameEnd(){
+		int answer = JOptionPane.showConfirmDialog(null, "게임이 종료되었습니다. \n 점수를 확인해 주세요!", "EcardGame", JOptionPane.PLAIN_MESSAGE);
+
+
+		if(answer ==JOptionPane.YES_OPTION){
+			String my ="";
+			String your ="";
+			text_chatLog.append("게임이 종료되었습니다. \n 점수를 확인해 주세요!");
+			if(myScore1.isVisible()){
+				my= myScore1.getText();
+				your= yourScore1.getText();
+			}else if(myScore2.isVisible()){
+				my= myScore2.getText();
+				your= yourScore2.getText();
+			}
+	
+
+			if(Integer.parseInt(my)>Integer.parseInt(your)){
+				System.out.println("당신이 이겼어!!");
+			}else if(Integer.parseInt(my)<Integer.parseInt(your)){
+				System.out.println("당신이 졌어!!");
+			}else if(Integer.parseInt(my)==Integer.parseInt(your)){
+				System.out.println("무승부로 끝났습니다");
+			}
+
+
+
+		}
 	}
 
 	void loadImg() {
@@ -128,15 +160,22 @@ public class EcardGUI extends JFrame{
 		
 		btn_Ready = new JButton(img_ready); 
 		btn_exit = new JButton(img_exit);
-		btn_myBack = new JButton(img_backCard); 
-		btn_yourBack = new JButton(img_backCard);
-		
+		btn_myBack = new JLabel(img_backCard); 
+		btn_yourBack = new JLabel(img_backCard);
+		laftKing = new JLabel(img_king);
+		laftSlav = new JLabel(img_slav);
+		laftCtzn = new JLabel(img_ctzn1);
+		rightKing = new JLabel(img_king);
+		rightSlav = new JLabel(img_slav);
+		rightCtzn = new JLabel(img_ctzn1);
         
         text_chatLog = new JTextArea(); 
 		text_msg = new JTextField();
+		// text_msg.setBorder(null);
 		scroll = new JScrollPane(text_chatLog);
-		
-		
+		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		// scroll.setBorder(null);
 		background.setBounds(0, 0, 1580, 960);
 		
 		
@@ -146,13 +185,20 @@ public class EcardGUI extends JFrame{
 		btn_myCtzn3.setBounds(870, 640, 150, 238);
 		btn_myCtzn4.setBounds(1030, 640, 150, 238); 
 		btn_mySlav.setBounds(390, 640, 150, 238);
-		btn_yourBack.setBounds(630, 328, 150, 238); 
-		btn_myBack.setBounds(790, 392, 150, 238);
+		btn_yourBack.setBounds(610, 328, 150, 238); 
+		laftKing.setBounds(610, 328, 150, 238); 
+		laftSlav.setBounds(610, 328, 150, 238); 
+		laftCtzn.setBounds(610, 328, 150, 238); 
+		btn_myBack.setBounds(810, 392, 150, 238);
+		rightKing.setBounds(810, 392, 150, 238);
+		rightSlav.setBounds(810, 392, 150, 238);
+		rightCtzn.setBounds(810, 392, 150, 238);
 		btn_Ready.setBounds(60, 660, 320, 90); 
 		btn_exit.setBounds(60, 780, 320, 90);
 		
-		scroll.setBounds(1200, 318, 330, 510); 
-		text_msg.setBounds(1200, 828, 330, 50);
+		scroll.setBounds(1200, 318, 300, 510);
+
+		text_msg.setBounds(1200, 828, 300, 50);
 		
 		frame.add(btn_myKing); frame.add(btn_myCtzn1); frame.add(btn_myCtzn2);
 		frame.add(btn_myCtzn3); frame.add(btn_myCtzn4); frame.add(btn_mySlav);
@@ -163,6 +209,8 @@ public class EcardGUI extends JFrame{
 		frame.add(myScore1); frame.add(myScore2);
 		
 		frame.add(btn_myBack); frame.add(btn_yourBack);
+		frame.add(laftKing); frame.add(laftSlav); frame.add(laftCtzn);
+		frame.add(rightKing); frame.add(rightSlav); frame.add(rightCtzn);
 		frame.add(btn_Ready); frame.add(btn_exit);
 		frame.add(scroll);
 		//frame.add(text_chatLog); 
@@ -172,6 +220,8 @@ public class EcardGUI extends JFrame{
 
 		revalidate();
 		repaint();
+		frame.setTitle("Ecard Game");
+		// frame.setLocationRelativeTo(null);	
 		frame.getContentPane().setLayout(null);
 		frame.setSize(1580,960);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

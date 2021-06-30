@@ -48,12 +48,13 @@ public class ServerThread extends Thread{
             if(!clientList.containsKey(pName)){ //닉네임 중복방지, 중복되면 소켓 닫음
                 clientList.put(pName,dos); //맵에 플레이어의 이름, 입력해 오는걸 저장
                 clientInfo.put(pName,score); //맵에 플레이어의 이름, 점수를 저장
-            }
-            if(clientList.size()> ServerGUI.maxclient){ //인원수 제한
-                System.out.println("풀방");
-                //sendMessage("//Full ");
+            }else if(clientList.containsKey(pName)){
+                gtsc.close();
+            }else if(clientList.size()> ServerGUI.maxclient){ //인원수 제한
                 gtsc.close();
             }
+
+
             if(client1 == "") { //client1이 비어있으면 최초로 로그인한 사람 저장
                 client1 = pName;
                 sendMessage("//King "+client1);
@@ -61,9 +62,8 @@ public class ServerThread extends Thread{
                 client2 = pName;
                 sendMessage("//Slav "+client2);
             }
-            System.out.println("System>> "+pName+"님이 입장하셨습니다."+clientList.size()+"명");
-            sendMessage("System>> "+pName+"님이 입장하셨습니다.");
-            setClientInfo();
+            sendMessage("[ "+pName+"님이 입장하셨습니다. ]");
+            //setClientInfo();
             while(true){
                 String msg = dis.readUTF(); //클라이언트로부터 수신되는 메세지 읽음
                 filter(msg); //메세지or게임진행 브로드캐스트
@@ -71,7 +71,7 @@ public class ServerThread extends Thread{
         } catch (IOException ie) {
             clientList.remove(pName); //게임참여자 리스트에서 제거 
             clientInfo.remove(pName, this); 
-            sendMessage("System>> "+pName+"님이 퇴장하셨습니다.");
+            sendMessage("[ "+pName+"님이 퇴장하셨습니다. ]");
             pln(pName+"님 퇴장!");
             readyPlayer.removeElement(1);
             System.out.println(readyPlayer.size());
@@ -99,7 +99,6 @@ public class ServerThread extends Thread{
         }else if(temp.equals("//Ready")){ //준비버튼이 입력되었을 경우
             readyPlayer.addElement(1);
             if(readyPlayer.size()>=2&&readyPlayer.size() == clientList.size()) { //준비버튼 배열의 사이즈와 클라이언트리스트 사이즈(최대:2) 같으면 실행
-                sendMessage("[곧 게임이 시작됩니다]");
                 for(int i=3; i>0; i--){
                     try{
                         sendMessage("[ " + i + "초 후 게임을 시작합니다 .. ]");						 	
@@ -114,71 +113,85 @@ public class ServerThread extends Thread{
         }else if(temp.equals("//Press")){//플레이어가 카드를 눌렀을 경우
             String cardType = msg.substring(7,13); //선택한 카드 저장
             String member = msg.substring(13);     //플레이어 저장
-            readyPlayer.removeAllElements();
+
             if(member.equals(client1)) {
                 client1Card = cardType;
             }else if(member.equals(client2)) {
                 client2Card = cardType;
             }
             if(!client2Card.equals("") && !client1Card.equals("")) {
-
+                readyPlayer.removeAllElements();
                 switch (client1Card) {//플레이어1
                     case "//Ctzn": //플레이어1이 시민카드 냈을때
                         if(client2Card.equals("//Slav")){//플레이어2 노예
-                            sendMessage(client1 +" 승 "+client2+" 패 ");
+                            sendMessage("[ WIN : "+ client1 +" ]" + "\n" + "[ LOSE : "+client2+" ]");
+                            sendMessage("//Wcard" + client1 + "#Ctzn");
+                            sendMessage("//Wcard" + client2 + "#Slav");
                             clientInfo.put(client1, clientInfo.get(client1)+1); //승자 점수 추가
                             setClientInfo();
-                            showCard();
+                            // showCard();
                             setRound();
                             client1Card = client2Card = "";
                             break;
                         }else if(client2Card.equals("//Ctzn")){//플레이어2 시민
-                            sendMessage("무승부 다시 하세요");
+                            sendMessage("[ 무승부! 다시 하세요. ]");
+                            sendMessage("//Wcard" + client1 + "#Ctzn");
+                            sendMessage("//Wcard" + client2 + "#Ctzn");
                             setClientInfo();
-                            showCard();
+                            // showCard();
                             client1Card = client2Card = "";
                             break;
                         }else if(client2Card.equals("//King")){
-                            sendMessage(client1 +" 패 "+client2+" 승 ");
+                            sendMessage("[ WIN : "+ client2 +" ]" + "\n" + "[ LOSE : "+client1+"> ]");
+                            sendMessage("//Wcard" + client1 + "#Ctzn");
+                            sendMessage("//Wcard" + client2 + "#King");
                             clientInfo.put(client2, clientInfo.get(client2)+1); //승자 점수 추가
                             setClientInfo();
-                            showCard();
+                            // showCard();
                             setRound();
                             client1Card = client2Card = "";
                             break;
                         }
                     case "//King": //플레이어1
                         if(client2Card.equals("//Slav")){//플레이어2 노예
-                            sendMessage(client1 +" 패 "+client2+" 승 ");
+                            sendMessage("[ WIN : "+ client1 +" ]" + "\n" + "[ LOSE : "+client2+" ]");
+                            sendMessage("//Wcard" + client1 + "#King");
+                            sendMessage("//Wcard" + client2 + "#Slav");
                             clientInfo.put(client2, clientInfo.get(client2)+1); //승자 점수 추가
                             setClientInfo();
-                            showCard();
+                            // showCard();
                             setRound();
                             client1Card = client2Card = "";
                             break;
                         }else if(client2Card.equals("//Ctzn")){//플레이어2 시민
-                            sendMessage(client1 +" 승 "+client2+" 패 ");
+                            sendMessage("[ WIN : "+ client2 +" ]" + "\n" + "[ LOSE : "+client1+"> ]");
+                            sendMessage("//Wcard" + client1 + "#King");
+                            sendMessage("//Wcard" + client2 + "#Ctzn");
                             clientInfo.put(client1, clientInfo.get(client1)+1); //승자 점수 추가
                             setClientInfo();
-                            showCard();
+                            // showCard();
                             setRound();
                             client1Card = client2Card = "";
                             break;
                         }
                     case "//Slav": //플레이어1
                         if(client2Card.equals("//King")){//플레이어2 왕
-                            sendMessage(client1 +" 승 "+client2+" 패 ");
+                            sendMessage("[ WIN : "+ client1 +" ]" + "\n" + "[ LOSE : "+client2+" ]");
+                            sendMessage("//Wcard" + client1 + "#Slav");
+                            sendMessage("//Wcard" + client2 + "#King");
                             clientInfo.put(client1, clientInfo.get(client1)+1); //승자 점수 추가
                             setClientInfo();
-                            showCard();
+                            // showCard();
                             setRound();
                             client1Card = client2Card = "";
                             break;
                         }else if(client2Card.equals("//Ctzn")){//플레이어2 시민
-                            sendMessage(client1 +" 패 "+client2+" 승 ");
+                            sendMessage("[ WIN : "+ client2 +" ]" + "\n" + "[ LOSE : "+client1+"> ]");
+                            sendMessage("//Wcard" + client1 + "#Slav");
+                            sendMessage("//Wcard" + client2 + "#Ctzn");
                             clientInfo.put(client2, clientInfo.get(client2)+1); //승자 점수 추가
                             setClientInfo();
-                            showCard();
+                            // showCard();
                             setRound();
                             client1Card = client2Card = "";
                             break;
@@ -189,60 +202,24 @@ public class ServerThread extends Thread{
         }
     }
 
-    // public void countRound(){
-    //     if(roundCount.size() == 0){
-    //         roundCount.add(2);
-    //         sendMessage("//Round2"); //이 예약어가 들어오면 라운드 표시? 안해도 상관 없을듯
-    //     }else {
-    //         int nextRound = roundCount.get(0) + 1;
-    //         if(nextRound > 3) {
-    //             sendMessage("//Chnge"+"//Slav" +" "+client1); 
-    //             sendMessage("//Chnge"+"//King" +" "+client2);
-    //             roundCount.clear();
-    //         }else {
-    //             roundCount.set(0, nextRound);
-    //             sendMessage("//Round" + nextRound);
-    //         }
-    //     }
-    // }
 
-    // public void setRound(){
-    //     if(roundCount.size() == 0){
-    //         roundCount.add(2);
-    //         sendMessage("//Round2"); //이 예약어가 들어오면 라운드 표시? 안해도 상관 없을듯
-    //     }else {
-    //         for (int i = 0; i<7; i++){
-    //             int nextRound = roundCount.get(0) + 1;
-    //             if(nextRound==3){
-    //                 sendMessage("//Chnge"+"//Slav" +" "+client1); 
-    //                 sendMessage("//Chnge"+"//King" +" "+client2);
-    //                 break;
-    //             }else{
-    //                 roundCount.set(0, nextRound);
-    //                 sendMessage("//Round" + nextRound);
-    //             }
-    //         }
-            
-    //     }
-    // }
 
     public void setRound(){
         if(roundCount.size() == 0){
             roundCount.add(2);
-            sendMessage("//Round2"); //이 예약어가 들어오면 라운드 표시? 안해도 상관 없을듯
+            //sendMessage("//Round2"); //이 예약어가 들어오면 라운드 표시? 안해도 상관 없을듯
         }else {
             int nextRound = roundCount.get(0) + 1;
             if(nextRound == 4) {
                 roundCount.set(0, nextRound);
-                sendMessage("//Round" + nextRound);
+                //sendMessage("//Round" + nextRound);
                 sendMessage("//Chnge"+"//Slav" +" "+client1); 
                 sendMessage("//Chnge"+"//King" +" "+client2);
             }else if(nextRound == 7){
-                System.out.println("끝~~~~~~~");
-                //종료 메쏘드
+                sendMessage("//GmEnd");
             }else {
                 roundCount.set(0, nextRound);
-                sendMessage("//Round" + nextRound);
+                //sendMessage("//Round" + nextRound);
             }
                 
         }
@@ -310,10 +287,21 @@ public class ServerThread extends Thread{
 					sendMessage("//Timer" + (toTime(time)));
                     //pln("//Timer" + (toTime(time)));
                     sleep(1000);
-					if(toTime(time).equals("00 : 00")){
-						sendMessage("//GmEnd"); // 시간 초과시, 게임 종료
-						readyPlayer.removeAllElements();
+					if(toTime(time).equals("00")){
+                        readyPlayer.removeAllElements();
 						gameStart = false;
+                        if((client1Card.equals(""))&& !client2Card.equals("")){
+                            sendMessage("//Randm"+client1);
+                            break;
+                        }else if((client2Card.equals(""))&& !client1Card.equals("")){
+                            sendMessage("//Randm"+client2);
+                            break;
+                        }
+
+                        
+                        
+                         // 시간 초과시, 게임 종료
+
 						break;
 					}else if(readyPlayer.size() == 0){
 						break;

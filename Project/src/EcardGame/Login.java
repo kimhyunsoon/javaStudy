@@ -27,6 +27,7 @@ public class Login extends JFrame implements ActionListener {
 	JButton start, button_ip;
 	JFrame frame;
 	ImageIcon i1;
+
 	
 	public Login(){
 		try {
@@ -54,16 +55,22 @@ public class Login extends JFrame implements ActionListener {
 		
 		//id
 		tf_id = new JTextField();
-		tf_id.setBounds(95, 180, 306, 63);
+		tf_id.setBounds(110, 183, 306, 63);
 		tf_id.setFont(f);
+		tf_id.setForeground(Color.WHITE);
 		tf_id.setText("");
+		tf_id.setOpaque(false);
+		tf_id.setBorder(null);
 		frame.add(tf_id);
 		
 		//ip
 		tf_ip = new JTextField("127.0.0.1");
-		tf_ip.setBounds(95, 290, 306, 63);
+		tf_ip.setBounds(110, 285, 306, 63);
 		tf_ip.setFont(f);
+		tf_ip.setForeground(Color.WHITE);
 		tf_ip.setEnabled(true);
+		tf_ip.setOpaque(false);
+		tf_ip.setBorder(null);
 		frame.add(tf_ip);
 		
 		//¹öÆ°

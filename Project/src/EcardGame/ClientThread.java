@@ -22,13 +22,16 @@ public class ClientThread extends Thread implements ActionListener{
     String msg;
     String ip;
     boolean gameStart; 
-    String playerName, playerScore, playerIdx; 
+    String playerName, playerScore, playerIdx, wPlayer, wCard; 
     Login login;
+    String chatID0;
     public static LinkedList<String> cardHost = new LinkedList<String>();
+    String nonPlayer;
 
     
     public void startChat(){//채팅 소켓 생성
         disableBtn(); //카드 버튼 비활성화
+        invisibleCard(); //중간 카드 라벨 비활성화
         chatID = Login.nickName; // Login 에서 nickName 를 받아옴.
 		ip = Login.IP; // Login 에서 ip를 받아옴
 
@@ -68,6 +71,7 @@ public class ClientThread extends Thread implements ActionListener{
         }
     }
 
+
     public void pln(String str){
         System.out.println(str);
     }
@@ -90,11 +94,17 @@ public class ClientThread extends Thread implements ActionListener{
         EcardGUI.btn_myCtzn2.setEnabled(false);
         EcardGUI.btn_myCtzn3.setEnabled(false);
         EcardGUI.btn_myCtzn4.setEnabled(false);
+
     }
 
+
     void invisibleCard(){
-        EcardGUI.jKing.setVisible(false);
-        EcardGUI.jSlave.setVisible(false);
+        EcardGUI.laftKing.setVisible(false);
+        EcardGUI.laftSlav.setVisible(false);
+        EcardGUI.laftCtzn.setVisible(false);
+        EcardGUI.rightKing.setVisible(false);
+        EcardGUI.rightSlav.setVisible(false);
+        EcardGUI.rightCtzn.setVisible(false);
     }
 
     //수신 쓰레드
@@ -114,7 +124,7 @@ public class ClientThread extends Thread implements ActionListener{
             while(dis !=null){
                 try {
                     String msg = dis.readUTF();
-                    System.out.println(msg);
+
                     //먼저 들어온 플레이어에게 왕 카드 셋팅
                     if(msg.startsWith("//King ") && msg.indexOf(cardHost.get(0)) != -1){
                         EcardGUI.btn_mySlav.setVisible(false);
@@ -134,13 +144,10 @@ public class ClientThread extends Thread implements ActionListener{
                         EcardGUI.myScore2.setVisible(true);
                         EcardGUI.yourScore1.setVisible(false);
                         EcardGUI.yourScore2.setVisible(true);
-                    }
-                    if(msg.startsWith("//Chnge")){
+                    }else if(msg.startsWith("//Chnge")){
                         
                         String temp = msg.substring(7,13);
                         String cName = msg.substring(msg.indexOf(" ")+1);
-                        // invisibleCard();
-                        //EcardGUI.btn_Ready.setEnabled(false);
                         if(temp.equals("//King") && cName.equals(cardHost.get(0))){
                             EcardGUI.btn_mySlav.setVisible(false);
                             EcardGUI.btn_myKing.setVisible(true);
@@ -156,11 +163,22 @@ public class ClientThread extends Thread implements ActionListener{
                             EcardGUI.dialog();
 
                         }
-                    
 
+                    }else if(msg.equals("//GmEnd")){
+                        gameStart = false;
+                        disableBtn();
+                        EcardGUI.btn_Ready.setEnabled(false); 
+                        EcardGUI.gameEnd();
 
-                    }
-                    if(msg.startsWith("//SList")){ //플레이어 점수 받아옴
+                    }else if(msg.startsWith("//Randm")){
+                        nonPlayer = msg.substring(7);
+                        disableBtn();
+                        dos.writeUTF("//Press"+"//Ctzn"+nonPlayer);
+                        EcardGUI.text_chatLog.append("[ 시간초과로 <citizen> 카드를 제출합니다 .. ] \n");
+
+                        dos.flush();
+
+                    }else if(msg.startsWith("//SList")){ //플레이어 점수 받아옴
                         playerName = msg.substring(7, msg.indexOf(" "));
                         playerScore = msg.substring(msg.indexOf(" ") + 1, msg.indexOf("#"));
                         playerIdx = msg.substring(msg.indexOf("#") + 1);
@@ -169,12 +187,46 @@ public class ClientThread extends Thread implements ActionListener{
     
                     }else if(msg.startsWith("//Start")){
                         enableBtn();
+                        invisibleCard();
+                        EcardGUI.btn_myBack.setVisible(true);
+                        EcardGUI.btn_yourBack.setVisible(true);
                         gameStart = true;
-                        EcardGUI.text_chatLog.append("Game Start"+ "\n");
+                        EcardGUI.text_chatLog.append("[ Game Start ]"+ "\n");
                     }else if(msg.startsWith("//Timer")){
                         EcardGUI.jTimer.setText(msg.substring(7));
-                    }else{
+
+                    }else if(msg.startsWith("//Wcard")){
+                        wPlayer = msg.substring(7, msg.indexOf("#"));
+                        wCard = msg.substring(msg.indexOf("#") + 1);
+                        if(wPlayer.equals(cardHost.get(0))){
+                            EcardGUI.text_chatLog.append("왼쪽거 : "+ wCard + "\n");
+                            if(wCard.equals("King")){
+                                EcardGUI.btn_myBack.setVisible(false);
+                                EcardGUI.rightKing.setVisible(true);
+                            }else if(wCard.equals("Slav")){
+                                EcardGUI.btn_myBack.setVisible(false);
+                                EcardGUI.rightSlav.setVisible(true);
+                            }else if(wCard.equals("Ctzn")){
+                                EcardGUI.btn_myBack.setVisible(false);
+                                EcardGUI.rightCtzn.setVisible(true);
+                            }
+                        } else {
+                            EcardGUI.text_chatLog.append("오른쪽거 : "+ wCard + "\n");
+                            if(wCard.equals("King")){
+                                EcardGUI.btn_yourBack.setVisible(false);
+                                EcardGUI.laftKing.setVisible(true);
+                            }else if(wCard.equals("Slav")){
+                                EcardGUI.btn_yourBack.setVisible(false);
+                                EcardGUI.laftSlav.setVisible(true);
+                            }else if(wCard.equals("Ctzn")){
+                                EcardGUI.btn_yourBack.setVisible(false);
+                                EcardGUI.laftCtzn.setVisible(true);
+                            }
+                        }
+
+                    } else if(!msg.startsWith("//Slav")){
                         EcardGUI.text_chatLog.append(msg + "\n");
+                        EcardGUI.scroll.getVerticalScrollBar().setValue(EcardGUI.scroll.getVerticalScrollBar().getMaximum());
                     }
                 } catch (IOException io) {
                     EcardGUI.text_chatLog.append("[ 서버와의 연결이 끊어졌습니다. ]\n[ 3초 후 프로그램을 종료합니다 .. ]");     
@@ -233,12 +285,16 @@ public class ClientThread extends Thread implements ActionListener{
         public void actionPerformed(ActionEvent e){
             if(e.getSource() ==  EcardGUI.btn_Ready) {
                 try {
+
                     dos.writeUTF("//Ready");
                     dos.flush();
                     EcardGUI.btn_Ready.setEnabled(false);
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
+            }
+            if(e.getSource() == EcardGUI.btn_exit){
+                System.exit(0);
             }
             if(e.getSource() == EcardGUI.btn_myKing){
                 try {
