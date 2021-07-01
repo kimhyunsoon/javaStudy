@@ -13,7 +13,7 @@ import ecardGame.ServerThread;
 public class ServerGUI extends JFrame implements ActionListener{
 
     ServerThread client;
-    ServerSocket ss;
+    static ServerSocket ss;
     Socket sc;
     public static final int port = 4003;
     public static final int maxclient = 2;
@@ -122,9 +122,9 @@ public class ServerGUI extends JFrame implements ActionListener{
 
     void loadImg(){
         try {
-            imageIcon1 = new ImageIcon(ImageIO.read(new File(path+"img/serverStart.png")));
-            imageIcon2 = new ImageIcon(ImageIO.read(new File(path+"img/serverExit.png")));
-            imageIcon3 = new ImageIcon(ImageIO.read(new File(path+"img/serverBG.png")));
+            imageIcon1 = new ImageIcon(ImageIO.read(new File("img/serverStart.png")));
+            imageIcon2 = new ImageIcon(ImageIO.read(new File("img/serverExit.png")));
+            imageIcon3 = new ImageIcon(ImageIO.read(new File("img/serverBG.png")));
         } catch (IOException ie) {
             //TODO: handle exception
         }

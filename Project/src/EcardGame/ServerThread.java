@@ -71,10 +71,20 @@ public class ServerThread extends Thread{
         } catch (IOException ie) {
             clientList.remove(pName); //게임참여자 리스트에서 제거 
             clientInfo.remove(pName, this); 
+            if(clientList.size()==0){
+                try {
+                    ServerGUI.ss.close();
+                    System.exit(0);
+                } catch (Exception e) {
+                    //TODO: handle exception
+                }
+            }
             sendMessage("[ "+pName+"님이 퇴장하셨습니다. ]");
-            pln(pName+"님 퇴장!");
-            readyPlayer.removeElement(1);
+            // pln(pName+"님 퇴장!");
+            readyPlayer.removeAllElements();
             System.out.println(readyPlayer.size());
+
+
         } 
         finally{
             try {
@@ -94,7 +104,7 @@ public class ServerThread extends Thread{
         String temp = msg.substring(0,7);
         
         if(temp.equals("//Chat ")){ //채팅을 입력받았을 경우
-            pln(msg.substring(7));
+            // pln(msg.substring(7));
             sendMessage(msg.substring(7)); 
         }else if(temp.equals("//Ready")){ //준비버튼이 입력되었을 경우
             readyPlayer.addElement(1);
@@ -142,7 +152,7 @@ public class ServerThread extends Thread{
                             client1Card = client2Card = "";
                             break;
                         }else if(client2Card.equals("//King")){
-                            sendMessage("[ WIN : "+ client2 +" ]" + "\n" + "[ LOSE : "+client1+"> ]");
+                            sendMessage("[ WIN : "+ client2 +" ]" + "\n" + "[ LOSE : "+client1+" ]");
                             sendMessage("//Wcard" + client1 + "#Ctzn");
                             sendMessage("//Wcard" + client2 + "#King");
                             clientInfo.put(client2, clientInfo.get(client2)+1); //승자 점수 추가
@@ -186,7 +196,7 @@ public class ServerThread extends Thread{
                             client1Card = client2Card = "";
                             break;
                         }else if(client2Card.equals("//Ctzn")){//플레이어2 시민
-                            sendMessage("[ WIN : "+ client2 +" ]" + "\n" + "[ LOSE : "+client1+"> ]");
+                            sendMessage("[ WIN : "+ client2 +" ]" + "\n" + "[ LOSE : "+client1+" ]");
                             sendMessage("//Wcard" + client1 + "#Slav");
                             sendMessage("//Wcard" + client2 + "#Ctzn");
                             clientInfo.put(client2, clientInfo.get(client2)+1); //승자 점수 추가
@@ -282,7 +292,7 @@ public class ServerThread extends Thread{
             try{
                 
 				while(gameStart == true){
-					sleep(10);
+					// sleep(10);
 					long time = System.currentTimeMillis() - preTime;
 					sendMessage("//Timer" + (toTime(time)));
                     //pln("//Timer" + (toTime(time)));

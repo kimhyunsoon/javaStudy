@@ -32,7 +32,7 @@ public class Login extends JFrame implements ActionListener {
 	public Login(){
 		try {
 			background = new JPanel() {
-				Image img = new ImageIcon(ImageIO.read(new File("image/login_BG.png"))).getImage();
+				Image img = new ImageIcon(ImageIO.read(new File("img/login_BG.png"))).getImage();
 				public void paint(Graphics g) {
 					g.drawImage(img, 0, 0,null);
 				}
@@ -46,16 +46,16 @@ public class Login extends JFrame implements ActionListener {
 	}
 	
 	public void init() {
-		background.setBounds(0, 0, 500, 550);
+		background.setBounds(0, 0, 430, 522);
 		frame = new JFrame();
 		laImg = new JLabel(i1);
-		laImg.setBounds(0, 0, 500, 550);
+		laImg.setBounds(0, 0, 430, 522);
 		
 		jpcen = new JPanel();
 		
 		//id
 		tf_id = new JTextField();
-		tf_id.setBounds(110, 183, 306, 63);
+		tf_id.setBounds(75, 183, 306, 63);
 		tf_id.setFont(f);
 		tf_id.setForeground(Color.WHITE);
 		tf_id.setText("");
@@ -65,7 +65,7 @@ public class Login extends JFrame implements ActionListener {
 		
 		//ip
 		tf_ip = new JTextField("127.0.0.1");
-		tf_ip.setBounds(110, 285, 306, 63);
+		tf_ip.setBounds(75, 290, 306, 63);
 		tf_ip.setFont(f);
 		tf_ip.setForeground(Color.WHITE);
 		tf_ip.setEnabled(true);
@@ -74,20 +74,22 @@ public class Login extends JFrame implements ActionListener {
 		frame.add(tf_ip);
 		
 		//¹öÆ°
-		button_ip = new JButton(new ImageIcon("image/getiP.png"));
-		button_ip.setBounds(300, 365, 83, 40);
-		frame.add(button_ip);
-		button_ip.addActionListener(this);
+		// button_ip = new JButton(new ImageIcon("image/getiP.png"));
+		// button_ip.setBounds(300, 365, 83, 40);
+		// frame.add(button_ip);
+		// button_ip.addActionListener(this);
 		
-		start = new JButton(new ImageIcon("image/loginBtn.png"));
+		start = new JButton(new ImageIcon("img/loginBtn.png"));
+		start.setBounds(62, 400, 300, 60);
 		start.addActionListener(this);
+
 		frame.add(start);
 		frame.add(background);
 		frame.add(laImg);
 		setUi();
 		//sound();
 	
-		start.setBounds(95, 440, 300, 60);
+
 		
 		
 		
@@ -99,7 +101,7 @@ public class Login extends JFrame implements ActionListener {
 		revalidate();
 		repaint();
 		frame.getContentPane().setLayout(null);
-		frame.setSize(500,550);
+		frame.setSize(445,561);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
 		frame.setVisible(true);
