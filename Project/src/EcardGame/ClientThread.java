@@ -110,6 +110,9 @@ public class ClientThread extends Thread implements ActionListener{
         EcardGUI.rightCtzn.setVisible(false);
     }
 
+
+
+
     //수신 쓰레드
     class Listener extends Thread{
         Socket sc;
@@ -196,6 +199,7 @@ public class ClientThread extends Thread implements ActionListener{
                         gameStart = true;
                         EcardGUI.text_chatLog.append("[ Game Start : 카드를 선택해주세요..]"+ "\n");
                         EcardGUI.scroll.getVerticalScrollBar().setValue(EcardGUI.scroll.getVerticalScrollBar().getMaximum());
+                        EcardGUI.bgm("//Play");
                     }else if(msg.startsWith("//Timer")){
                         EcardGUI.jTimer.setText(msg.substring(7));
 

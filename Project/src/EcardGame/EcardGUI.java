@@ -7,10 +7,12 @@ import java.util.*;
 import javax.swing.border.*;
 import javax.imageio.*;
 import javax.swing.*;
+import javafx.scene.media.*;
 
 public class EcardGUI extends JFrame{
 
     //GUI 관련
+	static MediaPlayer mp;
     Font font;
 	JFrame frame;
     static JTextArea text_chatLog;
@@ -47,6 +49,22 @@ public class EcardGUI extends JFrame{
 	static void dialog(){
 		JOptionPane.showMessageDialog(null, "카드를 변경합니다.", "EcardGame", JOptionPane.INFORMATION_MESSAGE);
 	}
+
+	static void bgm(String play){ // BGM 재생 & 정지
+        try{
+            if(play.equals("//Play")){
+                JFXPanel panel = new JFXPanel();
+                File f = new File("bgm\\bgm.wav");
+                Media bgm = new Media(f.toURI().toURL().toString());
+                mp = new MediaPlayer(bgm);
+                mp.play();
+            }else if(play.equals("//Stop")){
+                mp.stop();
+                mp.setMute(true);
+                mp.dispose();
+            }
+        }catch(Exception e){}
+    }
 
 	static void gameEnd(){
 		JOptionPane.showMessageDialog(null, "게임이 종료되었습니다. \n 점수를 확인해 주세요!", "EcardGame", JOptionPane.INFORMATION_MESSAGE);
