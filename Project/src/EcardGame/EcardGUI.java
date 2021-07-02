@@ -2,24 +2,20 @@ package ecardGame;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
-//import java.net.*;
-import java.util.*;
-import javax.swing.border.*;
 import javax.imageio.*;
 import javax.swing.*;
-import javafx.scene.media.*;
+
 
 public class EcardGUI extends JFrame{
 
     //GUI 관련
-	static MediaPlayer mp;
     Font font;
 	JFrame frame;
     static JTextArea text_chatLog;
 	static JTextField text_msg;
 	static JScrollPane scroll;
-    JPanel background;
-    static JLabel jTimer,tenTimer;
+    static JPanel background;
+    static JLabel jTimer;
 	static JLabel jSlave, jKing;
 	static JLabel yLabel, mLabel;
 	static JLabel btn_myBack, btn_yourBack;
@@ -50,22 +46,6 @@ public class EcardGUI extends JFrame{
 		JOptionPane.showMessageDialog(null, "카드를 변경합니다.", "EcardGame", JOptionPane.INFORMATION_MESSAGE);
 	}
 
-	static void bgm(String play){ // BGM 재생 & 정지
-        try{
-            if(play.equals("//Play")){
-                JFXPanel panel = new JFXPanel();
-                File f = new File("bgm\\bgm.wav");
-                Media bgm = new Media(f.toURI().toURL().toString());
-                mp = new MediaPlayer(bgm);
-                mp.play();
-            }else if(play.equals("//Stop")){
-                mp.stop();
-                mp.setMute(true);
-                mp.dispose();
-            }
-        }catch(Exception e){}
-    }
-
 	static void gameEnd(){
 		JOptionPane.showMessageDialog(null, "게임이 종료되었습니다. \n 점수를 확인해 주세요!", "EcardGame", JOptionPane.INFORMATION_MESSAGE);
 
@@ -81,7 +61,6 @@ public class EcardGUI extends JFrame{
 				your= yourScore2.getText();
 			}
 	
-
 			if(Integer.parseInt(my)>Integer.parseInt(your)){
 				invisibleCenter();
 				vicLabel.setVisible(true);
@@ -228,10 +207,6 @@ public class EcardGUI extends JFrame{
 		text_msg.setOpaque(false);
 		text_msg.setBounds(1210, 838, 300, 35);
 
-
-
-
-
 		vicLabel = new JLabel(victory);
 		vicLabel.setBounds(460, 360, 681, 294);
 		
@@ -240,9 +215,6 @@ public class EcardGUI extends JFrame{
 
 		drwLabel = new JLabel(draw);
 		drwLabel.setBounds(540, 360, 527, 290);
-
-
-
 
 
 		background.setBounds(0, 0, 1580, 960);

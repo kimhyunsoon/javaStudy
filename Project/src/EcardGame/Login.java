@@ -7,9 +7,7 @@ import java.awt.Image;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
-//import java.net.*;
 import javax.imageio.ImageIO;
-import javax.sound.sampled.*;
 import javax.swing.*;
 
 public class Login extends JFrame implements ActionListener {
@@ -72,12 +70,7 @@ public class Login extends JFrame implements ActionListener {
 		tf_ip.setOpaque(false);
 		tf_ip.setBorder(null);
 		frame.add(tf_ip);
-		
-		//버튼
-		// button_ip = new JButton(new ImageIcon("image/getiP.png"));
-		// button_ip.setBounds(300, 365, 83, 40);
-		// frame.add(button_ip);
-		// button_ip.addActionListener(this);
+
 		
 		start = new JButton(new ImageIcon("img/loginBtn.png"));
 		start.setBounds(62, 400, 300, 60);
@@ -87,14 +80,7 @@ public class Login extends JFrame implements ActionListener {
 		frame.add(background);
 		frame.add(laImg);
 		setUi();
-		//sound();
-	
 
-		
-		
-		
-		//cp.add(background);
-		
 	}
 	
 	void setUi() {
@@ -138,31 +124,12 @@ public class Login extends JFrame implements ActionListener {
 				}else{
 					JOptionPane.showMessageDialog(null, "IP 주소를 정확하게 입력해 주세요! ", "ERROR!", JOptionPane.WARNING_MESSAGE);
 				}
-				// IP1 = tf_ip.getText().trim();
-				// start.setBorderPainted(false); 
-				// start.setFocusPainted(false); 
-				// start.setContentAreaFilled(false);
-				// frame.setVisible(false);
-
 			}
 		} 
 
 		
 	}
-	
-	
-	void sound() {
-		File f = new File("sound/bgm.wav");
-		try {
-			AudioInputStream ais = AudioSystem.getAudioInputStream(f);
-			Clip c = AudioSystem.getClip();
-			c.open(ais);
-			c.start();
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
+
 	public static void main(String[] args) {
 		new Login();
 

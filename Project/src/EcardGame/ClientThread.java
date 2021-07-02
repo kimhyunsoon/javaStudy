@@ -1,35 +1,34 @@
 package ecardGame;
-// import ecardGame.EcardGUI;
-// import ecardGame.Login;
 
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
-// import javax.swing.JOptionPane;
-
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
 import javax.swing.*;
 
 
 public class ClientThread extends Thread implements ActionListener{
     Sender sender; //내부클래스 Sender    
     Listener listener; //내부클래스 Listener
+    Login login;
     int port = 4003;
     DataInputStream dis;
     DataOutputStream dos;
-    String chatID;
-    String msg;
-    String ip;
+    String chatID,msg,ip;
     boolean gameStart; 
     String playerName, playerScore, playerIdx, wPlayer, wCard; 
-    Login login;
+    String nonPlayer;
     String chatID0;
     public static LinkedList<String> cardHost = new LinkedList<String>();
-    String nonPlayer;
 
     
     public void startChat(){//채팅 소켓 생성
+        bgm("//Play");
         EcardGUI.defLabel.setVisible(false);
         EcardGUI.vicLabel.setVisible(false);
         EcardGUI.drwLabel.setVisible(false);
@@ -61,6 +60,7 @@ public class ClientThread extends Thread implements ActionListener{
             pln("서버가 닫혀있는거 같음");
 			System.exit(0);
         }
+
     }
 
     //클라이언트 정보 업데이트
@@ -77,6 +77,27 @@ public class ClientThread extends Thread implements ActionListener{
 
     public void pln(String str){
         System.out.println(str);
+    }
+
+    public void bgm(String play){ // BGM 재생 & 정지
+        File file = new File("bgm\\bgm.wav");
+        //System.out.println(file.exists()); //true
+        FloatControl volume; 
+        try {
+            AudioInputStream stream = AudioSystem.getAudioInputStream(file);
+            Clip clip = AudioSystem.getClip();
+            if(play.equals("//Play")){
+                clip.open(stream);
+                clip.start();
+                volume = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+                volume.setValue(-10.0f);
+            }else if(play.equals("//Stop")){
+                clip.stop();
+            }
+        } catch(Exception e) {
+            
+            e.printStackTrace();
+        }
     }
 
     //버튼 활성화
@@ -199,7 +220,6 @@ public class ClientThread extends Thread implements ActionListener{
                         gameStart = true;
                         EcardGUI.text_chatLog.append("[ Game Start : 카드를 선택해주세요..]"+ "\n");
                         EcardGUI.scroll.getVerticalScrollBar().setValue(EcardGUI.scroll.getVerticalScrollBar().getMaximum());
-                        EcardGUI.bgm("//Play");
                     }else if(msg.startsWith("//Timer")){
                         EcardGUI.jTimer.setText(msg.substring(7));
 
@@ -397,10 +417,6 @@ public class ClientThread extends Thread implements ActionListener{
         // TODO Auto-generated method stub
         
     }
-
-
-
-
 }
 
 
