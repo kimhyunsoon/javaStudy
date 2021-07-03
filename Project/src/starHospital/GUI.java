@@ -182,6 +182,11 @@ public class GUI extends JFrame implements ActionListener{
         mEnter = new JButton("¿˙¿Â");
         mCommit = new JButton("µÓ∑œ");
         mBack = new JButton("√Îº“");
+
+        mBack.addActionListener(this);
+        mEnter.addActionListener(this);
+        mCommit.addActionListener(this);
+
         mEnter.setFont(new Font("∏º¿∫ ∞ÌµÒ", Font.BOLD, 14));
         mCommit.setFont(new Font("∏º¿∫ ∞ÌµÒ", Font.BOLD, 14));
         mBack.setFont(new Font("∏º¿∫ ∞ÌµÒ", Font.BOLD, 14));
@@ -735,13 +740,21 @@ public class GUI extends JFrame implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         if(e.getSource()==regisBtn){
             cLayout.show(centerP,"1");
-
         }else if(e.getSource()==serchBtn){
             cLayout.show(centerP,"2");
         }else if(e.getSource()==medicBtn){
             cLayout.show(centerP,"3");
         }else if(e.getSource()==recptBtn){
             cLayout.show(centerP,"4");
+        }
+        
+        
+        if(e.getSource()==mBack){
+
+        }else if(e.getSource()==mEnter){
+
+        }else if(e.getSource()==mCommit){
+
         }
         
     }
