@@ -8,7 +8,7 @@ import javax.swing.*;
 
 public class EcardGUI extends JFrame{
 
-    //GUI 관련
+    //GUI ??
     Font font;
 	JFrame frame;
     static JTextArea text_chatLog;
@@ -28,10 +28,10 @@ public class EcardGUI extends JFrame{
 	static JButton btn_myKing, btn_mySlav, btn_myCtzn1, btn_myCtzn2, btn_myCtzn3, btn_myCtzn4;
 	static JButton btn_Ready, btn_exit;
 
-    //지우면 안됨
+    //??? ??
 	private static final long serialVersionUID = 1L;
-    public static ClientThread ccThread; //ClientThread 객체
-    public static EcardGUI ecardGUI; //자기 자신의 객체
+    public static ClientThread ccThread; //ClientThread ??
+    public static EcardGUI ecardGUI; //?? ??? ??
 
 	
 	
@@ -43,15 +43,15 @@ public class EcardGUI extends JFrame{
 		ccThread.startChat();
 	}
 	static void dialog(){
-		JOptionPane.showMessageDialog(null, "카드를 변경합니다.", "EcardGame", JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(null, "??? ?????.", "EcardGame", JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	static void gameEnd(){
-		JOptionPane.showMessageDialog(null, "게임이 종료되었습니다. \n 점수를 확인해 주세요!", "EcardGame", JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(null, "??? ???????. \n ??? ??? ???!", "EcardGame", JOptionPane.INFORMATION_MESSAGE);
 
 		String my ="";
 			String your ="";
-			text_chatLog.append("게임이 종료되었습니다. \n 점수를 확인해 주세요!\n");
+			text_chatLog.append("??? ???????. \n ??? ??? ???!\n");
 			scroll.getVerticalScrollBar().setValue(scroll.getVerticalScrollBar().getMaximum());
 			if(myScore1.isVisible()){
 				my= myScore1.getText();
@@ -108,12 +108,12 @@ public class EcardGUI extends JFrame{
 	void setPanel(){
 
         frame = new JFrame();
-        font = new Font("고딕체", Font.PLAIN, 70);
+        font = new Font("???", Font.PLAIN, 70);
 		try {
 			background = new JPanel() {
 				private static final long serialVersionUID = 1L;
 				Image img_background = new ImageIcon(ImageIO.read(new File("img/BG.png"))).getImage();
-				public void paint(Graphics g) {//그리는 함수
+				public void paint(Graphics g) {//??? ??
 					g.drawImage(img_background, 0, 0, null);
 				}
 			};
@@ -137,31 +137,31 @@ public class EcardGUI extends JFrame{
 
 		Color color = new Color(0xf4ead0);
 		
-		yLabel = new JLabel("[ 상대방 점수 ]");
+		yLabel = new JLabel("[ ??? ?? ]");
 		yLabel.setForeground(color);
-		yLabel.setFont(new Font("맑은 고딕", Font.BOLD, 20));
+		yLabel.setFont(new Font("?? ??", Font.BOLD, 20));
 		yLabel.setBounds(155, 270, 300, 150);
-		mLabel = new JLabel("[ 내 점수 ]");
+		mLabel = new JLabel("[ ? ?? ]");
 		mLabel.setForeground(color);
-		mLabel.setFont(new Font("맑은 고딕", Font.BOLD, 20));
+		mLabel.setFont(new Font("?? ??", Font.BOLD, 20));
 		mLabel.setBounds(170, 430, 300, 150);
 
 
 		yourScore1 = new JLabel("0");
 		yourScore1.setForeground(color);
-		yourScore1.setFont(new Font("맑은 고딕", Font.BOLD, 70));
+		yourScore1.setFont(new Font("?? ??", Font.BOLD, 70));
 		yourScore1.setBounds(200, 325, 150, 150);
 		yourScore2 = new JLabel("0");
 		yourScore2.setForeground(color);
-		yourScore2.setFont(new Font("맑은 고딕", Font.BOLD, 70));
+		yourScore2.setFont(new Font("?? ??", Font.BOLD, 70));
 		yourScore2.setBounds(200, 325, 150, 150);
 		myScore1 = new JLabel("0");
 		myScore1.setForeground(color);
-		myScore1.setFont(new Font("맑은 고딕", Font.BOLD, 70));
+		myScore1.setFont(new Font("?? ??", Font.BOLD, 70));
 		myScore1.setBounds(200, 485, 150, 150);
 		myScore2 = new JLabel("0");
 		myScore2.setForeground(color);
-		myScore2.setFont(new Font("맑은 고딕", Font.BOLD, 70));
+		myScore2.setFont(new Font("?? ??", Font.BOLD, 70));
 		myScore2.setBounds(200, 485, 150, 150);
 		btn_myKing = new JButton(img_king); 
 		btn_mySlav = new JButton(img_slav);
@@ -182,7 +182,7 @@ public class EcardGUI extends JFrame{
 		rightCtzn = new JLabel(img_ctzn1);
         
 		scroll = new JScrollPane(text_chatLog);
-		scroll.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
+		scroll.setFont(new Font("?? ??", Font.PLAIN, 14));
 		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scroll.setBounds(1210, 330, 300, 510);
@@ -201,7 +201,7 @@ public class EcardGUI extends JFrame{
 		scroll.getViewport().setOpaque(false);
 
 		text_msg = new JTextField();
-		text_msg.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
+		text_msg.setFont(new Font("?? ??", Font.PLAIN, 14));
 		text_msg.setForeground(color);
 		text_msg.setBorder(null);
 		text_msg.setOpaque(false);

@@ -182,7 +182,7 @@ public class JT3 extends JFrame implements ActionListener{
             model2.setRowCount(0);
             selectALL();
         }else if(e.getSource()==modD){
-            //1. JTextField에 입력하고 삭제버튼 클릭
+            //1. JTextField에 입력하고 수정버튼 클릭
             if(inputData1.getText() !=null){
                 DefaultTableModel model3 = (DefaultTableModel)jtresult.getModel();
                 String DNANE= inputData2.getText(); 
