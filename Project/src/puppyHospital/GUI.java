@@ -1,5 +1,5 @@
+package puppyHospital;
 
-//package starHospital;
 import java.sql.*;
 import java.util.Vector;
 import javax.swing.*;
