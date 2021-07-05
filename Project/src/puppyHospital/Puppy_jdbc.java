@@ -1,4 +1,4 @@
-package puppyHospital;
+//package puppyHospital;
 import java.sql.*;
 import java.io.*;
 import java.util.*;
@@ -540,7 +540,7 @@ public class Puppy_jdbc {
 
 
 
-
+    /**
     void readT(){
         list = new ArrayList<String>();
         try {
@@ -555,4 +555,5 @@ public class Puppy_jdbc {
             //TODO: handle exception
         }
     }
+     */
 }
