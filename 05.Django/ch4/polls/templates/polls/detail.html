@@ -1,0 +1,26 @@
+<h1>{{ question.question_text }}</h1> 
+
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form action="{% url 'polls:vote' question.id %}" method="post"> {% comment %} polls:vote -> 이동할 목적지, 해당 데이터가 도착할 URL {% endcomment %}
+
+{% csrf_token %} 
+
+{% comment %} 하나의 질문엔 여러개의 답변이 있으니까 {% endcomment %}
+{% for choice in question.choice_set.all %}
+    <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" /> {% comment %} empty tag {% endcomment %}
+    <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br />
+{% endfor %}
+<input type="submit" value="Vote" />
+</form>
+
+{% comment %} h1 : 헤드글자 크기 {% endcomment %}
+{% comment %} question.choice_set.all : question 클래스 안의 choice set(집합)에 있는 모든것 {% endcomment %}
+{% comment %} forloop.counter : 생성한 답변의 갯수만큼 loop하면서 counter 값이 올라간다는 뜻 {% endcomment %}
+{% comment %} csrf_token : 웹에 대한 해킹에 대한 방법 cross site request fogery
+POST 방식일 때만 적어주면 됨. get 방식에서는 필요없음 {% endcomment %}
+{% comment %} 
+<form> 태그의 action 속성은 폼 데이터(form data)를 서버로 보낼 때 해당 데이터가 도착할 URL을 명시합니다.
+
+ {% endcomment %}
