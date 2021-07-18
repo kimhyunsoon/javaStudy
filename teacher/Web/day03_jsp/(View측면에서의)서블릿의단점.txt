@@ -1,0 +1,26 @@
+< Servlet 단점 >
+
+(1) web.xml  매핑 
+(2) 매번 컴파일 
+(3) scope 핸들링 복잡 
+     application, session, request, page 
+(4) 중복코드 
+     package aa.bb;
+     import javax.servlet.*;
+     import javax.servlet.http.*;
+     import java.io.*;
+     public void service(){
+         response.setContentType("text/html;charset=utf-8");
+         PrintWriter pw = response.getWriter();
+         pw.println();
+     }
+(5) 논리경로 ( WEB-INF/classes )
+(6) 분업 ( 디자이너 + 프로그래머 )
+   - Servlet : html -> java 
+   - JSP: html <- java
+(7) Bean  사용 코드 복잡 
+    ConnectionPoolBean pool =  new soo.db.ConnectionPoolBean(); //get
+    application.setAttribute("pool", pool); //create 
+    ConnectionPoolBean pool = (ConnectionPoolBean)application.getAttribute("pool"); //set 
+    
+   

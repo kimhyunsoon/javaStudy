@@ -1,0 +1,44 @@
+(1) server.xml에 추가 
+    <Resource name="jdbc/myoracle" auth="Container"
+              type="javax.sql.DataSource" driverClassName="oracle.jdbc.driver.OracleDriver"
+              url="jdbc:oracle:thin:@127.0.0.1:1521:JAVA"
+              username="servlet" password="java" maxTotal="20" maxIdle="10"
+              maxWaitMillis="-1"/>
+
+(2) web.xml에 추가 
+    <resource-ref>
+	 <description>Oracle Datasource example</description>
+	 <res-ref-name>jdbc/myoracle</res-ref-name>
+	 <res-type>javax.sql.DataSource</res-type>
+	 <res-auth>Container</res-auth>
+   </resource-ref>
+
+(3) soo.dbcp.DbcpBean.java 생성 
+    public class DbcpBean {
+	private DataSource ds; 
+	public DbcpBean() {
+		try {
+			Context initContext = new InitialContext();
+			Context envContext  = (Context)initContext.lookup("java:/comp/env");
+			ds = (DataSource)envContext.lookup("jdbc/myoracle");
+			//Connection conn = ds.getConnection();
+		}catch(NamingException ne) {
+		}
+	}
+	
+	public DataSource getDs() {
+		return ds;
+	}
+     }   
+
+(4) dbcp_test.jsp  생성 및 호출 
+<%@ page contentType="text/html; charset=utf-8" import="javax.sql.DataSource, java.sql.Connection"%>
+<jsp:useBean id="dbcp" class="soo.dbcp.DbcpBean" scope="application"/>
+
+<center>
+<%
+	DataSource ds = dbcp.getDs();
+    Connection con = ds.getConnection();
+%>
+#생성된 con : <%=con.hashCode()%>
+</center>
