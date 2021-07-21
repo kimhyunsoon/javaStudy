@@ -1,0 +1,55 @@
+
+<meta charset='utf-8'>
+<style>
+table, th, td {
+border: 1px solid black;
+border-collapse: collapse;
+}
+th, td {
+padding: 5px;
+}
+a { text-decoration:none }
+</style>
+<center>
+<hr width='600' size='2' noshade>
+<h2>Simple Board with Servlet</h2>
+&nbsp;&nbsp;&nbsp;
+<a href='b_list.do'>글목록</a>
+<hr width='600' size='2' noshade>
+<form name='f' method='post' action='b_update.do'>
+<input type='hidden' name='seq' value='89'>
+<input type='hidden' name='writer' value='가'>
+<table border='1' width='600' align='center' cellpadding='3' cellspacing='1'><tr>
+<td width='30%' align='center'>글쓴이</td>
+<td align='center'><input type='text' name='aa' size='60' value='가' disabled></td>
+</tr>
+<tr>
+<td width='30%' align='center'>이메일</td>
+<td align='center'><input type='text' name='email' size='60' value='나'></td>
+</tr>
+<tr>
+<td width='30%' align='center'>글제목</td>
+<td align='center'><input type='text' name='subject' size='60' value='다'></td>
+</tr>
+<tr>
+<td width='30%' align='center'>글내용</td>
+<td align='center'><textarea name='content' rows='5' cols='53'>라</textarea></td>
+</tr>
+<tr>
+<td colspan='2' align='center'>
+<input type='submit' value='수정'>
+</td>
+</tr>
+</table>
+</form>
+</table>
+<hr width='600' size='2' noshade>
+<b>
+<a  href='b_update.do?seq=89'>수정</a>
+| 
+<a href='b_del.do?seq=89'>삭제</a>
+| 
+<a href='b_list.do'>목록</a>
+</b>
+<hr width='600' size='2' noshade>
+</center>

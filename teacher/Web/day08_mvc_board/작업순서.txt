@@ -1,0 +1,15 @@
+< 제작 순서 >
+(1) mvc.domain.Board
+(2) board.mvc.model 
+      - BoardSQL
+      - BoardDAO 
+      - BoardService
+(3) board.mvc.control.BoardController
+(4) WebContent/board  
+      - list.jsp 
+      - write.jsp 
+      - content.jsp 
+      - update.jsp 
+
+
+
