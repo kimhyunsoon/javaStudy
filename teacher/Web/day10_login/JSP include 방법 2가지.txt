@@ -1,0 +1,7 @@
+< JSP include 방법 2가지 >
+
+(1) 쏘스 파일 
+<%@ include file="../login/login_check_modul.jsp"%>
+
+(2) 결과HTML 
+<jsp:include page="../login/login_check_modul.jsp"/>

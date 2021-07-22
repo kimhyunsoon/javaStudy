@@ -1,0 +1,33 @@
+< 패키지 구조 >
+(1) View 
+  - js폴더 
+      - trim.jsp 
+  - login폴더 
+      - login_form.jsp 
+
+  - msg.jsp
+
+  - login_check_modul.jsp
+
+  - index.jsp 
+    <c:if test="${!empty loginOkUser}">
+        ${loginOkUser.name}님 어솨~ 
+    </c:if>
+
+(2) Controller ( login.mvc.control )
+  - LoginController.java 
+    
+    void loginOk(){
+        HttpSession session = request.getSession();
+        session.setAttribute("loginOkUser", member);
+    }
+    
+(3) Model ( login.mvc.model ) 
+  - mvc.domain.Member.java 
+  - LoginDAO.java
+  - LoginSQL.java
+  - LoginService.java 
+  - LoginConst.java 
+
+   
+       

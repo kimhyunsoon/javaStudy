@@ -46,6 +46,21 @@
     <8> config 객체 ( type : ServletConfig )
 	  -> DD(web.xml)에서 서블릿의 구성정보를 접근할 수 있는 객체
 
+      정의) web.xml 
+	   <servlet>
+		  <servlet-name>servletEx</servlet-name>
+		  <jsp-file>/jspEx.jsp</jsp-file>
+		  <init-param>
+			  <param-name>adminId</param-name>
+			  <param-value>admin</param-value>
+		  </init-param>
+	   </servlet>
+
+      사용) jspEx.jsp
+	   <%
+	        String adminId = config.getInitParameter("adminId");
+	   %>
+
 	<9> exception ( type : Throwable )
 	  -> 예외 처리 객체 
 	   
