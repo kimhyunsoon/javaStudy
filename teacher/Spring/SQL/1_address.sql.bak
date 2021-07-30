@@ -15,10 +15,10 @@ create table ADDRESS(
 ); 
 create sequence ADDRESS_SEQ increment by 1 start with 1 nocache;
 
-insert into ADDRESS values(ADDRESS_SEQ.nextval, '이가은', '서울시', SYSDATE);
-insert into ADDRESS values(ADDRESS_SEQ.nextval, '이재영', '부산시', SYSDATE);
-insert into ADDRESS values(ADDRESS_SEQ.nextval, '김현수', '인천시', SYSDATE);
-insert into ADDRESS values(ADDRESS_SEQ.nextval, '이동연', '광주시', SYSDATE);
+insert into ADDRESS values(ADDRESS_SEQ.nextval, '김명훈', '서울시', SYSDATE);
+insert into ADDRESS values(ADDRESS_SEQ.nextval, '강정구', '부산시', SYSDATE);
+insert into ADDRESS values(ADDRESS_SEQ.nextval, '박소연', '인천시', SYSDATE);
+insert into ADDRESS values(ADDRESS_SEQ.nextval, '최민규', '광주시', SYSDATE);
 
 commit;
 
