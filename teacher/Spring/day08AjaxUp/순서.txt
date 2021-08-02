@@ -1,0 +1,11 @@
+< Ajax 응용 순서 >
+
+1. Drag & Drop 
+
+2. Chart 
+
+3. AutoComplete 
+
+
+- 서비스 발굴 ( html/css/js + api )
+- View(jsp) <-> Controller(text/json/xml) <-> Model   

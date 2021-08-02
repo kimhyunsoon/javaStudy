@@ -1,0 +1,16 @@
+< Restful > 
+
+1. 테스트 
+(1) index.jsp 
+(2) RestTestController.java
+
+2. Address Restful 
+(1) AddressRestController.java
+(2) AddressController4RestController.java
+(3) rest_addr/write.jsp 
+(4) 크롬앱 
+    - 검색어: restlet client 
+    - 설치 : Talend API Tester 
+    - 각 전송방식에 맞게 URL호출 
+
+
