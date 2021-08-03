@@ -1,0 +1,19 @@
+< AOP순서 >
+
+(1) Advice
+    SampleLogService.java
+    SampleLogServiceImpl.java
+    SampleLogAdvice.java
+    
+    SampleLogServiceTests.java 
+
+(2) @Transactional
+    TxSample1Mapper.java
+    TxSample2Mapper.java
+    TxSampleService.java
+    TxSampleServiceImpl.java 
+
+    TxSampleServiceTests.java 
+
+
+
